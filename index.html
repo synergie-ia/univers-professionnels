@@ -1,69 +1,131 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orientation 360 IA</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orientation 360 IA</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #ffffff;
+      color: #2c3e50;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #004AAD;
+      text-align: center;
+    }
+    p {
+      text-align: center;
+      color: #555;
+    }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff8a00, #ff6600);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.2s ease;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-blue { background: linear-gradient(135deg, #004AAD, #0074e4); }
+    .section { display: none; margin-top: 30px; }
+    .visible { display: block; }
+    .bloc {
+      border: 2px solid #004AAD;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+    label {
+      background: #f7f9fc;
+      border: 1px solid #cce;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      display: block;
+      transition: all 0.2s ease;
+    }
+    input[type="checkbox"]:checked + label {
+      background-color: #004AAD;
+      color: white;
+      border-color: #004AAD;
+    }
+    .profile {
+      background: #f9fbff;
+      border: 2px solid #004AAD;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .profile h2, .profile h3 { color: #004AAD; text-align: center; }
+  </style>
 </head>
 <body>
-<div class="container">
-
-    <!-- PAGE D’ACCUEIL -->
-    <div id="welcome">
-        <h1>🎯 Bienvenue sur Orientation 360 IA</h1>
-        <p class="subtitle">Voilà comment ça va se passer : tu vas parcourir trois séries de propositions.<br>
-        Choisis celles qui te ressemblent le plus. À la fin, tu pourras copier ou imprimer ton profil pour l’IA.</p>
-        <div style="text-align:center;">
-            <button class="btn" onclick="goToPage(1)">Commencer le questionnaire</button>
-        </div>
+  <div class="container">
+    <div id="welcome" class="section visible">
+      <h1>🎯 Bienvenue sur Orientation 360 IA</h1>
+      <p>Voilà comment ça va se passer : tu vas parcourir trois séries de propositions.<br>
+      Choisis celles qui te ressemblent le plus. À la fin, tu pourras copier ou imprimer ton profil.</p>
+      <div style="text-align:center;">
+        <button class="btn" onclick="start()">Commencer le questionnaire</button>
+      </div>
     </div>
 
-    <!-- INTÉRÊTS -->
-    <div id="page1" class="page">
-        <h2>🧭 Tes Intérêts</h2>
-        <div id="interets"></div>
-        <div class="actions">
-            <button class="btn" onclick="goToPage(0)">↩️ Accueil</button>
-            <button class="btn" onclick="goToPage(2)">Page suivante →</button>
-        </div>
+    <div id="interets" class="section">
+      <h2>🔹 Tes Intérêts</h2>
+      <div class="checkbox-group" id="interets-list"></div>
+      <div style="text-align:center;">
+        <button class="btn btn-blue" onclick="back(0)">Accueil</button>
+        <button class="btn" id="next1" onclick="next(1)">Page suivante →</button>
+      </div>
     </div>
 
-    <!-- PERSONNALITÉ -->
-    <div id="page2" class="page">
-        <h2>🙂 Ta Personnalité</h2>
-        <div id="personnalite"></div>
-        <div class="actions">
-            <button class="btn" onclick="goToPage(1)">← Page précédente</button>
-            <button class="btn" onclick="goToPage(3)">Page suivante →</button>
-        </div>
+    <div id="personnalite" class="section">
+      <h2>🔹 Ta Personnalité</h2>
+      <div class="checkbox-group" id="personnalite-list"></div>
+      <div style="text-align:center;">
+        <button class="btn btn-blue" onclick="back(1)">← Page précédente</button>
+        <button class="btn" id="next2" onclick="next(2)">Page suivante →</button>
+      </div>
     </div>
 
-    <!-- VALEURS -->
-    <div id="page3" class="page">
-        <h2>💡 Tes Valeurs</h2>
-        <div id="valeurs"></div>
-        <div class="actions">
-            <button class="btn" onclick="goToPage(2)">← Page précédente</button>
-            <button class="btn" onclick="showSummary()">Voir mon profil →</button>
-        </div>
+    <div id="valeurs" class="section">
+      <h2>🔹 Tes Valeurs</h2>
+      <div class="checkbox-group" id="valeurs-list"></div>
+      <div style="text-align:center;">
+        <button class="btn btn-blue" onclick="back(2)">← Page précédente</button>
+        <button class="btn" id="next3" onclick="next(3)">Voir mon profil</button>
+      </div>
     </div>
 
-    <!-- RÉCAPITULATIF -->
-    <div id="summary">
-        <h2>📋 Ton Profil Global</h2>
-        <div id="recap"></div>
-        <div class="actions">
-            <button class="btn" onclick="copyProfile()">📋 Copier le profil</button>
-            <button class="btn" onclick="exportPDF()">📄 Télécharger en PDF</button>
-            <button class="btn" onclick="goToPage(0)">🏠 Retour à l'accueil</button>
-        </div>
+    <div id="profil" class="section">
+      <h2>🌟 Ton Profil Global</h2>
+      <div class="profile" id="profileDisplay"></div>
+      <div style="text-align:center;">
+        <button class="btn btn-blue" onclick="back(3)">← Retour</button>
+        <button class="btn" onclick="copyProfile()">📋 Copier pour l’IA</button>
+        <button class="btn" onclick="downloadPDF()">📄 Télécharger en PDF</button>
+      </div>
     </div>
+  </div>
 
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="data.js"></script>
-<script src="script.js"></script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
