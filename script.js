@@ -1,20 +1,30 @@
-// =======================
-// SCRIPT PRINCIPAL IA360
-// =======================
+// ======================================
+// SCRIPT PRINCIPAL ORIENTATION 360 IA
+// ======================================
 
 let currentPage = 0;
-const selections = { interets: [], competences: [], personnalite: [], valeurs: [] };
+const selections = {
+  interets: [],
+  personnalite: [],
+  valeurs: []
+};
 const maxChoices = 6;
 
-// Changement de page
+// =========================
+// NAVIGATION ENTRE LES PAGES
+// =========================
+
 function goToPage(page) {
-  document.querySelectorAll('.page, #welcome').forEach(p => p.style.display = 'none');
-  const next = document.getElementById(page === 0 ? 'welcome' : `page${page}`);
-  if (next) next.style.display = 'block';
+  document.querySelectorAll('.page, #welcome, #summary').forEach(p => p.style.display = 'none');
+  const target = document.getElementById(page === 0 ? 'welcome' : `page${page}`);
+  if (target) target.style.display = 'block';
   currentPage = page;
 }
 
-// Génération des blocs de verbes
+// =========================
+// AFFICHAGE DES BLOCS
+// =========================
+
 function renderSection(id, data) {
   const container = document.getElementById(id);
   container.innerHTML = '';
@@ -35,6 +45,10 @@ function renderSection(id, data) {
   });
 }
 
+// =========================
+// GESTION DES CHOIX
+// =========================
+
 function toggleChoice(category, index, checkbox) {
   if (checkbox.checked) {
     if (selections[category].length >= maxChoices) {
@@ -48,9 +62,15 @@ function toggleChoice(category, index, checkbox) {
   }
 }
 
-// Affichage du récapitulatif
+// =========================
+// RÉCAPITULATIF FINAL
+// =========================
+
 function showSummary() {
-  goToPage('summary');
+  document.querySelectorAll('.page, #welcome').forEach(p => p.style.display = 'none');
+  const recapSection = document.getElementById('summary');
+  recapSection.style.display = 'block';
+
   const recap = document.getElementById('recap');
   recap.innerHTML = '';
 
@@ -75,26 +95,73 @@ function showSummary() {
   });
 }
 
-// Copier le profil final
+// =========================
+// COPIER LE PROFIL
+// =========================
+
 function copyProfile() {
   let text = '🎯 PROFIL GLOBAL ORIENTATION 360 IA\n\n';
   Object.keys(selections).forEach(cat => {
     text += `--- ${cat.toUpperCase()} ---\n`;
-    selections[cat].forEach(i => {
+    if (selections[cat].length === 0) text += 'Aucune sélection.\n';
+    else selections[cat].forEach(i => {
       const d = window[cat][i];
       text += `• ${d.verbes.join(', ')} — ${d.phrase}\n`;
     });
     text += '\n';
   });
-  navigator.clipboard.writeText(text);
-  alert('Profil copié dans le presse-papiers !');
+  navigator.clipboard.writeText(text)
+    .then(() => alert('✅ Profil copié dans le presse-papiers !'));
 }
 
-// Initialisation
+// =========================
+// EXPORT EN PDF
+// =========================
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 20;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Profil Orientation 360 IA", 20, y);
+  y += 10;
+
+  Object.keys(selections).forEach(cat => {
+    doc.setFontSize(14);
+    doc.setTextColor(102, 126, 234);
+    doc.text(cat.toUpperCase(), 20, y);
+    y += 8;
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(11);
+
+    if (selections[cat].length === 0) {
+      doc.text("Aucune sélection.", 25, y);
+      y += 8;
+    } else {
+      selections[cat].forEach(i => {
+        const d = window[cat][i];
+        const text = `• ${d.verbes.join(', ')} — ${d.phrase}`;
+        const split = doc.splitTextToSize(text, 170);
+        doc.text(split, 25, y);
+        y += split.length * 6;
+      });
+    }
+    y += 5;
+    if (y > 270) { doc.addPage(); y = 20; }
+  });
+
+  doc.save("profil_orientation360IA.pdf");
+}
+
+// =========================
+// INITIALISATION
+// =========================
+
 document.addEventListener('DOMContentLoaded', () => {
   goToPage(0);
   renderSection('interets', interets);
-  renderSection('competences', competences);
   renderSection('personnalite', personnalite);
   renderSection('valeurs', valeurs);
 });
