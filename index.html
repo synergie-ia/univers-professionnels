@@ -1,167 +1,172 @@
-// ======================================
-// SCRIPT PRINCIPAL ORIENTATION 360 IA
-// ======================================
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientation 360 IA</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            margin: 0;
+            padding: 0;
+            color: #2c3e50;
+        }
 
-let currentPage = 0;
-const selections = {
-  interets: [],
-  personnalite: [],
-  valeurs: []
-};
-const maxChoices = 6;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+        }
 
-// =========================
-// NAVIGATION ENTRE LES PAGES
-// =========================
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #ff6600;
+        }
 
-function goToPage(page) {
-  document.querySelectorAll('.page, #welcome, #summary').forEach(p => p.style.display = 'none');
-  const target = document.getElementById(page === 0 ? 'welcome' : `page${page}`);
-  if (target) target.style.display = 'block';
-  currentPage = page;
-}
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
-// =========================
-// AFFICHAGE DES BLOCS
-// =========================
+        .page, #welcome, #summary {
+            display: none;
+        }
 
-function renderSection(id, data) {
-  const container = document.getElementById(id);
-  container.innerHTML = '';
+        .item {
+            background: #f8f9fa;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
 
-  data.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'item';
-    div.innerHTML = `
-      <label>
-        <input type="checkbox" onchange="toggleChoice('${id}', ${i}, this)">
-        <div class="content">
-          <div class="verbs">${item.verbes.join(', ')}</div>
-          <div class="phrase">${item.phrase}</div>
+        .item:hover {
+            border-color: #ff6600;
+            box-shadow: 0 3px 10px rgba(255, 102, 0, 0.15);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .verbs {
+            font-weight: 600;
+            color: #ff6600;
+        }
+
+        .phrase {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6600, #667eea);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 25px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .recap-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #667eea;
+            background: #f9f9ff;
+            border-radius: 8px;
+        }
+
+        .recap-section h3 {
+            color: #667eea;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- PAGE D’ACCUEIL -->
+    <div id="welcome">
+        <h1>🎯 Bienvenue sur Orientation 360 IA</h1>
+        <p class="subtitle">Voilà comment ça va se passer : tu vas parcourir trois séries de propositions.<br>
+        Choisis celles qui te ressemblent le plus. À la fin, tu pourras copier ou imprimer ton profil pour l’IA.</p>
+        <div style="text-align:center;">
+            <button class="btn" onclick="goToPage(1)">Commencer le questionnaire</button>
         </div>
-      </label>
-    `;
-    container.appendChild(div);
-  });
-}
+    </div>
 
-// =========================
-// GESTION DES CHOIX
-// =========================
+    <!-- INTÉRÊTS -->
+    <div id="page1" class="page">
+        <h2>🧭 Tes Intérêts</h2>
+        <div id="interets"></div>
+        <div class="actions">
+            <button class="btn" onclick="goToPage(2)">Page suivante →</button>
+        </div>
+    </div>
 
-function toggleChoice(category, index, checkbox) {
-  if (checkbox.checked) {
-    if (selections[category].length >= maxChoices) {
-      alert(`Tu ne peux choisir que ${maxChoices} éléments maximum.`);
-      checkbox.checked = false;
-      return;
-    }
-    selections[category].push(index);
-  } else {
-    selections[category] = selections[category].filter(i => i !== index);
-  }
-}
+    <!-- PERSONNALITÉ -->
+    <div id="page2" class="page">
+        <h2>🙂 Ta Personnalité</h2>
+        <div id="personnalite"></div>
+        <div class="actions">
+            <button class="btn" onclick="goToPage(1)">← Page précédente</button>
+            <button class="btn" onclick="goToPage(3)">Page suivante →</button>
+        </div>
+    </div>
 
-// =========================
-// RÉCAPITULATIF FINAL
-// =========================
+    <!-- VALEURS -->
+    <div id="page3" class="page">
+        <h2>💡 Tes Valeurs</h2>
+        <div id="valeurs"></div>
+        <div class="actions">
+            <button class="btn" onclick="goToPage(2)">← Page précédente</button>
+            <button class="btn" onclick="showSummary()">Voir mon profil →</button>
+        </div>
+    </div>
 
-function showSummary() {
-  document.querySelectorAll('.page, #welcome').forEach(p => p.style.display = 'none');
-  const recapSection = document.getElementById('summary');
-  recapSection.style.display = 'block';
+    <!-- RÉCAPITULATIF -->
+    <div id="summary">
+        <h2>📋 Ton Profil Global</h2>
+        <div id="recap"></div>
+        <div class="actions">
+            <button class="btn" onclick="copyProfile()">📋 Copier le profil</button>
+            <button class="btn" onclick="exportPDF()">📄 Télécharger en PDF</button>
+            <button class="btn" onclick="goToPage(1)">↩️ Recommencer</button>
+        </div>
+    </div>
 
-  const recap = document.getElementById('recap');
-  recap.innerHTML = '';
+</div>
 
-  Object.keys(selections).forEach(cat => {
-    const section = document.createElement('div');
-    section.className = 'recap-section';
-    section.innerHTML = `<h3>${cat.toUpperCase()}</h3>`;
+<!-- Librairie jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    if (selections[cat].length === 0) {
-      section.innerHTML += `<p><em>Aucune sélection</em></p>`;
-    } else {
-      const list = document.createElement('ul');
-      selections[cat].forEach(i => {
-        const data = window[cat][i];
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${data.verbes.join(', ')}</strong> — ${data.phrase}`;
-        list.appendChild(li);
-      });
-      section.appendChild(list);
-    }
-    recap.appendChild(section);
-  });
-}
-
-// =========================
-// COPIER LE PROFIL
-// =========================
-
-function copyProfile() {
-  let text = '🎯 PROFIL GLOBAL ORIENTATION 360 IA\n\n';
-  Object.keys(selections).forEach(cat => {
-    text += `--- ${cat.toUpperCase()} ---\n`;
-    if (selections[cat].length === 0) text += 'Aucune sélection.\n';
-    else selections[cat].forEach(i => {
-      const d = window[cat][i];
-      text += `• ${d.verbes.join(', ')} — ${d.phrase}\n`;
-    });
-    text += '\n';
-  });
-  navigator.clipboard.writeText(text)
-    .then(() => alert('✅ Profil copié dans le presse-papiers !'));
-}
-
-// =========================
-// EXPORT EN PDF
-// =========================
-
-function exportPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y = 20;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text("Profil Orientation 360 IA", 20, y);
-  y += 10;
-
-  Object.keys(selections).forEach(cat => {
-    doc.setFontSize(14);
-    doc.setTextColor(102, 126, 234);
-    doc.text(cat.toUpperCase(), 20, y);
-    y += 8;
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(11);
-
-    if (selections[cat].length === 0) {
-      doc.text("Aucune sélection.", 25, y);
-      y += 8;
-    } else {
-      selections[cat].forEach(i => {
-        const d = window[cat][i];
-        const text = `• ${d.verbes.join(', ')} — ${d.phrase}`;
-        const split = doc.splitTextToSize(text, 170);
-        doc.text(split, 25, y);
-        y += split.length * 6;
-      });
-    }
-    y += 5;
-    if (y > 270) { doc.addPage(); y = 20; }
-  });
-
-  doc.save("profil_orientation360IA.pdf");
-}
-
-// =========================
-// INITIALISATION
-// =========================
-
-document.addEventListener('DOMContentLoaded', () => {
-  goToPage(0);
-  renderSection('interets', interets);
-  renderSection('personnalite', personnalite);
-  renderSection('valeurs', valeurs);
-});
+<!-- Données + Script -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
