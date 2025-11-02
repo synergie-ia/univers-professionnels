@@ -2,87 +2,87 @@
 const interests = [
     {
         id: 1, 
-        icon: '🌿', 
+        icon: '🏃', 
         title: 'Activités physiques & nature', 
         verbs: 'Bouger, respirer, explorer, agir', 
-        description: "J'aime être en mouvement, vivre dehors et sentir l'énergie du corps."
+        description: "Je me vois plutôt dans un métier où je pourrai être en mouvement, vivre dehors et sentir l'énergie du corps."
     },
     {
         id: 2, 
         icon: '🔧', 
         title: 'Manuel & technique', 
         verbs: 'Fabriquer, réparer, construire, ajuster', 
-        description: "J'aime créer ou réparer avec mes mains et voir le résultat concret de mon travail."
+        description: "Je me vois plutôt dans un métier où je pourrai créer ou réparer avec mes mains et voir le résultat concret de mon travail."
     },
     {
         id: 3, 
         icon: '🔍', 
         title: 'Investigation & information', 
         verbs: 'Observer, comprendre, apprendre', 
-        description: "J'aime chercher à comprendre comment les choses fonctionnent et approfondir mes connaissances."
+        description: "Je me vois plutôt dans un métier où je pourrai chercher à comprendre comment les choses fonctionnent et approfondir mes connaissances."
     },
     {
         id: 4, 
         icon: '🧪', 
         title: 'Sciences & technologies', 
         verbs: 'Tester, modéliser, programmer, innover', 
-        description: "J'aime expérimenter, utiliser des technologies et résoudre des problèmes complexes."
+        description: "Je me vois plutôt dans un métier où je pourrai expérimenter, utiliser des technologies et résoudre des problèmes complexes."
     },
     {
         id: 5, 
-        icon: '🎨', 
+        icon: '🎭', 
         title: 'Arts & expression', 
         verbs: 'Imaginer, exprimer, créer, interpréter', 
-        description: "J'aime créer des œuvres originales et m'exprimer à travers l'art et la créativité."
+        description: "Je me vois plutôt dans un métier où je pourrai créer des œuvres originales et m'exprimer à travers l'art et la créativité."
     },
     {
         id: 6, 
         icon: '💡', 
         title: 'Idées & conception', 
         verbs: 'Concevoir, structurer, inventer, organiser', 
-        description: "J'aime imaginer de nouveaux concepts et organiser des idées de manière innovante."
+        description: "Je me vois plutôt dans un métier où je pourrai imaginer de nouveaux concepts et organiser des idées de manière innovante."
     },
     {
         id: 7, 
         icon: '🤝', 
         title: 'Aide & accompagnement', 
         verbs: 'Soutenir, écouter, former, accompagner', 
-        description: "J'aime aider les autres à progresser et les accompagner dans leurs difficultés."
+        description: "Je me vois plutôt dans un métier où je pourrai aider les autres à progresser et les accompagner dans leurs difficultés."
     },
     {
         id: 8, 
-        icon: '💬', 
+        icon: '👥', 
         title: 'Relations & sociabilité', 
         verbs: 'Communiquer, relier, partager, coopérer', 
-        description: "J'aime échanger avec les autres, créer du lien et travailler en équipe."
+        description: "Je me vois plutôt dans un métier où je pourrai échanger avec les autres, créer du lien et travailler en équipe."
     },
     {
         id: 9, 
-        icon: '🚀', 
+        icon: '⚡', 
         title: 'Action & initiative', 
         verbs: 'Agir, entreprendre, dynamiser, décider', 
-        description: "J'aime prendre des initiatives, lancer des projets et passer à l'action rapidement."
+        description: "Je me vois plutôt dans un métier où je pourrai prendre des initiatives, lancer des projets et passer à l'action rapidement."
     },
     {
         id: 10, 
-        icon: '🧭', 
+        icon: '👑', 
         title: 'Leadership & stratégie', 
         verbs: 'Motiver, diriger, influencer, décider', 
-        description: "J'aime guider les autres, prendre des décisions importantes et définir une vision."
+        description: "Je me vois plutôt dans un métier où je pourrai guider les autres, prendre des décisions importantes et définir une vision."
     },
     {
         id: 11, 
         icon: '📊', 
         title: 'Données & chiffres', 
         verbs: 'Calculer, comparer, interpréter, vérifier', 
-        description: "J'aime travailler avec des données chiffrées et analyser des informations précises."
+        description: "Je me vois plutôt dans un métier où je pourrai travailler avec des données chiffrées et analyser des informations précises."
     },
     {
         id: 12, 
         icon: '📋', 
         title: 'Règles & méthodes', 
         verbs: 'Contrôler, sécuriser, appliquer, structurer', 
-        description: "J'aime suivre des procédures rigoureuses et m'assurer que tout est en ordre."
+        description: "Je me vois plutôt dans un métier où je pourrai suivre des procédures rigoureuses et m'assurer que tout est en ordre."
     }
 ];
 
@@ -102,7 +102,7 @@ const universes = [
         weights: [0, 0, 0, 0, 1, 1, 1, 3, 2, 3, 1, 0]
     },
     {
-        name: '🗞️ Communication, médias & culture', 
+        name: '🎙️ Communication, médias & culture', 
         weights: [0, 0, 1, 0, 3, 3, 1, 3, 1, 2, 0, 0]
     },
     {
@@ -128,6 +128,10 @@ const universes = [
     {
         name: '🍽️ Hôtellerie, restauration & tourisme', 
         weights: [2, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 0]
+    },
+    {
+        name: '🏠 Immobilier & patrimoine', 
+        weights: [1, 1, 1, 1, 0, 1, 0, 0, 2, 3, 2, 3]
     },
     {
         name: '⚙️ Industrie, fabrication & production', 
@@ -168,9 +172,5 @@ const universes = [
     {
         name: '🚀 Technologies émergentes & futur du travail', 
         weights: [1, 1, 2, 3, 1, 2, 0, 0, 2, 2, 3, 1]
-    },
-    {
-        name: '🏠 Immobilier & patrimoine', 
-        weights: [1, 1, 1, 1, 0, 1, 0, 0, 2, 3, 2, 3]
     }
 ];
