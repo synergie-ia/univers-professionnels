@@ -1,260 +1,126 @@
-// ======================================================
-// === SCRIPT PRINCIPAL IA360 - ORIENTATION ===
-// ======================================================
+// Stockage des réponses de l'utilisateur
+const ratings = {};
 
-// === GÉNÉRATION DYNAMIQUE DU QUESTIONNAIRE ===
-function generateQuestionnaire() {
-    const container = document.getElementById('questionnaire');
-    
-    // Éviter la duplication : vider le container d'abord
-    container.innerHTML = '';
-    
-    interests.forEach((interest, idx) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question';
-        
-        questionDiv.innerHTML = `
-            <div class="question-header">
-                <span class="question-icon">${interest.icon}</span>
-                <span class="question-title">${interest.name}</span>
-            </div>
-            <div class="question-verbs">${interest.verbs}</div>
-            <div class="question-phrase">${interest.phrase}</div>
-            <div class="options">
-                <div class="option">
-                    <input type="radio" name="q${idx}" value="-2" id="q${idx}_-2">
-                    <label for="q${idx}_-2">Pas du tout moi</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="q${idx}" value="-1" id="q${idx}_-1">
-                    <label for="q${idx}_-1">Peu moi</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="q${idx}" value="0" id="q${idx}_0">
-                    <label for="q${idx}_0">Parfois moi</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="q${idx}" value="1" id="q${idx}_1">
-                    <label for="q${idx}_1">Plutôt moi</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="q${idx}" value="2" id="q${idx}_2">
-                    <label for="q${idx}_2">Tout à fait moi</label>
+// Fonction d'initialisation au chargement de la page
+function renderInterests() {
+    const container = document.getElementById('interestsList');
+    container.innerHTML = interests.map(interest => `
+        <div class="interest-card">
+            <div class="interest-header">
+                <div class="interest-icon">${interest.icon}</div>
+                <div class="interest-title">
+                    <h3>${interest.title}</h3>
+                    <div class="interest-verbs">${interest.verbs}</div>
                 </div>
             </div>
-        `;
-        
-        container.appendChild(questionDiv);
-    });
+            <div class="interest-description">${interest.description}</div>
+            <div class="rating-buttons">
+                <button class="rating-btn level-0" onclick="setRating(${interest.id}, 0)">
+                    ❌ Pas du tout moi
+                </button>
+                <button class="rating-btn level-1" onclick="setRating(${interest.id}, 1)">
+                    ⚪ Un peu moi
+                </button>
+                <button class="rating-btn level-2" onclick="setRating(${interest.id}, 2)">
+                    🟡 Plutôt moi
+                </button>
+                <button class="rating-btn level-3" onclick="setRating(${interest.id}, 3)">
+                    🟢 Totalement moi
+                </button>
+            </div>
+        </div>
+    `).join('');
 }
 
-// === RÉCUPÉRATION DES RÉPONSES ===
-function getUserAnswers() {
-    const answers = [];
+// Fonction appelée quand l'utilisateur clique sur un bouton de notation
+function setRating(interestId, value) {
+    ratings[interestId] = value;
     
-    for (let i = 0; i < interests.length; i++) {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        
-        if (!selected) {
-            alert('⚠️ Veuillez répondre à toutes les questions avant de continuer.');
-            return null;
-        }
-        
-        answers.push(parseInt(selected.value));
+    // Mise à jour visuelle du bouton sélectionné
+    const card = event.target.closest('.interest-card');
+    const buttons = card.querySelectorAll('.rating-btn');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+    
+    // Mise à jour de la barre de progression
+    updateProgress();
+}
+
+// Fonction pour mettre à jour la barre de progression
+function updateProgress() {
+    const totalAnswered = Object.keys(ratings).length;
+    const percentage = (totalAnswered / interests.length) * 100;
+    document.getElementById('progressBar').style.width = percentage + '%';
+}
+
+// Fonction principale de calcul des résultats
+function calculateResults() {
+    // Vérifier que toutes les questions ont été répondues
+    if (Object.keys(ratings).length < interests.length) {
+        alert('⚠️ Veuillez répondre à toutes les questions avant de calculer vos résultats.');
+        return;
     }
-    
-    return answers;
-}
 
-// === CALCUL DES SCORES PAR UNIVERS ===
-function calculateScores(answers) {
-    const scores = [];
-    
-    // Calcul des scores min et max possibles pour la normalisation
-    let minPossible = 0;
-    let maxPossible = 0;
-    
-    univers.forEach((universName, universIdx) => {
-        let totalScore = 0;
-        let minScore = 0;
+    // Calcul du score pour chaque univers
+    const results = universes.map(universe => {
+        let score = 0;
         let maxScore = 0;
         
-        // Calcul : réponse utilisateur × coefficient de compatibilité
-        for (let interestIdx = 0; interestIdx < interests.length; interestIdx++) {
-            const userScore = answers[interestIdx];
-            const compatibilityCoef = matrix[universIdx][interestIdx];
-            totalScore += userScore * compatibilityCoef;
+        // Pour chaque intérêt (12 au total)
+        universe.weights.forEach((weight, index) => {
+            const interestId = index + 1;
+            const userRating = ratings[interestId] || 0;
             
-            // Calcul des bornes théoriques
-            if (compatibilityCoef > 0) {
-                minScore += -2 * compatibilityCoef;
-                maxScore += 2 * compatibilityCoef;
-            } else {
-                minScore += 2 * compatibilityCoef;
-                maxScore += -2 * compatibilityCoef;
-            }
-        }
-        
-        // Normalisation en pourcentage (0% = min possible, 100% = max possible)
-        let percentage = 0;
-        if (maxScore !== minScore) {
-            percentage = ((totalScore - minScore) / (maxScore - minScore)) * 100;
-        }
-        
-        scores.push({
-            name: universName,
-            score: totalScore,
-            percentage: Math.round(percentage),
-            coefficients: matrix[universIdx]
+            // Score = somme des (note utilisateur × poids univers)
+            score += userRating * weight;
+            
+            // Score max = somme des poids × 3 (note max possible)
+            maxScore += weight * 3;
         });
+        
+        // Calcul du pourcentage de compatibilité
+        const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
+        
+        return {
+            name: universe.name,
+            score: score,
+            maxScore: maxScore,
+            percentage: percentage
+        };
     });
-    
-    // Tri par pourcentage décroissant
-    scores.sort((a, b) => b.percentage - a.percentage);
-    
-    return scores;
+
+    // Tri des résultats par pourcentage décroissant
+    results.sort((a, b) => b.percentage - a.percentage);
+
+    // Affichage du top 10
+    displayResults(results.slice(0, 10));
 }
 
-// === AFFICHAGE DU CLASSEMENT ===
-function displayRanking(scores) {
-    const container = document.getElementById('ranking');
-    container.innerHTML = '<h3>🏆 Vos univers les plus compatibles</h3>';
+// Fonction d'affichage des résultats
+function displayResults(results) {
+    const container = document.getElementById('resultsList');
     
-    // Afficher le top 10
-    scores.slice(0, 10).forEach((item, index) => {
-        const rankingItem = document.createElement('div');
-        rankingItem.className = 'ranking-item';
-        
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
-        
-        rankingItem.innerHTML = `
-            <span class="ranking-name">${medal} ${index + 1}. ${item.name}</span>
-            <span class="ranking-score">${item.percentage}%</span>
-        `;
-        
-        container.appendChild(rankingItem);
-    });
-}
-
-// === AFFICHAGE DE LA MATRICE INDIVIDUELLE ===
-function displayMatrix(answers, scores) {
-    const table = document.getElementById('matrixTable');
-    
-    // En-tête du tableau
-    let html = '<thead><tr><th>Univers</th>';
-    interests.forEach(interest => {
-        html += `<th title="${interest.name}">${interest.icon}</th>`;
-    });
-    html += '<th>Score Total</th><th>%</th></tr></thead><tbody>';
-    
-    // Lignes de la matrice - afficher UNIQUEMENT les scores individuels (réponse × coefficient)
-    scores.forEach((item) => {
-        const universIdx = univers.indexOf(item.name);
-        html += `<tr><td>${item.name}</td>`;
-        
-        let totalForRow = 0;
-        matrix[universIdx].forEach((compatValue, interestIdx) => {
-            const userAnswer = answers[interestIdx];
-            const individualScore = userAnswer * compatValue; // Score individuel uniquement
-            totalForRow += individualScore;
-            
-            // Déterminer la classe de couleur selon le score individuel
-            let cellClass = 'score0';
-            if (individualScore >= 6) cellClass = 'score3';
-            else if (individualScore >= 3) cellClass = 'score1';
-            else if (individualScore <= -4) cellClass = 'score-2';
-            else if (individualScore <= -2) cellClass = 'score-1';
-            
-            html += `<td>
-                <div class="cell-score ${cellClass}" 
-                     title="Votre réponse: ${userAnswer} × Coefficient: ${compatValue} = ${individualScore}">
-                    ${individualScore > 0 ? '+' : ''}${individualScore}
+    container.innerHTML = results.map((result, index) => `
+        <div class="result-card">
+            <div class="result-info">
+                <div class="result-title">#${index + 1} ${result.name}</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${result.percentage}%"></div>
                 </div>
-            </td>`;
-        });
-        
-        html += `<td><strong>${totalForRow > 0 ? '+' : ''}${totalForRow}</strong></td>`;
-        html += `<td><strong>${item.percentage}%</strong></td>`;
-        html += '</tr>';
-    });
+            </div>
+            <div class="result-score">${result.percentage.toFixed(1)}%</div>
+        </div>
+    `).join('');
+
+    // Affichage de la section résultats avec animation
+    const resultsSection = document.getElementById('results');
+    resultsSection.classList.add('show');
     
-    html += '</tbody>';
-    table.innerHTML = html;
+    // Scroll automatique vers les résultats
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// === CALCUL ET AFFICHAGE DES RÉSULTATS ===
-function calculateResults() {
-    // Récupérer les réponses
-    const answers = getUserAnswers();
-    if (!answers) return;
-    
-    // Calculer les scores
-    const scores = calculateScores(answers);
-    
-    // Afficher le classement
-    displayRanking(scores);
-    
-    // Afficher la matrice individuelle
-    displayMatrix(answers, scores);
-    
-    // Afficher la section résultats
-    document.getElementById('results').style.display = 'block';
-    
-    // Scroll vers les résultats
-    document.getElementById('results').scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-    });
-}
-
-// === COPIE DU PROFIL POUR IA360 ===
-function copyProfile() {
-    const answers = getUserAnswers();
-    if (!answers) return;
-    
-    const scores = calculateScores(answers);
-    
-    // Formatage du profil
-    let profileText = '=== PROFIL IA360 - ORIENTATION PROFESSIONNELLE ===\n\n';
-    
-    profileText += '📊 RÉPONSES AUX INTÉRÊTS:\n';
-    profileText += '─────────────────────────────\n';
-    interests.forEach((interest, idx) => {
-        const answer = answers[idx];
-        const emoji = answer > 0 ? '✅' : answer < 0 ? '❌' : '⚪';
-        profileText += `${emoji} ${interest.icon} ${interest.name}: ${answer > 0 ? '+' : ''}${answer}\n`;
-    });
-    
-    profileText += '\n🏆 TOP 10 UNIVERS COMPATIBLES:\n';
-    profileText += '─────────────────────────────\n';
-    scores.slice(0, 10).forEach((item, index) => {
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '  ';
-        profileText += `${medal} ${index + 1}. ${item.name} → ${item.percentage}%\n`;
-    });
-    
-    profileText += '\n📋 TOUS LES UNIVERS:\n';
-    profileText += '─────────────────────────────\n';
-    scores.forEach((item, index) => {
-        profileText += `${index + 1}. ${item.name}: ${item.percentage}%\n`;
-    });
-    
-    profileText += '\n─────────────────────────────\n';
-    profileText += 'Généré par IA360 Orientation\n';
-    profileText += new Date().toLocaleDateString('fr-FR');
-    
-    // Copie dans le presse-papier
-    navigator.clipboard.writeText(profileText).then(() => {
-        alert('✅ Profil copié dans le presse-papier !\n\nVous pouvez maintenant le coller dans votre GPT IA360 ou dans un document.');
-    }).catch(err => {
-        console.error('Erreur lors de la copie:', err);
-        alert('❌ Impossible de copier automatiquement. Veuillez sélectionner et copier manuellement.');
-    });
-}
-
-// === INITIALISATION AU CHARGEMENT DE LA PAGE ===
-// Utiliser une seule méthode pour éviter la duplication
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', generateQuestionnaire);
-} else {
-    generateQuestionnaire();
-}
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    renderInterests();
+});
