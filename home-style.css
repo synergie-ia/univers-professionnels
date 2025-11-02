@@ -21,11 +21,10 @@ body {
 
 .hero-content {
     text-align: center;
-    margin-bottom: 60px;
 }
 
 .hero-title {
-    font-size: 4em;
+    font-size: 3em;
     color: white;
     margin-bottom: 20px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -33,21 +32,13 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 2em;
+    font-size: 1.3em;
     color: white;
-    margin-bottom: 15px;
     opacity: 0.95;
-    animation: fadeInDown 1s ease;
-}
-
-.hero-description {
-    font-size: 1.2em;
-    color: white;
-    opacity: 0.9;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto 50px;
     line-height: 1.6;
-    animation: fadeInDown 1.2s ease;
+    animation: fadeInDown 1s ease;
 }
 
 .cta-buttons {
@@ -55,7 +46,7 @@ body {
     gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
-    animation: fadeInUp 1.4s ease;
+    animation: fadeInUp 1.2s ease;
 }
 
 .cta-btn {
@@ -94,50 +85,16 @@ body {
     transform: translateY(-5px);
 }
 
-.badge {
-    background: #f39c12;
+.cta-btn.tertiary {
+    background: rgba(255,255,255,0.15);
     color: white;
-    font-size: 0.7em;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: bold;
+    border: 2px solid rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
 }
 
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    animation: fadeInUp 1.6s ease;
-}
-
-.feature-card {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-}
-
-.feature-icon {
-    font-size: 3em;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    color: #333;
-    font-size: 1.5em;
-    margin-bottom: 15px;
-}
-
-.feature-card p {
-    color: #666;
-    line-height: 1.6;
+.cta-btn.tertiary:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-5px);
 }
 
 @keyframes fadeInDown {
@@ -164,15 +121,11 @@ body {
 
 @media (max-width: 768px) {
     .hero-title {
-        font-size: 2.5em;
+        font-size: 2em;
     }
     
     .hero-subtitle {
-        font-size: 1.5em;
-    }
-    
-    .hero-description {
-        font-size: 1em;
+        font-size: 1.1em;
     }
     
     .cta-buttons {
@@ -182,9 +135,5 @@ body {
     .cta-btn {
         width: 100%;
         justify-content: center;
-    }
-    
-    .features {
-        grid-template-columns: 1fr;
     }
 }
