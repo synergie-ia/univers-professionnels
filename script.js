@@ -20,13 +20,13 @@ function renderInterests() {
                     ❌ Pas du tout moi
                 </button>
                 <button class="rating-btn level-1" onclick="setRating(${interest.id}, 1)">
-                    😐 Un peu moi
+                    🤔 Un peu moi
                 </button>
                 <button class="rating-btn level-2" onclick="setRating(${interest.id}, 2)">
                     👍 Plutôt moi
                 </button>
                 <button class="rating-btn level-3" onclick="setRating(${interest.id}, 3)">
-                    ✅ Totalement moi
+                    ⭐ Totalement moi
                 </button>
             </div>
         </div>
@@ -56,12 +56,12 @@ function updateProgress() {
 
 // Fonction pour créer le profil utilisateur
 function createUserProfile() {
-    let profile = "🎯 MON PROFIL D'INTÉRÊTS\n";
+    let profile = "📋 MON PROFIL D'INTÉRÊTS\n";
     profile += "=".repeat(50) + "\n\n";
     
     interests.forEach(interest => {
         const rating = ratings[interest.id] || 0;
-        const ratingLabels = ['❌ Pas du tout', '😐 Un peu', '👍 Plutôt', '✅ Totalement'];
+        const ratingLabels = ['❌ Pas du tout', '🤔 Un peu', '👍 Plutôt', '⭐ Totalement'];
         profile += `${interest.icon} ${interest.title}\n`;
         profile += `   → ${ratingLabels[rating]}\n\n`;
     });
@@ -108,10 +108,10 @@ function calculateResults() {
     // Tri des résultats par pourcentage décroissant
     results.sort((a, b) => b.percentage - a.percentage);
 
-    // Stocker les résultats globalement
-    currentResults = results.slice(0, 10);
+    // Stocker tous les résultats (21 univers)
+    currentResults = results;
 
-    // Affichage du top 10
+    // Affichage des 21 résultats
     displayResults(currentResults);
 }
 
@@ -142,7 +142,7 @@ function displayResults(results) {
 // Fonction pour créer le contenu visuel des résultats
 function createVisualResults() {
     const date = new Date().toLocaleDateString('fr-FR');
-    let content = "🧭 ORIENTATION 360 IA - RÉSULTATS DU TEST D'ORIENTATION\n";
+    let content = "🎯 ORIENTATION 360 IA - RÉSULTATS DU TEST D'ORIENTATION\n";
     content += "Date : " + date + "\n";
     content += "=".repeat(60) + "\n\n";
     
@@ -151,7 +151,7 @@ function createVisualResults() {
     content += "\n" + "=".repeat(60) + "\n\n";
     
     // Ajout des résultats
-    content += "🎯 TOP 10 DES UNIVERS COMPATIBLES\n";
+    content += "🌐 LES 21 UNIVERS COMPATIBLES\n";
     content += "=".repeat(60) + "\n\n";
     
     currentResults.forEach((result, index) => {
@@ -173,25 +173,194 @@ function createVisualResults() {
     return content;
 }
 
-// Fonction pour télécharger les résultats
+// Fonction pour télécharger les résultats en PDF
 function downloadResults() {
     if (currentResults.length === 0) {
         alert('⚠️ Aucun résultat à télécharger. Veuillez d\'abord passer le test.');
         return;
     }
     
-    const content = createVisualResults();
+    // Créer une nouvelle fenêtre pour le PDF
+    const printWindow = window.open('', '', 'width=800,height=600');
+    
     const date = new Date().toLocaleDateString('fr-FR');
     
-    // Création et téléchargement du fichier
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `Orientation360_Resultats_${date.replace(/\//g, '-')}.txt`;
-    link.click();
+    // Créer le contenu HTML stylisé pour le PDF
+    let htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Résultats Orientation 360 IA</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                background: #f5f7fa;
+                padding: 40px;
+                margin: 0;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 40px;
+                padding-bottom: 20px;
+                border-bottom: 3px solid #2c3e50;
+            }
+            .header h1 {
+                color: #2c3e50;
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            .header p {
+                color: #546e7a;
+                font-size: 14px;
+            }
+            .profile-section {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .profile-section h2 {
+                color: #2c3e50;
+                font-size: 20px;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #ecf0f1;
+                padding-bottom: 10px;
+            }
+            .interest-item {
+                margin-bottom: 15px;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 5px;
+            }
+            .interest-name {
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            .interest-rating {
+                color: #546e7a;
+                margin-left: 20px;
+            }
+            .results-section {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .results-section h2 {
+                color: #2c3e50;
+                font-size: 20px;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #ecf0f1;
+                padding-bottom: 10px;
+            }
+            .result-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+                margin-bottom: 10px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                border-left: 4px solid #667eea;
+            }
+            .result-name {
+                flex: 1;
+                font-weight: 600;
+                color: #2c3e50;
+            }
+            .result-percentage {
+                font-size: 20px;
+                font-weight: bold;
+                color: #667eea;
+                margin-left: 20px;
+            }
+            .progress-bar {
+                width: 200px;
+                height: 8px;
+                background: #ecf0f1;
+                border-radius: 4px;
+                overflow: hidden;
+                margin: 0 20px;
+            }
+            .progress-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            }
+            .footer {
+                text-align: center;
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 2px solid #ecf0f1;
+                color: #546e7a;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🎯 ORIENTATION 360 IA</h1>
+            <p>Résultats du test d'orientation professionnelle</p>
+            <p>Date : ${date}</p>
+        </div>
+        
+        <div class="profile-section">
+            <h2>📋 Mon profil d'intérêts</h2>
+    `;
     
-    // Notification
-    showNotification('✅ Résultats téléchargés avec succès !');
+    // Ajouter le profil
+    const ratingLabels = ['❌ Pas du tout', '🤔 Un peu', '👍 Plutôt', '⭐ Totalement'];
+    interests.forEach(interest => {
+        const rating = ratings[interest.id] || 0;
+        htmlContent += `
+            <div class="interest-item">
+                <span class="interest-name">${interest.icon} ${interest.title}</span>
+                <span class="interest-rating">${ratingLabels[rating]}</span>
+            </div>
+        `;
+    });
+    
+    htmlContent += `
+        </div>
+        
+        <div class="results-section">
+            <h2>🌐 Mes 21 univers professionnels classés</h2>
+    `;
+    
+    // Ajouter les résultats
+    currentResults.forEach((result, index) => {
+        htmlContent += `
+            <div class="result-item">
+                <span class="result-name">#${index + 1} ${result.name}</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${result.percentage}%"></div>
+                </div>
+                <span class="result-percentage">${result.percentage.toFixed(1)}%</span>
+            </div>
+        `;
+    });
+    
+    htmlContent += `
+        </div>
+        
+        <div class="footer">
+            <p>Merci d'avoir utilisé Orientation 360 IA !</p>
+            <p>L'intelligence artificielle au service de votre orientation professionnelle</p>
+        </div>
+    </body>
+    </html>
+    `;
+    
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    
+    // Attendre que le contenu soit chargé avant d'imprimer
+    printWindow.onload = function() {
+        printWindow.print();
+    };
+    
+    showNotification('📄 Génération du PDF en cours...');
 }
 
 // Fonction pour copier les résultats
@@ -218,8 +387,8 @@ function askAssistant() {
         return;
     }
     
-    // Cette fonction sera connectée à un GPT ultérieurement
-    alert('🧭 Cette fonctionnalité sera bientôt disponible !\n\nL\'assistant virtuel analysera votre profil complet et vous proposera un diagnostic personnalisé pour votre orientation professionnelle.');
+    // Cette fonctionnalité sera connectée à un GPT ultérieurement
+    alert('🤖 Cette fonctionnalité sera bientôt disponible !\n\nL\'assistant virtuel analysera votre profil complet et vous proposera un diagnostic personnalisé pour votre orientation professionnelle.');
 }
 
 // Fonction pour afficher une notification
