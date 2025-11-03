@@ -633,4 +633,126 @@
                     {emoji: '♿', name: 'Handicap'},
                     {emoji: '🧠', name: 'Santé mentale'},
                     {emoji: '🤲', name: 'Médiation sociale'},
-                    {emoji: '👨‍👩‍👧
+                    {emoji: '👨‍👩‍👧', name: 'Protection de l enfance'},
+                    {emoji: '🌱', name: 'Économie solidaire'},
+                    {emoji: '💚', name: 'Bénévolat'},
+                    {emoji: '🏥', name: 'Gestion médico-social'},
+                    {emoji: '👨‍👩‍👧‍👦', name: 'Médiation familiale'},
+                    {emoji: '🤗', name: 'Services à la personne'},
+                    {emoji: '🕊️', name: 'Accompagnement funéraire'}
+                ]
+            },
+            {
+                id: 20,
+                icon: '🏋️',
+                name: 'Sport, loisirs & vie active',
+                description: 'Animez et organisez des activités sportives.',
+                subUniverses: [
+                    {emoji: '💪', name: 'Coaching sportif'},
+                    {emoji: '🎉', name: 'Animation'},
+                    {emoji: '🏃', name: 'Enseignement du sport'},
+                    {emoji: '⚽', name: 'Encadrement sportif'},
+                    {emoji: '🏟️', name: 'Gestion d équipements sportifs'},
+                    {emoji: '🤝', name: 'Médiation par le sport'},
+                    {emoji: '🥗', name: 'Nutrition sportive'},
+                    {emoji: '🩺', name: 'Sport santé'},
+                    {emoji: '🎊', name: 'Organisation d événements sportifs'},
+                    {emoji: '🏔️', name: 'Tourisme sportif'},
+                    {emoji: '🎮', name: 'E-sport'}
+                ]
+            },
+            {
+                id: 21,
+                icon: '🚀',
+                name: 'Technologies émergentes',
+                description: 'Explorez l IA et les nouvelles formes de travail.',
+                subUniverses: [
+                    {emoji: '🤖', name: 'Robotique humanoïde'},
+                    {emoji: '🥽', name: 'Technologies immersives'},
+                    {emoji: '🧬', name: 'Bio-ingénierie'},
+                    {emoji: '🌾', name: 'AgroTech'},
+                    {emoji: '♻️', name: 'CleanTech'},
+                    {emoji: '⚕️', name: 'HealthTech'},
+                    {emoji: '🚀', name: 'SpaceTech'},
+                    {emoji: '💻', name: 'Travail numérique'}
+                ]
+            }
+        ];
+
+        var allSubUniversesVisible = false;
+
+        function renderUniverses() {
+            var grid = document.getElementById('universesGrid');
+            var html = '';
+            
+            for (var i = 0; i < universesData.length; i++) {
+                var universe = universesData[i];
+                var subHtml = '';
+                
+                for (var j = 0; j < universe.subUniverses.length; j++) {
+                    var sub = universe.subUniverses[j];
+                    subHtml += '<div class="sub-universe-item">' +
+                        '<span class="sub-universe-emoji">' + sub.emoji + '</span>' +
+                        '<span>' + sub.name + '</span>' +
+                    '</div>';
+                }
+                
+                html += '<div class="universe-card">' +
+                    '<div class="universe-image">' + universe.icon + '</div>' +
+                    '<div class="universe-content">' +
+                        '<div class="universe-name">' + universe.name + '</div>' +
+                        '<div class="universe-description">' + universe.description + '</div>' +
+                        '<div class="toggle-arrow" onclick="toggleSubUniverse(' + i + ')">' +
+                            '<span class="arrow-icon" id="arrow-' + i + '">⬇️</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="sub-universes" id="sub-' + i + '">' +
+                        '<div class="sub-universes-content">' + subHtml + '</div>' +
+                    '</div>' +
+                '</div>';
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        function toggleSubUniverse(index) {
+            var subDiv = document.getElementById('sub-' + index);
+            var arrow = document.getElementById('arrow-' + index);
+            
+            if (subDiv.classList.contains('open')) {
+                subDiv.classList.remove('open');
+                arrow.classList.remove('rotated');
+            } else {
+                subDiv.classList.add('open');
+                arrow.classList.add('rotated');
+            }
+        }
+
+        function toggleAllSubUniverses() {
+            allSubUniversesVisible = !allSubUniversesVisible;
+            var button = document.querySelector('.show-all-btn');
+            
+            for (var i = 0; i < universesData.length; i++) {
+                var subDiv = document.getElementById('sub-' + i);
+                var arrow = document.getElementById('arrow-' + i);
+                
+                if (allSubUniversesVisible) {
+                    subDiv.classList.add('open');
+                    arrow.classList.add('rotated');
+                } else {
+                    subDiv.classList.remove('open');
+                    arrow.classList.remove('rotated');
+                }
+            }
+            
+            button.textContent = allSubUniversesVisible ? '📋 Masquer tous les sous-univers' : '📋 Afficher tous les sous-univers';
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderUniverses);
+        } else {
+            renderUniverses();
+        }
+    </script>
+</body>
+</html>
