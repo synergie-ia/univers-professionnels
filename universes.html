@@ -4,7 +4,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Univers Professionnels - Orientation 360 IA</title>
-    <link rel="stylesheet" href="universes-style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #333;
+            margin: 0 0 15px 0;
+        }
+
+        .show-all-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        .show-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .universes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .universe-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .universe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            z-index: 10;
+        }
+
+        .universe-image {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .universe-content {
+            padding: 20px;
+        }
+
+        .universe-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .universe-description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95em;
+            text-align: center;
+        }
+
+        .sub-universes {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 0 0 15px 15px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .universe-card:hover .sub-universes {
+            display: block;
+        }
+
+        .sub-universes.show-all {
+            display: block !important;
+        }
+
+        .sub-universe-item {
+            padding: 6px 0;
+            color: #555;
+            font-size: 0.85em;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .back-btn {
+                position: static;
+                display: inline-block;
+                margin-bottom: 15px;
+                transform: none;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .universes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -16,11 +184,208 @@
             </button>
         </div>
         
-        <div class="universes-grid" id="universesGrid">
-            <!-- Les cartes seront générées ici par JavaScript -->
-        </div>
+        <div class="universes-grid" id="universesGrid"></div>
     </div>
 
-    <script src="universes-script.js"></script>
+    <script>
+        var universesData = [
+            {
+                id: 1,
+                icon: '🌾',
+                name: 'Agriculture, nature & animaux',
+                description: 'Cultivez, élevez, protégez la nature et travaillez avec les animaux.',
+                subUniverses: ['Agroalimentaire industriel', 'Production biologique', 'Agronomie', 'Viticulture', 'Maraîchage', 'Horticulture', 'Paysagisme', 'Forêt & sylviculture', 'Élevage', 'Aquaculture', 'Apiculture', 'Gestion de l eau', 'Valorisation des produits agricoles']
+            },
+            {
+                id: 2,
+                icon: '🎨',
+                name: 'Arts, design & création',
+                description: 'Créez, dessinez et exprimez votre créativité artistique.',
+                subUniverses: ['Arts visuels', 'Sculpture', 'Design graphique', 'Design produit', 'Architecture intérieure', 'Photographie', 'Cinéma & audiovisuel', 'Mode & stylisme', 'Artisanat d art', 'Scénographie', 'Illustration', 'Patrimoine', 'Spectacle vivant', 'Métiers du luxe', 'Régie spectacle']
+            },
+            {
+                id: 3,
+                icon: '🛒',
+                name: 'Commerce, marketing & vente',
+                description: 'Vendez, négociez et développez des stratégies commerciales.',
+                subUniverses: ['Commerce de détail', 'E-commerce', 'Vente B2B', 'Représentation', 'Merchandising', 'Marketing stratégique', 'Marketing digital', 'Communication commerciale', 'Achats', 'Management point de vente', 'Immobilier commercial', 'Banque & assurance', 'Service client', 'Commerce du luxe', 'Marketplaces']
+            },
+            {
+                id: 4,
+                icon: '🎙️',
+                name: 'Communication, médias & culture',
+                description: 'Informez, divertissez, communiquez à travers les médias.',
+                subUniverses: ['Journalisme', 'Audiovisuel', 'Relations publiques', 'Communication entreprise', 'Communication publique', 'Édition', 'Création de contenus', 'Publicité', 'Influence & storytelling', 'Traduction', 'Médiation culturelle', 'Podcasting']
+            },
+            {
+                id: 5,
+                icon: '🏗️',
+                name: 'Construction, BTP & habitat',
+                description: 'Construisez, rénovez et aménagez les bâtiments.',
+                subUniverses: ['Architecture', 'Gros œuvre', 'Second œuvre', 'Menuiserie', 'Plomberie & chauffage', 'Électricité & domotique', 'Travaux publics', 'Génie civil', 'Rénovation énergétique', 'Études techniques', 'Conduite de chantier', 'Gestion immobilière', 'Aménagement urbain']
+            },
+            {
+                id: 6,
+                icon: '⚖️',
+                name: 'Droit, administration & politique',
+                description: 'Défendez, régulez et administrez dans le juridique.',
+                subUniverses: ['Droit privé', 'Droit des affaires', 'Droit social', 'Droit public', 'Administration publique', 'Ressources humaines', 'Gouvernance territoriale', 'Diplomatie', 'Marchés publics', 'Intelligence juridique', 'Notariat']
+            },
+            {
+                id: 7,
+                icon: '🎓',
+                name: 'Éducation, formation & apprentissage',
+                description: 'Enseignez, formez et transmettez vos connaissances.',
+                subUniverses: ['Enseignement primaire', 'Enseignement secondaire', 'Enseignement supérieur', 'Formation professionnelle', 'Orientation', 'Coaching', 'Ingénierie pédagogique', 'Éducation spécialisée', 'Recherche en éducation', 'Animation socioculturelle']
+            },
+            {
+                id: 8,
+                icon: '🌍',
+                name: 'Environnement, climat & énergies',
+                description: 'Protégez la planète et développez les énergies vertes.',
+                subUniverses: ['Gestion des déchets', 'Traitement de l eau', 'Énergies renouvelables', 'Hydrogène', 'Énergie nucléaire', 'Génie climatique', 'Adaptation climatique', 'Bilan carbone', 'Économie circulaire', 'Aménagement durable', 'Ingénierie environnementale', 'Biodiversité', 'Restauration écologique', 'Mobilité durable', 'Agriculture régénératrice', 'Gestion risques naturels']
+            },
+            {
+                id: 9,
+                icon: '💶',
+                name: 'Gestion, finance & comptabilité',
+                description: 'Gérez et optimisez les ressources financières.',
+                subUniverses: ['Comptabilité', 'Audit', 'Trésorerie', 'Banque', 'Gestion de patrimoine', 'Gestion d entreprise', 'Finance durable', 'Gestion de projets financiers', 'Fintech', 'Gestion budgétaire publique', 'Conformité']
+            },
+            {
+                id: 10,
+                icon: '🍽️',
+                name: 'Hôtellerie, restauration & tourisme',
+                description: 'Accueillez, servez et faites découvrir les destinations.',
+                subUniverses: ['Cuisine gastronomique', 'Restauration collective', 'Service & sommellerie', 'Hôtellerie', 'Accueil', 'Tourisme local', 'Tourisme international', 'Événementiel', 'Management hôtelier', 'Œnotourisme', 'Gestion durable du tourisme']
+            },
+            {
+                id: 11,
+                icon: '🏠',
+                name: 'Immobilier & patrimoine',
+                description: 'Conseillez et gérez les biens immobiliers.',
+                subUniverses: ['Transaction résidentielle', 'Transaction entreprise', 'Promotion immobilière', 'Gestion locative', 'Expertise immobilière', 'Conseil patrimonial', 'Aménagement foncier', 'Immobilier social', 'Facility management', 'Immobilier de luxe']
+            },
+            {
+                id: 12,
+                icon: '⚙️',
+                name: 'Industrie, fabrication & production',
+                description: 'Produisez et automatisez dans les usines modernes.',
+                subUniverses: ['Production industrielle', 'Maintenance', 'Mécanique', 'Électrotechnique', 'Robotique', 'Chimie', 'Aéronautique', 'Métallurgie', 'Industrie pharmaceutique', 'Plasturgie', 'Qualité & sécurité', 'Supply chain industrielle', 'Impression 3D', 'Industrie textile', 'Micro-électronique', 'Industries extractives', 'Construction navale']
+            },
+            {
+                id: 13,
+                icon: '🚚',
+                name: 'Logistique, transport & mobilité',
+                description: 'Transportez et gérez les flux de marchandises.',
+                subUniverses: ['Logistique', 'Supply chain', 'Douanes', 'Transport routier', 'Transport ferroviaire', 'Transport aérien', 'Transport maritime', 'Mobilité urbaine', 'Gestion de flotte', 'Dernier kilomètre', 'Activités portuaires', 'Mobilité autonome']
+            },
+            {
+                id: 14,
+                icon: '💼',
+                name: 'Management, entrepreneuriat & stratégie',
+                description: 'Dirigez et pilotez des équipes vers le succès.',
+                subUniverses: ['Création d entreprise', 'Gestion de projets', 'Transformation digitale', 'Management d équipe', 'RSE', 'Stratégie', 'Pilotage de structures', 'Management interculturel', 'Conseil stratégique', 'Gouvernance']
+            },
+            {
+                id: 15,
+                icon: '💻',
+                name: 'Numérique, informatique & data',
+                description: 'Codez et créez les technologies de demain.',
+                subUniverses: ['Développement web', 'DevOps & cloud', 'Cybersécurité', 'Réseaux', 'Intelligence artificielle', 'Data science', 'Réalité augmentée', 'UX/UI design', 'IoT', 'ERP', 'No-code', 'Design numérique', 'Blockchain', 'Informatique durable', 'Gaming', 'E-sport']
+            },
+            {
+                id: 16,
+                icon: '⚕️',
+                name: 'Santé, bien-être & médical',
+                description: 'Soignez et accompagnez dans la santé.',
+                subUniverses: ['Médecine générale', 'Chirurgie', 'Radiologie', 'Biologie', 'Pharmacie', 'Soins infirmiers', 'Kinésithérapie', 'Santé mentale', 'Nutrition', 'Santé publique', 'Accompagnement personnes âgées', 'Médecine du sport', 'Télésanté']
+            },
+            {
+                id: 17,
+                icon: '🔬',
+                name: 'Sciences, recherche & innovation',
+                description: 'Cherchez et innovez pour faire avancer la science.',
+                subUniverses: ['Physique', 'Mathématiques', 'Chimie', 'Biotechnologies', 'Géosciences', 'Neurosciences', 'Sciences humaines', 'Recherche en éducation', 'Recherche appliquée', 'R&D entreprise', 'Consulting scientifique']
+            },
+            {
+                id: 18,
+                icon: '🛡️',
+                name: 'Sécurité, défense & urgence',
+                description: 'Protégez et sécurisez les personnes et les biens.',
+                subUniverses: ['Police', 'Pompiers', 'Sécurité privée', 'Protection civile', 'Défense', 'Renseignement', 'Cyberdéfense', 'Sécurité infrastructures', 'Gestion de crise', 'Prévention des risques', 'Industrie de défense']
+            },
+            {
+                id: 19,
+                icon: '❤️',
+                name: 'Social, aide & solidarité',
+                description: 'Aidez et accompagnez les personnes vulnérables.',
+                subUniverses: ['Aide à domicile', 'Travail social', 'Enfance & jeunesse', 'Handicap', 'Santé mentale', 'Médiation sociale', 'Protection de l enfance', 'Économie solidaire', 'Bénévolat', 'Gestion médico-social', 'Médiation familiale', 'Services à la personne', 'Accompagnement funéraire']
+            },
+            {
+                id: 20,
+                icon: '🏋️',
+                name: 'Sport, loisirs & vie active',
+                description: 'Animez et organisez des activités sportives.',
+                subUniverses: ['Coaching sportif', 'Animation', 'Enseignement du sport', 'Encadrement sportif', 'Gestion d équipements sportifs', 'Médiation par le sport', 'Nutrition sportive', 'Sport santé', 'Organisation d événements sportifs', 'Tourisme sportif', 'E-sport']
+            },
+            {
+                id: 21,
+                icon: '🚀',
+                name: 'Technologies émergentes',
+                description: 'Explorez l IA et les nouvelles formes de travail.',
+                subUniverses: ['Robotique humanoïde', 'Technologies immersives', 'Bio-ingénierie', 'AgroTech', 'CleanTech', 'HealthTech', 'SpaceTech', 'Travail numérique']
+            }
+        ];
+
+        var allSubUniversesVisible = false;
+
+        function renderUniverses() {
+            var grid = document.getElementById('universesGrid');
+            var html = '';
+            
+            for (var i = 0; i < universesData.length; i++) {
+                var universe = universesData[i];
+                var subHtml = '';
+                
+                for (var j = 0; j < universe.subUniverses.length; j++) {
+                    subHtml += '<div class="sub-universe-item">• ' + universe.subUniverses[j] + '</div>';
+                }
+                
+                html += '<div class="universe-card">' +
+                    '<div class="universe-image">' + universe.icon + '</div>' +
+                    '<div class="universe-content">' +
+                        '<div class="universe-name">' + universe.name + '</div>' +
+                        '<div class="universe-description">' + universe.description + '</div>' +
+                    '</div>' +
+                    '<div class="sub-universes">' + subHtml + '</div>' +
+                '</div>';
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        function toggleAllSubUniverses() {
+            allSubUniversesVisible = !allSubUniversesVisible;
+            var allSubs = document.querySelectorAll('.sub-universes');
+            var button = document.querySelector('.show-all-btn');
+            
+            for (var i = 0; i < allSubs.length; i++) {
+                if (allSubUniversesVisible) {
+                    allSubs[i].classList.add('show-all');
+                } else {
+                    allSubs[i].classList.remove('show-all');
+                }
+            }
+            
+            button.textContent = allSubUniversesVisible ? '📋 Masquer tous les sous-univers' : '📋 Afficher tous les sous-univers';
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderUniverses);
+        } else {
+            renderUniverses();
+        }
+    </script>
 </body>
 </html>
