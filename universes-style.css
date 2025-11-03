@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f7fa;
     min-height: 100vh;
     padding: 20px;
 }
@@ -22,7 +22,7 @@ body {
     padding: 25px 40px;
     margin-bottom: 40px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
 }
 
@@ -48,8 +48,25 @@ body {
 
 .header h1 {
     font-size: 2em;
-    color: #333;
-    margin: 0;
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+}
+
+.show-all-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95em;
+}
+
+.show-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .universes-grid {
@@ -61,20 +78,14 @@ body {
 .universe-card {
     background: white;
     border-radius: 15px;
-    overflow: visible;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     transition: all 0.3s;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    position: relative;
 }
 
 .universe-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-    z-index: 10;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
 }
 
 .universe-image {
@@ -94,7 +105,7 @@ body {
 .universe-name {
     font-size: 1.1em;
     font-weight: bold;
-    color: #333;
+    color: #2c3e50;
     margin-bottom: 12px;
     min-height: 50px;
     display: flex;
@@ -104,48 +115,122 @@ body {
 }
 
 .universe-description {
-    color: #666;
+    color: #546e7a;
     line-height: 1.5;
     font-size: 0.95em;
     text-align: center;
 }
 
 .sub-universes {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 0 0 15px 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    padding: 20px;
-    z-index: 1000;
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: -1px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
 }
 
-.universe-card:hover .sub-universes {
-    display: block;
+.sub-universes.open {
+    max-height: 2000px;
+    transition: max-height 0.7s ease-in;
+}
+
+.sub-universes-content {
+    padding: 20px;
+    border-top: 2px solid #e9ecef;
 }
 
 .sub-universe-item {
-    padding: 8px 0;
-    border-bottom: 1px solid #f0f0f0;
-    color: #555;
+    padding: 10px 15px;
+    color: #2c3e50;
     font-size: 0.9em;
     text-align: left;
-}
-
-.sub-universe-item:last-child {
-    border-bottom: none;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 }
 
 .sub-universe-item:hover {
-    color: #667eea;
-    padding-left: 5px;
-    transition: all 0.2s;
+    background: #667eea;
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.sub-universe-emoji {
+    font-size: 1.2em;
+}
+
+/* Modal pour les définitions */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideDown 0.3s;
+    position: relative;
+}
+
+.close-modal {
+    color: #95a5a6;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #2c3e50;
+}
+
+.modal-content h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-right: 30px;
+}
+
+.modal-content p {
+    color: #546e7a;
+    line-height: 1.6;
+    font-size: 1.05em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
@@ -172,14 +257,9 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .sub-universes {
-        position: static;
-        max-height: none;
-        margin-top: 10px;
-        border-radius: 10px;
-    }
-    
-    .universe-card:hover .sub-universes {
-        display: block;
+    .modal-content {
+        width: 95%;
+        margin: 20% auto;
+        padding: 20px;
     }
 }
