@@ -98,15 +98,17 @@ body {
 }
 
 .interest-verbs {
-    color: #666;
-    font-size: 0.9em;
-    font-style: italic;
+    color: #667eea;
+    font-size: 1em;
+    font-style: normal;
+    font-weight: bold;
 }
 
 .interest-description {
     color: #555;
     margin-bottom: 15px;
     line-height: 1.6;
+    font-weight: 600;
 }
 
 .rating-buttons {
@@ -246,6 +248,26 @@ body {
     background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.show-more-btn {
+    background: #f8f9fa;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    transition: all 0.3s;
+}
+
+.show-more-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-3px);
 }
 
 @keyframes fadeIn {
