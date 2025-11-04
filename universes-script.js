@@ -1,64 +1,66 @@
-// universes-script.js – rendu de la page des univers
-
-const grid = document.getElementById('universesGrid');
-const toggleBtn = document.getElementById('toggleAllBtn');
-
-function renderUniverses(){
-  grid.innerHTML = (window.universesData || []).map(u=>`
-    <div class="universe-card">
-      <div class="universe-head">
-        <div class="universe-name">${u.icon ?? ''} ${u.name}</div>
-        <div class="universe-description">${u.description ?? ''}</div>
-      </div>
-      <div class="sub-universes open">
-        <div class="sub-universes-content">
-          ${u.subUniverses.map(su=>`
-            <div class="sub-universe-item" data-name="${su.name}">
-              <span>${su.emoji ?? ''}</span><span>${su.name}</span>
+// Fonction pour générer les cartes d'univers
+function renderUniverses() {
+    const grid = document.getElementById('universesGrid');
+    
+    grid.innerHTML = universesData.map(universe => `
+        <div class="universe-card" onclick="openModal(${universe.id})">
+            <div class="universe-image">
+                ${universe.icon}
             </div>
-          `).join('')}
+            <div class="universe-content">
+                <div class="universe-name">${universe.name}</div>
+                <div class="universe-description">${universe.description}</div>
+                <div class="universe-footer">
+                    <span class="universe-arrow">→</span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  `).join('');
+    `).join('');
 }
 
-function toggleAll(){
-  const all = Array.from(document.querySelectorAll('.sub-universes'));
-  const willOpen = toggleBtn.dataset.state !== 'open';
-  all.forEach(el => el.classList.toggle('open', willOpen));
-  toggleBtn.textContent = willOpen ? 'Masquer tous les univers' : 'Afficher tous les univers';
-  toggleBtn.dataset.state = willOpen ? 'open' : 'closed';
+// Fonction pour ouvrir le modal avec les sous-univers
+function openModal(universeId) {
+    const universe = universesData.find(u => u.id === universeId);
+    if (!universe) return;
+    
+    const modal = document.getElementById('subUniversesModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const subUniversesList = document.getElementById('subUniversesList');
+    
+    modalTitle.textContent = universe.icon + ' ' + universe.name;
+    
+    subUniversesList.innerHTML = universe.subUniverses.map((sub, index) => `
+        <div class="sub-universe-card" onclick="toggleDescription(event, ${universeId}, ${index})">
+            <div class="sub-universe-header">
+                <div class="sub-universe-icon">${sub.icon}</div>
+                <div class="sub-universe-name">${sub.name}</div>
+            </div>
+            <div class="sub-universe-description">${sub.description}</div>
+        </div>
+    `).join('');
+    
+    modal.style.display = 'block';
 }
 
-function handleClick(e){
-  const item = e.target.closest('.sub-universe-item');
-  if(!item) return;
-  const name = item.dataset.name;
-  const defs = window.subUniverseDefinitions || {};
-  const text = defs[name] || "Définition à venir pour ce sous-univers.";
-  openModal(name, text);
+// Fonction pour fermer le modal
+function closeModal() {
+    document.getElementById('subUniversesModal').style.display = 'none';
 }
 
-// --- Modale ---
-const modal = document.getElementById('defModal');
-const closeModalBtn = document.getElementById('closeModal');
-function openModal(title, text){
-  document.getElementById('defTitle').textContent = title;
-  document.getElementById('defText').textContent = text;
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden','false');
+// Fonction pour afficher/masquer la description
+function toggleDescription(event, universeId, subIndex) {
+    event.currentTarget.classList.toggle('expanded');
 }
-function closeModal(){
-  modal.classList.remove('show');
-  modal.setAttribute('aria-hidden','true');
-}
-modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
-closeModalBtn.addEventListener('click', closeModal);
 
-// Init
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderUniverses();
-  grid.addEventListener('click', handleClick);
-  toggleBtn.addEventListener('click', toggleAll);
+// Fermer le modal si on clique en dehors
+window.onclick = function(event) {
+    const modal = document.getElementById('subUniversesModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    renderUniverses();
 });
