@@ -77,32 +77,15 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-.interest-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.interest-icon {
-    font-size: 2.5em;
-    margin-right: 15px;
-}
-
-.interest-title {
-    flex: 1;
-}
-
-.interest-title h3 {
+.interest-question {
     color: #333;
-    margin-bottom: 5px;
-    font-size: 1.1em;
-}
-
-.interest-description {
-    color: #555;
     margin-bottom: 15px;
     line-height: 1.6;
-    font-weight: 500;
+    font-size: 1.05em;
+}
+
+.interest-question strong {
+    color: #667eea;
 }
 
 .rating-buttons {
