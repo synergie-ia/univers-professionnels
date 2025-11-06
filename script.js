@@ -1,247 +1,271 @@
-// Variables globales
-let currentQuestion = 0;
-let responses = [];
+// Stockage des réponses de l'utilisateur
+let ratings = {};
 let currentResults = [];
 
-// Nouvelle échelle à 5 niveaux
-const ratingScale = [
-    { value: 0, label: "Pas du tout" },
-    { value: 1, label: "Un peu" },
-    { value: 2, label: "Moyennement" },
-    { value: 3, label: "Plutôt" },
-    { value: 4, label: "Totalement" }
-];
-
-// Charger les réponses sauvegardées
-function loadSavedResponses() {
-    const saved = localStorage.getItem('orientation360_responses');
+// Charger les réponses sauvegardées au démarrage
+function loadSavedRatings() {
+    const saved = localStorage.getItem('orientation360_ratings');
     if (saved) {
-        responses = JSON.parse(saved);
-        return true;
+        ratings = JSON.parse(saved);
     }
-    return false;
 }
 
 // Sauvegarder les réponses
-function saveResponses() {
-    localStorage.setItem('orientation360_responses', JSON.stringify(responses));
+function saveRatings() {
+    localStorage.setItem('orientation360_ratings', JSON.stringify(ratings));
 }
 
-// Initialisation
-document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier si on a des résultats à afficher
-    if (loadSavedResponses() && responses.length === 12) {
-        displayResults();
-    } else {
-        startTest();
-    }
-});
-
-// Démarrer le test
-function startTest() {
-    responses = [];
-    currentQuestion = 0;
-    saveResponses();
-    displayQuestion();
-}
-
-// Afficher une question
-function displayQuestion() {
-    const container = document.getElementById('questionContainer');
-    const progressBar = document.getElementById('progressBar');
-    const questionNumber = document.getElementById('questionNumber');
-    
-    if (currentQuestion >= interestsData.length) {
-        calculateResults();
-        return;
-    }
-    
-    const interest = interestsData[currentQuestion];
-    
-    // Mise à jour de la progression
-    const progress = ((currentQuestion + 1) / interestsData.length) * 100;
-    progressBar.style.width = progress + '%';
-    questionNumber.textContent = `Question ${currentQuestion + 1}/${interestsData.length}`;
-    
-    // Affichage de la question
-    container.innerHTML = `
-        <div class="question-card">
-            <div class="verb-highlight">${interest.verb}</div>
-            <div class="question-text">${interest.question}</div>
-            <div class="rating-container">
-                ${ratingScale.map((rating, index) => `
-                    <button class="rating-btn" onclick="selectRating(${rating.value})">
-                        <div class="rating-value">${rating.label}</div>
-                    </button>
-                `).join('')}
+// Fonction d'initialisation au chargement de la page
+function renderInterests() {
+    const container = document.getElementById('interestsList');
+    container.innerHTML = interests.map(interest => `
+        <div class="interest-card">
+            <div class="interest-header">
+                <div class="interest-icon">${interest.icon}</div>
+                <div class="interest-title">
+                    <h3>${interest.title}</h3>
+                    <div class="interest-verbs">${interest.verbs}</div>
+                </div>
+            </div>
+            <div class="interest-description">${interest.description}</div>
+            <div class="rating-buttons">
+                <button class="rating-btn level-0" data-interest="${interest.id}" data-value="0">❌ Pas du tout</button>
+                <button class="rating-btn level-1" data-interest="${interest.id}" data-value="1">🤔 Un peu</button>
+                <button class="rating-btn level-2" data-interest="${interest.id}" data-value="2">👍 Plutôt</button>
+                <button class="rating-btn level-3" data-interest="${interest.id}" data-value="3">✅ Totalement</button>
             </div>
         </div>
-    `;
+    `).join('');
+
+    // Ajouter les event listeners
+    document.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const interestId = parseInt(this.getAttribute('data-interest'));
+            const value = parseInt(this.getAttribute('data-value'));
+            ratings[interestId] = value;
+
+            // Sauvegarder dans localStorage
+            saveRatings();
+
+            // Mettre à jour visuellement
+            const card = this.closest('.interest-card');
+            card.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+
+            // Mettre à jour la barre de progression
+            updateProgress();
+        });
+    });
+
+    // Restaurer les sélections
+    Object.keys(ratings).forEach(interestId => {
+        const value = ratings[interestId];
+        const btn = document.querySelector(`.rating-btn[data-interest="${interestId}"][data-value="${value}"]`);
+        if (btn) {
+            btn.classList.add('selected');
+        }
+    });
+
+    // Mettre à jour la progression
+    updateProgress();
 }
 
-// Sélectionner une réponse
-function selectRating(value) {
-    responses[currentQuestion] = value;
-    saveResponses();
-    currentQuestion++;
-    displayQuestion();
+// Fonction pour mettre à jour la barre de progression
+function updateProgress() {
+    const totalAnswered = Object.keys(ratings).length;
+    const percentage = (totalAnswered / interests.length) * 100;
+    document.getElementById('progressBar').style.width = percentage + '%';
 }
 
-// Calculer les résultats
+// Fonction pour créer le profil utilisateur
+function createUserProfile() {
+    let profile = "MON PROFIL D'INTÉRÊTS\n";
+    profile += "=".repeat(50) + "\n\n";
+    
+    interests.forEach(interest => {
+        const rating = ratings[interest.id] || 0;
+        const ratingLabels = ['Pas du tout', 'Un peu', 'Plutôt', 'Totalement'];
+        profile += `${interest.title}\n`;
+        profile += `   ${ratingLabels[rating]}\n\n`;
+    });
+    
+    return profile;
+}
+
+// Fonction principale de calcul des résultats
 function calculateResults() {
-    const results = universesData.map(universe => {
+    // Vérifier que toutes les questions ont été répondues
+    if (Object.keys(ratings).length < interests.length) {
+        alert('⚠️ Veuillez répondre à toutes les questions avant de calculer vos résultats.');
+        return;
+    }
+
+    // Calcul du score pour chaque univers selon l'algorithme du document
+    const results = universes.map(universe => {
         let score = 0;
         let maxScore = 0;
         
-        universe.interests.forEach((weight, index) => {
-            if (weight > 0) {
-                score += responses[index] * weight;
-                maxScore += 4 * weight; // 4 = valeur max de l'échelle
-            }
+        // Pour chaque intérêt (12 au total)
+        universe.weights.forEach((weight, index) => {
+            const interestId = index + 1;
+            const userRating = ratings[interestId] || 0;
+            
+            // Score = somme des (note utilisateur × poids univers)
+            score += userRating * weight;
+            
+            // Score max = somme des poids × 3 (note max possible)
+            maxScore += weight * 3;
         });
         
+        // Calcul du pourcentage de compatibilité
         const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
         
         return {
             id: universe.id,
             name: universe.name,
-            icon: universe.icon,
             score: score,
             maxScore: maxScore,
             percentage: percentage
         };
     });
-    
-    // Trier par pourcentage décroissant
+
+    // Tri des résultats par pourcentage décroissant
     results.sort((a, b) => b.percentage - a.percentage);
+
+    // Stocker TOUS les résultats globalement
     currentResults = results;
-    
-    displayResults();
+
+    // Affichage des résultats (la fonction displayResults gère top 5 + reste)
+    displayResults(currentResults);
 }
 
-// Afficher les résultats
-function displayResults() {
-    const container = document.getElementById('questionContainer');
-    const progressContainer = document.querySelector('.progress-container');
+// Fonction d'affichage des résultats
+function displayResults(results) {
+    const container = document.getElementById('resultsList');
     
-    progressContainer.style.display = 'none';
+    // Afficher seulement les 5 premiers
+    const top5 = results.slice(0, 5);
+    const remaining = results.slice(5);
     
-    // Top 5
-    const top5HTML = currentResults.slice(0, 5).map((result, index) => `
-        <div class="result-item">
-            <div class="result-rank">#${index + 1}</div>
-            <div class="result-icon">${result.icon}</div>
+    let html = top5.map((result, index) => `
+        <div class="result-card">
             <div class="result-info">
-                <div class="result-name">${result.name.replace(result.icon, '').trim()}</div>
-                <div class="result-score">Compatibilité : ${Math.round(result.percentage)}%</div>
+                <div class="result-title">#${index + 1} ${result.name}</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${result.percentage}%"></div>
+                </div>
             </div>
-            <button class="explore-btn" onclick="exploreUniverse(${result.id})">🔍</button>
+            <div class="result-actions">
+                <div class="result-score">${Math.round(result.percentage)}%</div>
+                <button class="view-universe-btn" onclick="viewUniverseDetails(${result.id})" title="Voir les sous-univers">
+                    👁️
+                </button>
+            </div>
         </div>
     `).join('');
     
-    // Autres univers
-    const othersHTML = currentResults.length > 5 ? `
-        <div id="otherResults" style="display: none;">
-            ${currentResults.slice(5).map((result, index) => `
-                <div class="result-item">
-                    <div class="result-rank">#${index + 6}</div>
-                    <div class="result-icon">${result.icon}</div>
-                    <div class="result-info">
-                        <div class="result-name">${result.name.replace(result.icon, '').trim()}</div>
-                        <div class="result-score">Compatibilité : ${Math.round(result.percentage)}%</div>
+    // Ajouter le bouton pour voir les univers restants
+    if (remaining.length > 0) {
+        html += `
+            <button class="show-more-btn" onclick="showRemainingUniverses()" id="showMoreBtn">
+                👇 Voir les ${remaining.length} univers restants
+            </button>
+            <div id="remainingUniverses" style="display: none;">
+                ${remaining.map((result, index) => `
+                    <div class="result-card">
+                        <div class="result-info">
+                            <div class="result-title">#${index + 6} ${result.name}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${result.percentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <div class="result-score">${Math.round(result.percentage)}%</div>
+                            <button class="view-universe-btn" onclick="viewUniverseDetails(${result.id})" title="Voir les sous-univers">
+                                👁️
+                            </button>
+                        </div>
                     </div>
-                    <button class="explore-btn" onclick="exploreUniverse(${result.id})">🔍</button>
-                </div>
-            `).join('')}
-        </div>
-        <button class="show-more-btn" onclick="toggleOtherResults()">
-            <span id="showMoreText">Voir les ${currentResults.length - 5} univers restants</span>
-        </button>
-    ` : '';
+                `).join('')}
+            </div>
+        `;
+    }
     
-    container.innerHTML = `
-        <div class="results-header">
-            <h2>🎯 Vos résultats</h2>
-            <p>Voici les univers professionnels les plus compatibles avec votre profil</p>
-        </div>
-        
-        <div class="top-actions">
-            <button class="action-icon-btn pdf-btn" onclick="downloadPDF()">
-                📄
-            </button>
-            <button class="action-icon-btn copy-btn" onclick="copyResults()">
-                📋
-            </button>
-        </div>
-        
-        <div class="results-list">
-            <h3>🏆 Top 5 des univers</h3>
-            ${top5HTML}
-        </div>
-        
-        ${othersHTML}
-        
-        <div class="actions-container">
-            <button class="restart-btn" onclick="restartTest()">🔄 Recommencer le test</button>
-            <button class="home-btn" onclick="goHome()">🏠 Retour à l'accueil</button>
+    // Ajouter le bouton Retour
+    html += `
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="window.history.back()" class="home-btn">← Retour</button>
         </div>
     `;
-}
-
-// Afficher/masquer les autres résultats
-function toggleOtherResults() {
-    const otherResults = document.getElementById('otherResults');
-    const showMoreText = document.getElementById('showMoreText');
-    const btn = event.target.closest('.show-more-btn');
     
-    if (otherResults.style.display === 'none') {
-        otherResults.style.display = 'block';
-        showMoreText.textContent = 'Masquer';
-    } else {
-        otherResults.style.display = 'none';
-        showMoreText.textContent = `Voir les ${currentResults.length - 5} univers restants`;
-    }
+    container.innerHTML = html;
+
+    // Affichage de la section résultats avec animation
+    const resultsSection = document.getElementById('results');
+    resultsSection.classList.add('show');
+    
+    // Scroll automatique vers les résultats
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Explorer un univers
-function exploreUniverse(universeId) {
+// Fonction pour afficher les univers restants
+function showRemainingUniverses() {
+    const remainingDiv = document.getElementById('remainingUniverses');
+    const btn = document.getElementById('showMoreBtn');
+    remainingDiv.style.display = 'block';
+    btn.style.display = 'none';
+}
+
+// Fonction pour voir les détails d'un univers
+function viewUniverseDetails(universeId) {
+    // Sauvegarder qu'on vient de la page résultats
+    sessionStorage.setItem('fromResults', 'true');
+    // Ouvrir la page univers avec l'ID
     window.location.href = `universes.html?id=${universeId}&from=results`;
 }
 
-// Télécharger en PDF
-function downloadPDF() {
+// Fonction pour télécharger les résultats en PDF
+function downloadResults() {
+    if (currentResults.length === 0) {
+        alert('⚠️ Aucun résultat à télécharger. Veuillez d\'abord passer le test.');
+        return;
+    }
+    
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
     const date = new Date().toLocaleDateString('fr-FR');
+    let yPos = 20;
     
+    // Titre
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold');
-    doc.text('ORIENTATION 360 IA', 105, 20, { align: 'center' });
+    doc.text('Orientation 360 IA', 105, yPos, { align: 'center' });
+    yPos += 10;
     
     doc.setFontSize(12);
     doc.setFont(undefined, 'normal');
-    doc.text('Resultats du test d\'orientation', 105, 28, { align: 'center' });
-    doc.text('Date : ' + date, 105, 35, { align: 'center' });
+    doc.text('Résultats du test d\'orientation', 105, yPos, { align: 'center' });
+    yPos += 5;
+    doc.text('Date : ' + date, 105, yPos, { align: 'center' });
+    yPos += 15;
     
-    let yPos = 50;
-    
-    // Profil
+    // Profil d'intérêts
     doc.setFontSize(14);
     doc.setFont(undefined, 'bold');
-    doc.text('VOTRE PROFIL', 20, yPos);
+    doc.text('MON PROFIL D\'INTERETS', 20, yPos);
     yPos += 10;
     
     doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
     
-    interestsData.forEach((interest, index) => {
+    interests.forEach(interest => {
         if (yPos > 270) {
             doc.addPage();
             yPos = 20;
         }
-        const rating = responses[index];
-        const ratingLabels = ['Pas du tout', 'Un peu', 'Moyennement', 'Plutot', 'Totalement'];
+        const rating = ratings[interest.id] || 0;
+        const ratingLabels = ['Pas du tout', 'Un peu', 'Plutot', 'Totalement'];
         doc.text(interest.title, 20, yPos);
         yPos += 5;
         doc.text('   ' + ratingLabels[rating], 20, yPos);
@@ -250,7 +274,7 @@ function downloadPDF() {
     
     yPos += 10;
     
-    // Top 5
+    // Top 5 des univers
     if (yPos > 200) {
         doc.addPage();
         yPos = 20;
@@ -269,7 +293,9 @@ function downloadPDF() {
             doc.addPage();
             yPos = 20;
         }
-        const cleanName = result.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+        // Enlever les emojis et nettoyer le nom
+        let cleanName = result.name.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').trim();
+        cleanName = cleanName.replace(/[^\x00-\x7F]/g, ''); // Enlever tous caractères non-ASCII
         doc.setFont(undefined, 'bold');
         doc.text('#' + (index + 1) + ' ' + cleanName, 20, yPos);
         yPos += 5;
@@ -298,83 +324,128 @@ function downloadPDF() {
                 doc.addPage();
                 yPos = 20;
             }
-            const cleanName = result.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+            let cleanName = result.name.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').trim();
+            cleanName = cleanName.replace(/[^\x00-\x7F]/g, '');
             doc.text('#' + (index + 6) + ' ' + cleanName + ' - ' + Math.round(result.percentage) + '%', 20, yPos);
             yPos += 6;
         });
     }
     
+    // Sauvegarde
     doc.save('Orientation360IA_Resultats_' + date.replace(/\//g, '-') + '.pdf');
+    
     showNotification('✅ PDF téléchargé avec succès !');
 }
 
-// Copier les résultats
+// Fonction pour copier les résultats
 function copyResults() {
     if (currentResults.length === 0) {
-        alert('⚠️ Aucun résultat à copier.');
+        alert('⚠️ Aucun résultat à copier. Veuillez d\'abord passer le test.');
         return;
     }
     
     const date = new Date().toLocaleDateString('fr-FR');
+    let content = "🎯 ORIENTATION 360 IA - RÉSULTATS\n";
+    content += "Date : " + date + "\n";
+    content += "=".repeat(60) + "\n\n";
     
-    let text = '🎯 ORIENTATION 360 IA - RÉSULTATS\n';
-    text += '═══════════════════════════════════\n\n';
-    text += `Date : ${date}\n\n`;
+    // Ajout du profil
+    content += createUserProfile();
+    content += "\n" + "=".repeat(60) + "\n\n";
     
-    text += '📊 VOTRE PROFIL\n';
-    text += '─────────────────────────────────\n';
-    interestsData.forEach((interest, index) => {
-        const rating = responses[index];
-        const ratingLabels = ['Pas du tout', 'Un peu', 'Moyennement', 'Plutôt', 'Totalement'];
-        text += `${interest.title} : ${ratingLabels[rating]}\n`;
-    });
+    // Ajout des résultats
+    content += "🏆 TOP 5 DES UNIVERS COMPATIBLES\n";
+    content += "=".repeat(60) + "\n\n";
     
-    text += '\n🏆 TOP 5 DES UNIVERS\n';
-    text += '─────────────────────────────────\n';
     currentResults.slice(0, 5).forEach((result, index) => {
-        const cleanName = result.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
-        text += `#${index + 1} ${cleanName} - ${Math.round(result.percentage)}%\n`;
+        content += `#${index + 1} ${result.name}\n`;
+        content += `   Compatibilité : ${Math.round(result.percentage)}%\n\n`;
     });
     
     if (currentResults.length > 5) {
-        text += '\n📋 AUTRES UNIVERS\n';
-        text += '─────────────────────────────────\n';
+        content += "\nAUTRES UNIVERS\n";
+        content += "=".repeat(60) + "\n\n";
         currentResults.slice(5).forEach((result, index) => {
-            const cleanName = result.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
-            text += `#${index + 6} ${cleanName} - ${Math.round(result.percentage)}%\n`;
+            content += `#${index + 6} ${result.name} - ${Math.round(result.percentage)}%\n`;
         });
     }
     
-    navigator.clipboard.writeText(text).then(() => {
+    // Copie dans le presse-papier
+    navigator.clipboard.writeText(content).then(() => {
         showNotification('✅ Résultats copiés dans le presse-papier !');
-    }).catch(() => {
-        alert('❌ Erreur lors de la copie');
+    }).catch(err => {
+        alert('❌ Erreur lors de la copie : ' + err);
     });
 }
 
-// Notification
-function showNotification(message) {
-    const notif = document.createElement('div');
-    notif.className = 'notification';
-    notif.textContent = message;
-    document.body.appendChild(notif);
+// Fonction pour ouvrir l'assistant virtuel
+function openAssistant() {
+    if (currentResults.length === 0) {
+        alert('⚠️ Veuillez d\'abord passer le test avant de consulter l\'assistant virtuel.');
+        return;
+    }
     
-    setTimeout(() => notif.classList.add('show'), 100);
+    // Pour l'instant, afficher un message (sera connecté à un GPT plus tard)
+    alert('🚀 Fonctionnalité à venir !\n\nL\'assistant virtuel sera bientôt disponible pour analyser votre profil en détail.');
+    
+    // TODO: Intégrer avec un GPT pour l'analyse du profil
+}
+
+// Fonction pour afficher une notification
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #27ae60;
+        color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-weight: bold;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
     setTimeout(() => {
-        notif.classList.remove('show');
-        setTimeout(() => notif.remove(), 300);
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
-// Recommencer le test
-function restartTest() {
-    if (confirm('⚠️ Êtes-vous sûr de vouloir recommencer le test ? Vos réponses actuelles seront effacées.')) {
-        localStorage.removeItem('orientation360_responses');
-        location.reload();
+// Ajout des animations CSS pour les notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
-}
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
 
-// Retour à l'accueil
-function goHome() {
-    window.location.href = 'index.html';
-}
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedRatings();
+    renderInterests();
+});
