@@ -11,6 +11,20 @@
         <div class="header">
             <a href="index.html" class="back-btn">← Retour</a>
             <h1>🌐 Les Univers Professionnels</h1>
+            <p class="subtitle">Sélectionnez les univers qui vous intéressent</p>
+        </div>
+        
+        <div class="top-actions">
+            <button class="test-btn" onclick="window.location.href='test.html'">
+                📝 Si vous hésitez sur les univers, passez le test d'intérêts professionnels
+            </button>
+            <button class="download-btn" onclick="downloadSelectedUniverses()" id="downloadBtn" disabled>
+                📥 Télécharger les univers choisis
+            </button>
+        </div>
+        
+        <div class="selection-info" id="selectionInfo">
+            <span id="selectionCount">0 univers sélectionné(s)</span>
         </div>
         
         <div class="universes-grid" id="universesGrid"></div>
@@ -25,6 +39,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="universes-data.js"></script>
     <script src="universes-script.js"></script>
 </body>
