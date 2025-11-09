@@ -111,25 +111,26 @@ const interests = [
   {
     id: 10,
     code: "AT",
-    name: "Action & Efficacité terrain",
-    question: "Dans votre façon de travailer :",
-    statements: [
-      "Vous avez besoin de voir rapidement le résultat concret de vos actions",
-      "Vous êtes à l'aise dans l'urgence et les situations qui demandent une réaction immédiate",
-      "Vous préférez résoudre plusieurs petits problèmes concrets qu'un seul gros projet théorique",
-      "Vous êtes frustrés par les projets à très long terme où l'impact n'est pas visible avant des mois"
-    ]
-  },
-  {
-    id: 11,
-    code: "TP",
-    name: "Transmission et progression",
+    name: "Attention & transmission",
     question: "Dans vos interactions avec les autres :",
     statements: [
       "Vous ressentez une réelle satisfaction quand quelqu'un comprend grâce à vous",
       "Vous êtes patient face aux difficultés d'apprentissage des autres",
       "Vous prenez plaisir à adapter vos explications jusqu'à trouver la bonne approche",
       "Vous trouvez gratifiant de voir quelqu'un devenir autonome grâce à votre accompagnement"
+    ]
+  },
+  {
+    id: 11,
+    code: "TP",
+    name: "Travail de proximité",
+    question: "Dans votre façon de travailler :",
+    statements: [
+      "Vous avez besoin de voir rapidement le résultat concret de vos actions",
+      "Vous êtes à l'aise dans l'urgence et les situations qui demandent une réaction immédiate",
+      "Vous préférez résoudre plusieurs petits problèmes concrets qu'un seul gros projet théorique",
+      "Vous êtes frustré par les projets à très long terme où l'impact n'est pas visible avant des mois"
+    ]
   },
   {
     id: 12,
