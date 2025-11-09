@@ -6,135 +6,6 @@ const universesData = [
     icon: "🌾",
     description: "Cultivez, élevez, protégez la nature et travaillez avec les animaux dans des métiers en plein air.",
     subUniverses: [
-      { icon: "🌐", name: "Développement web & mobile", description: "Création d'applications et de sites internet." },
-      { icon: "☁️", name: "DevOps & cloud computing", description: "Automatisation et hébergement de systèmes informatiques." },
-      { icon: "🔐", name: "Cybersécurité", description: "Protection des réseaux et données." },
-      { icon: "🖥️", name: "Réseaux & systèmes", description: "Installation et maintenance des infrastructures informatiques." },
-      { icon: "🤖", name: "Intelligence artificielle & machine learning", description: "Conception d'algorithmes d'apprentissage." },
-      { icon: "📊", name: "Data science & big data", description: "Analyse et valorisation de grandes bases de données." },
-      { icon: "🥽", name: "Réalité augmentée & métavers", description: "Expériences numériques immersives." },
-      { icon: "🎨", name: "UX/UI design", description: "Conception d'interfaces centrées sur l'utilisateur." },
-      { icon: "🏭", name: "Informatique industrielle & IoT", description: "Objets connectés et automatisation des processus." },
-      { icon: "🧩", name: "Logiciels métiers & ERP", description: "Outils de gestion pour entreprises." },
-      { icon: "⚙️", name: "No-code & automation", description: "Création d'applications sans programmation." },
-      { icon: "🎨", name: "Design numérique & multimédia", description: "Graphisme et création d'environnements digitaux." },
-      { icon: "⛓️", name: "Blockchain & web3", description: "Technologies décentralisées et sécurisées." },
-      { icon: "♻️", name: "Informatique durable & sobriété numérique", description: "Réduction de l'empreinte écologique du numérique." },
-      { icon: "🎮", name: "Gaming, jeux vidéo & développement ludique", description: "Conception de jeux interactifs." },
-      { icon: "🏆", name: "E-sport, streaming & création de contenu gaming", description: "Compétition et diffusion de jeux vidéo." }
-    ]
-  },
-  {
-    id: 16,
-    name: "Santé, bien-être & médical",
-    icon: "⚕️",
-    description: "Soignez, diagnostiquez, accompagnez et promouvez la santé.",
-    subUniverses: [
-      { icon: "🩺", name: "Médecine générale", description: "Soins courants et prévention." },
-      { icon: "🏥", name: "Chirurgie & spécialités hospitalières", description: "Interventions et soins techniques." },
-      { icon: "📷", name: "Radiologie & imagerie médicale", description: "Diagnostic par l'image." },
-      { icon: "🔬", name: "Biologie & analyses médicales", description: "Études de prélèvements biologiques." },
-      { icon: "💊", name: "Pharmacie & biotechnologies", description: "Développement et distribution de traitements." },
-      { icon: "🩹", name: "Infirmier & soins paramédicaux", description: "Accompagnement des patients au quotidien." },
-      { icon: "🦵", name: "Rééducation & kinésithérapie", description: "Restauration des capacités physiques." },
-      { icon: "🧠", name: "Santé mentale & psychologie", description: "Prise en charge des troubles psychiques." },
-      { icon: "🥗", name: "Nutrition & diététique", description: "Équilibre alimentaire et santé." },
-      { icon: "🏥", name: "Santé publique & prévention", description: "Promotion du bien-être collectif." },
-      { icon: "👵", name: "Accompagnement des personnes âgées", description: "Soins et assistance en gérontologie." },
-      { icon: "⚽", name: "Médecine du sport", description: "Prévention et suivi des sportifs." },
-      { icon: "💻", name: "Médecine connectée & télésanté", description: "Soins à distance et outils numériques." }
-    ]
-  },
-  {
-    id: 17,
-    name: "Sciences, recherche & innovation",
-    icon: "🔬",
-    description: "Cherchez, expérimentez, découvrez et innovez dans les sciences.",
-    subUniverses: [
-      { icon: "🌌", name: "Physique & astrophysique", description: "Étude des lois de l'univers et de la matière." },
-      { icon: "📐", name: "Mathématiques & statistiques", description: "Modélisation et analyse quantitative." },
-      { icon: "⚗️", name: "Chimie & matériaux", description: "Recherche sur les réactions et nouveaux matériaux." },
-      { icon: "🧬", name: "Biotechnologies", description: "Innovation à partir du vivant." },
-      { icon: "🌍", name: "Géosciences & climatologie", description: "Étude de la Terre et des phénomènes climatiques." },
-      { icon: "🧠", name: "Neurosciences & cognition", description: "Exploration du cerveau et du comportement." },
-      { icon: "👥", name: "Sciences humaines & sociales", description: "Analyse des sociétés et comportements humains." },
-      { icon: "📚", name: "Recherche en éducation", description: "Étude des processus d'apprentissage." },
-      { icon: "🔬", name: "Recherche appliquée & transfert technologique", description: "Passage de la science au produit." },
-      { icon: "🏢", name: "R&D en entreprise", description: "Innovation intégrée à la production." },
-      { icon: "📊", name: "Études et consulting scientifique", description: "Expertise et accompagnement de projets techniques." }
-    ]
-  },
-  {
-    id: 18,
-    name: "Sécurité, défense & urgence",
-    icon: "🚨",
-    description: "Protégez, intervenez, sécurisez les personnes et les biens au quotidien.",
-    subUniverses: [
-      { icon: "👮", name: "Police & gendarmerie", description: "Maintien de l'ordre et protection des citoyens." },
-      { icon: "🚒", name: "Pompiers & secours", description: "Interventions d'urgence et sauvetage." },
-      { icon: "🛡️", name: "Sécurité privée & surveillance", description: "Protection des biens et des personnes." },
-      { icon: "🌪️", name: "Protection civile", description: "Organisation des secours en cas de catastrophe." },
-      { icon: "⚔️", name: "Défense & armée", description: "Sécurité nationale et opérations extérieures." },
-      { icon: "🕵️", name: "Renseignement & sécurité stratégique", description: "Collecte d'informations sensibles et analyse de menaces." }
-    ]
-  },
-  {
-    id: 19,
-    name: "Social, aide & solidarité",
-    icon: "❤️",
-    description: "Aidez, accompagnez, soutenez les personnes en difficulté ou en situation de vulnérabilité.",
-    subUniverses: [
-      { icon: "👨‍👩‍👧", name: "Travail social & action sociale", description: "Accompagnement social et insertion." },
-      { icon: "🏠", name: "Hébergement & logement d'urgence", description: "Accueil de personnes en précarité." },
-      { icon: "🍽️", name: "Aide alimentaire & distributions", description: "Lutte contre la faim et l'insécurité alimentaire." },
-      { icon: "🤝", name: "Médiation sociale & résolution de conflits", description: "Facilitation du dialogue et prévention." },
-      { icon: "🌍", name: "Action humanitaire & ONG", description: "Interventions solidaires en France ou à l'étranger." },
-      { icon: "👶", name: "Petite enfance & crèches", description: "Accueil et éveil des jeunes enfants." },
-      { icon: "👦", name: "Protection de l'enfance", description: "Accompagnement et sécurisation des mineurs en danger." },
-      { icon: "♿", name: "Accompagnement du handicap", description: "Soutien aux personnes en situation de handicap." },
-      { icon: "💪", name: "Insertion professionnelle & formation", description: "Retour à l'emploi pour publics éloignés." },
-      { icon: "🗣️", name: "Prévention & éducation populaire", description: "Sensibilisation et citoyenneté." },
-      { icon: "🏡", name: "Services à la personne", description: "Aide à domicile et accompagnement du quotidien." },
-      { icon: "🤲", name: "Bénévolat & engagement citoyen", description: "Actions solidaires et vie associative." },
-      { icon: "🧑‍⚖️", name: "Accès aux droits & lutte contre les discriminations", description: "Défense et promotion de l'égalité." }
-    ]
-  },
-  {
-    id: 20,
-    name: "Sport, loisirs & vie active",
-    icon: "⚽",
-    description: "Entraînez, animez, organisez des activités sportives et de loisirs pour tous.",
-    subUniverses: [
-      { icon: "🏃", name: "Éducation sportive & encadrement", description: "Enseignement et animation sportive." },
-      { icon: "🏋️", name: "Entraînement & préparation physique", description: "Optimisation des performances." },
-      { icon: "🏆", name: "Sport de haut niveau & compétition", description: "Pratique professionnelle et excellence." },
-      { icon: "🏢", name: "Management d'équipements sportifs", description: "Gestion de salles, stades, piscines." },
-      { icon: "📺", name: "Événementiel sportif", description: "Organisation de compétitions et manifestations." },
-      { icon: "🎭", name: "Loisirs & animation socioculturelle", description: "Activités récréatives et vie associative." },
-      { icon: "🏕️", name: "Tourisme sportif & plein air", description: "Activités nature et découverte." },
-      { icon: "🎮", name: "E-sport & gaming professionnel", description: "Compétition et coaching sur jeux vidéo." },
-      { icon: "🧘", name: "Bien-être & activités douces", description: "Yoga, pilates, relaxation." },
-      { icon: "🛍️", name: "Industrie & commerce du sport", description: "Vente et distribution d'articles sportifs." },
-      { icon: "🎨", name: "Création de contenus sportifs & médias", description: "Journalisme et production autour du sport." }
-    ]
-  },
-  {
-    id: 21,
-    name: "Technologies émergentes & futur du travail",
-    icon: "🚀",
-    description: "Explorez l'IA, la robotique, le métavers et les nouvelles formes de travail.",
-    subUniverses: [
-      { icon: "🤖", name: "Intelligence artificielle générative", description: "Création de contenus par l'IA (texte, image, code)." },
-      { icon: "🧠", name: "IA éthique & gouvernance algorithmique", description: "Encadrement responsable des systèmes intelligents." },
-      { icon: "🦾", name: "Robotique humanoïde & collaborative", description: "Robots pour assistance et interaction." },
-      { icon: "🧬", name: "Biotechnologies avancées & biohacking", description: "Ingénierie du vivant et optimisation humaine." },
-      { icon: "🌌", name: "Exploration spatiale & NewSpace", description: "Satellites, lanceurs, tourisme spatial." },
-      { icon: "⚛️", name: "Technologies quantiques", description: "Calcul et communication quantiques." },
-      { icon: "🏠", name: "Travail hybride & télétravail", description: "Nouvelles organisations du travail." },
-      { icon: "🌐", name: "Économie collaborative & plateformes", description: "Partage, freelance, gig economy." }
-    ]
-  }
-];
       { icon: "🏭", name: "Agroalimentaire industriel", description: "Transformation et production à grande échelle des produits agricoles." },
       { icon: "🌱", name: "Production biologique & circuits courts", description: "Cultures et élevages respectueux de l'environnement, vente locale." },
       { icon: "🔬", name: "Agronomie & recherche appliquée", description: "Études scientifiques pour améliorer les rendements et la durabilité." },
@@ -425,3 +296,132 @@ const universesData = [
     icon: "💻",
     description: "Développez, analysez, sécurisez et gérez les systèmes et données numériques.",
     subUniverses: [
+      { icon: "🌐", name: "Développement web & mobile", description: "Création d'applications et de sites internet." },
+      { icon: "☁️", name: "DevOps & cloud computing", description: "Automatisation et hébergement de systèmes informatiques." },
+      { icon: "🔐", name: "Cybersécurité", description: "Protection des réseaux et données." },
+      { icon: "🖥️", name: "Réseaux & systèmes", description: "Installation et maintenance des infrastructures informatiques." },
+      { icon: "🤖", name: "Intelligence artificielle & machine learning", description: "Conception d'algorithmes d'apprentissage." },
+      { icon: "📊", name: "Data science & big data", description: "Analyse et valorisation de grandes bases de données." },
+      { icon: "🥽", name: "Réalité augmentée & métavers", description: "Expériences numériques immersives." },
+      { icon: "🎨", name: "UX/UI design", description: "Conception d'interfaces centrées sur l'utilisateur." },
+      { icon: "🏭", name: "Informatique industrielle & IoT", description: "Objets connectés et automatisation des processus." },
+      { icon: "🧩", name: "Logiciels métiers & ERP", description: "Outils de gestion pour entreprises." },
+      { icon: "⚙️", name: "No-code & automation", description: "Création d'applications sans programmation." },
+      { icon: "🎨", name: "Design numérique & multimédia", description: "Graphisme et création d'environnements digitaux." },
+      { icon: "⛓️", name: "Blockchain & web3", description: "Technologies décentralisées et sécurisées." },
+      { icon: "♻️", name: "Informatique durable & sobriété numérique", description: "Réduction de l'empreinte écologique du numérique." },
+      { icon: "🎮", name: "Gaming, jeux vidéo & développement ludique", description: "Conception de jeux interactifs." },
+      { icon: "🏆", name: "E-sport, streaming & création de contenu gaming", description: "Compétition et diffusion de jeux vidéo." }
+    ]
+  },
+  {
+    id: 16,
+    name: "Santé, bien-être & médical",
+    icon: "⚕️",
+    description: "Soignez, diagnostiquez, accompagnez et promouvez la santé.",
+    subUniverses: [
+      { icon: "🩺", name: "Médecine générale", description: "Soins courants et prévention." },
+      { icon: "🏥", name: "Chirurgie & spécialités hospitalières", description: "Interventions et soins techniques." },
+      { icon: "📷", name: "Radiologie & imagerie médicale", description: "Diagnostic par l'image." },
+      { icon: "🔬", name: "Biologie & analyses médicales", description: "Études de prélèvements biologiques." },
+      { icon: "💊", name: "Pharmacie & biotechnologies", description: "Développement et distribution de traitements." },
+      { icon: "🩹", name: "Infirmier & soins paramédicaux", description: "Accompagnement des patients au quotidien." },
+      { icon: "🦵", name: "Rééducation & kinésithérapie", description: "Restauration des capacités physiques." },
+      { icon: "🧠", name: "Santé mentale & psychologie", description: "Prise en charge des troubles psychiques." },
+      { icon: "🥗", name: "Nutrition & diététique", description: "Équilibre alimentaire et santé." },
+      { icon: "🏥", name: "Santé publique & prévention", description: "Promotion du bien-être collectif." },
+      { icon: "👵", name: "Accompagnement des personnes âgées", description: "Soins et assistance en gérontologie." },
+      { icon: "⚽", name: "Médecine du sport", description: "Prévention et suivi des sportifs." },
+      { icon: "💻", name: "Médecine connectée & télésanté", description: "Soins à distance et outils numériques." }
+    ]
+  },
+  {
+    id: 17,
+    name: "Sciences, recherche & innovation",
+    icon: "🔬",
+    description: "Cherchez, expérimentez, découvrez et innovez dans les sciences.",
+    subUniverses: [
+      { icon: "🌌", name: "Physique & astrophysique", description: "Étude des lois de l'univers et de la matière." },
+      { icon: "📐", name: "Mathématiques & statistiques", description: "Modélisation et analyse quantitative." },
+      { icon: "⚗️", name: "Chimie & matériaux", description: "Recherche sur les réactions et nouveaux matériaux." },
+      { icon: "🧬", name: "Biotechnologies", description: "Innovation à partir du vivant." },
+      { icon: "🌍", name: "Géosciences & climatologie", description: "Étude de la Terre et des phénomènes climatiques." },
+      { icon: "🧠", name: "Neurosciences & cognition", description: "Exploration du cerveau et du comportement." },
+      { icon: "👥", name: "Sciences humaines & sociales", description: "Analyse des sociétés et comportements humains." },
+      { icon: "📚", name: "Recherche en éducation", description: "Étude des processus d'apprentissage." },
+      { icon: "🔬", name: "Recherche appliquée & transfert technologique", description: "Passage de la science au produit." },
+      { icon: "🏢", name: "R&D en entreprise", description: "Innovation intégrée à la production." },
+      { icon: "📊", name: "Études et consulting scientifique", description: "Expertise et accompagnement de projets techniques." }
+    ]
+  },
+  {
+    id: 18,
+    name: "Sécurité, défense & urgence",
+    icon: "🚨",
+    description: "Protégez, intervenez, sécurisez les personnes et les biens au quotidien.",
+    subUniverses: [
+      { icon: "👮", name: "Police & gendarmerie", description: "Maintien de l'ordre et protection des citoyens." },
+      { icon: "🚒", name: "Pompiers & secours", description: "Interventions d'urgence et sauvetage." },
+      { icon: "🛡️", name: "Sécurité privée & surveillance", description: "Protection des biens et des personnes." },
+      { icon: "🌪️", name: "Protection civile", description: "Organisation des secours en cas de catastrophe." },
+      { icon: "⚔️", name: "Défense & armée", description: "Sécurité nationale et opérations extérieures." },
+      { icon: "🕵️", name: "Renseignement & sécurité stratégique", description: "Collecte d'informations sensibles et analyse de menaces." }
+    ]
+  },
+  {
+    id: 19,
+    name: "Social, aide & solidarité",
+    icon: "❤️",
+    description: "Aidez, accompagnez, soutenez les personnes en difficulté ou en situation de vulnérabilité.",
+    subUniverses: [
+      { icon: "👨‍👩‍👧", name: "Travail social & action sociale", description: "Accompagnement social et insertion." },
+      { icon: "🏠", name: "Hébergement & logement d'urgence", description: "Accueil de personnes en précarité." },
+      { icon: "🍽️", name: "Aide alimentaire & distributions", description: "Lutte contre la faim et l'insécurité alimentaire." },
+      { icon: "🤝", name: "Médiation sociale & résolution de conflits", description: "Facilitation du dialogue et prévention." },
+      { icon: "🌍", name: "Action humanitaire & ONG", description: "Interventions solidaires en France ou à l'étranger." },
+      { icon: "👶", name: "Petite enfance & crèches", description: "Accueil et éveil des jeunes enfants." },
+      { icon: "👦", name: "Protection de l'enfance", description: "Accompagnement et sécurisation des mineurs en danger." },
+      { icon: "♿", name: "Accompagnement du handicap", description: "Soutien aux personnes en situation de handicap." },
+      { icon: "💪", name: "Insertion professionnelle & formation", description: "Retour à l'emploi pour publics éloignés." },
+      { icon: "🗣️", name: "Prévention & éducation populaire", description: "Sensibilisation et citoyenneté." },
+      { icon: "🏡", name: "Services à la personne", description: "Aide à domicile et accompagnement du quotidien." },
+      { icon: "🤲", name: "Bénévolat & engagement citoyen", description: "Actions solidaires et vie associative." },
+      { icon: "🧑‍⚖️", name: "Accès aux droits & lutte contre les discriminations", description: "Défense et promotion de l'égalité." }
+    ]
+  },
+  {
+    id: 20,
+    name: "Sport, loisirs & vie active",
+    icon: "⚽",
+    description: "Entraînez, animez, organisez des activités sportives et de loisirs pour tous.",
+    subUniverses: [
+      { icon: "🏃", name: "Éducation sportive & encadrement", description: "Enseignement et animation sportive." },
+      { icon: "🏋️", name: "Entraînement & préparation physique", description: "Optimisation des performances." },
+      { icon: "🏆", name: "Sport de haut niveau & compétition", description: "Pratique professionnelle et excellence." },
+      { icon: "🏢", name: "Management d'équipements sportifs", description: "Gestion de salles, stades, piscines." },
+      { icon: "📺", name: "Événementiel sportif", description: "Organisation de compétitions et manifestations." },
+      { icon: "🎭", name: "Loisirs & animation socioculturelle", description: "Activités récréatives et vie associative." },
+      { icon: "🏕️", name: "Tourisme sportif & plein air", description: "Activités nature et découverte." },
+      { icon: "🎮", name: "E-sport & gaming professionnel", description: "Compétition et coaching sur jeux vidéo." },
+      { icon: "🧘", name: "Bien-être & activités douces", description: "Yoga, pilates, relaxation." },
+      { icon: "🛍️", name: "Industrie & commerce du sport", description: "Vente et distribution d'articles sportifs." },
+      { icon: "🎨", name: "Création de contenus sportifs & médias", description: "Journalisme et production autour du sport." }
+    ]
+  },
+  {
+    id: 21,
+    name: "Technologies émergentes & futur du travail",
+    icon: "🚀",
+    description: "Explorez l'IA, la robotique, le métavers et les nouvelles formes de travail.",
+    subUniverses: [
+      { icon: "🤖", name: "Intelligence artificielle générative", description: "Création de contenus par l'IA (texte, image, code)." },
+      { icon: "🧠", name: "IA éthique & gouvernance algorithmique", description: "Encadrement responsable des systèmes intelligents." },
+      { icon: "🦾", name: "Robotique humanoïde & collaborative", description: "Robots pour assistance et interaction." },
+      { icon: "🧬", name: "Biotechnologies avancées & biohacking", description: "Ingénierie du vivant et optimisation humaine." },
+      { icon: "🌌", name: "Exploration spatiale & NewSpace", description: "Satellites, lanceurs, tourisme spatial." },
+      { icon: "⚛️", name: "Technologies quantiques", description: "Calcul et communication quantiques." },
+      { icon: "🏠", name: "Travail hybride & télétravail", description: "Nouvelles organisations du travail." },
+      { icon: "🌐", name: "Économie collaborative & plateformes", description: "Partage, freelance, gig economy." }
+    ]
+  }
+];
