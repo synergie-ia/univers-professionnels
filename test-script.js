@@ -102,14 +102,26 @@ function percentFromSum(sum){
 
 function calcUnivers(){
   const s = calcProfile();
-  return universes.map(u=>{
+  return universesData.map(u=>{
     let score=0, max=0;
-    u.weights.forEach((w,i)=>{
-      const dimCode = DIMENSIONS[i].code;
-      score += s[dimCode]*w;
-      max += 16 * w;
-    });
-    const pct = Math.round((score/max)*100);
+    // Utiliser les poids de test-data.js si disponibles, sinon calcul par défaut
+    if(typeof universes !== 'undefined' && universes.length > 0){
+      const universMatch = universes.find(uv => uv.id === u.id);
+      if(universMatch && universMatch.weights){
+        universMatch.weights.forEach((w,i)=>{
+          const dimCode = DIMENSIONS[i].code;
+          score += s[dimCode]*w;
+          max += 16 * w;
+        });
+      }
+    } else {
+      // Calcul par défaut si pas de weights
+      Object.values(s).forEach(val => {
+        score += val;
+        max += 16;
+      });
+    }
+    const pct = max > 0 ? Math.round((score/max)*100) : 0;
     return {...u, pct};
   }).sort((a,b)=>b.pct-a.pct);
 }
@@ -153,9 +165,9 @@ function renderUniversCard(u){
         <div class="univers-score">${u.pct}%</div>
         <div class="univers-actions">
           ${hasSubUnivers 
-            ? `<button class="btn-toggle-sub" data-id="${u.id}">🔎 Voir</button>` 
+            ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir les sous-univers">🔎</button>` 
             : ''}
-          <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-id="${u.id}">
+          <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-id="${u.id}" title="Sélectionner cet univers">
             <span class="tick">${isSelected ? '✓' : ''}</span>
           </button>
         </div>
@@ -176,7 +188,8 @@ function attachUniversEvents(){
       if(subList){
         const isVisible = subList.classList.contains("visible");
         subList.classList.toggle("visible");
-        btn.textContent = isVisible ? "🔎 Voir" : "🔼 Masquer";
+        btn.textContent = isVisible ? "🔎" : "🔼";
+        btn.title = isVisible ? "Voir les sous-univers" : "Masquer les sous-univers";
       }
     });
   });
@@ -219,14 +232,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const scores = calcProfile();
     const root = document.getElementById("profileResults");
     
-    root.innerHTML = DIMENSIONS.map(dim=>{
-      const sum = scores[dim.code];
-      const pct = percentFromSum(sum);
+    // Créer un tableau avec dimensions et scores pour tri
+    const dimensionsWithScores = DIMENSIONS.map(dim => ({
+      ...dim,
+      sum: scores[dim.code],
+      pct: percentFromSum(scores[dim.code])
+    }));
+    
+    // Trier par score décroissant
+    dimensionsWithScores.sort((a, b) => b.pct - a.pct);
+    
+    root.innerHTML = dimensionsWithScores.map(dim => {
       return `
         <div class="profile-row">
           <div class="profile-label">${dim.name}</div>
-          <div class="profile-bar"><div class="profile-fill" style="width:${pct}%"></div></div>
-          <div><strong>${pct}%</strong></div>
+          <div class="profile-bar"><div class="profile-fill" style="width:${dim.pct}%"></div></div>
+          <div><strong>${dim.pct}%</strong></div>
         </div>
       `;
     }).join("");
@@ -291,11 +312,17 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Boutons Accueil (haut et bas)
-  document.getElementById("btnAccueil").addEventListener("click", ()=>{
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  const btnAccueil = document.getElementById("btnAccueil");
+  if(btnAccueil){
+    btnAccueil.addEventListener("click", ()=>{
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
-  document.getElementById("btnAccueilBottom").addEventListener("click", ()=>{
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  const btnAccueilBottom = document.getElementById("btnAccueilBottom");
+  if(btnAccueilBottom){
+    btnAccueilBottom.addEventListener("click", ()=>{
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 });
