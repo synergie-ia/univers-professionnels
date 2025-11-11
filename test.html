@@ -30,9 +30,14 @@
     <!-- Conteneur des questions -->
     <div id="questionsContainer"></div>
     
-    <!-- Bouton calcul -->
+    <!-- Message d'erreur -->
+    <div id="errorMessage" class="error-message hidden">
+      ⚠️ Veuillez répondre à toutes les questions avant de valider.
+    </div>
+    
+    <!-- Bouton validation -->
     <div style="text-align:center;margin-top:24px;">
-      <button id="calculateBtn" class="main-btn">📊 Calculer mon profil</button>
+      <button id="validateBtn" class="main-btn">✅ Valider la saisie</button>
     </div>
     
     <!-- Section résultat profil -->
@@ -40,33 +45,29 @@
       <h2 style="margin:32px 0 16px;font-size:24px;">📊 Votre profil d'intérêts</h2>
       <div id="profileResults"></div>
       <div style="text-align:center;margin-top:24px;">
-        <button id="goUniversesBtn" class="main-btn">🌍 Voir les univers métiers compatibles</button>
+        <button id="goUniversesBtn" class="main-btn">🌍 Voir vos univers compatibles</button>
       </div>
     </div>
     
     <!-- Section univers métiers -->
     <div id="univers-section" class="hidden">
-      <div class="section-header">
-        <button id="btnAccueil" class="btn-retour">🏠 Accueil</button>
-      </div>
-      
-      <h2 style="margin:24px 0 12px;font-size:24px;">🌍 Vos univers métiers compatibles</h2>
+      <h2 style="margin:32px 0 16px;font-size:24px;">🌍 Vos univers métiers compatibles</h2>
       
       <div id="selectedUniversCounter" class="counter-univers">0 univers sélectionné</div>
       
-      <p class="notice">Sélectionnez les univers qui vous intéressent et explorez leurs sous-domaines :</p>
+      <p class="notice">Sélectionnez les univers qui vous intéressent et cliquez sur 🔎 pour explorer leurs sous-domaines :</p>
       
       <div id="univers-results"></div>
       
       <button id="btn-show-all" class="alt-btn hidden">Voir tous les univers (21)</button>
       
       <div class="section-footer">
-        <button id="btnAccueilBottom" class="btn-retour">🏠 Accueil</button>
+        <button id="btnAccueilBottom" class="btn-retour">🏠 Retour à l'accueil</button>
       </div>
     </div>
   </div>
   
   <script src="test-data.js"></script>
-  <script src="test-script.js?v=5"></script>
+  <script src="test-script.js?v=7"></script>
 </body>
 </html>
