@@ -1,5 +1,6 @@
 /* 
   Script questionnaire + calculs avec validation complète
+  VERSION QUADRATIQUE : Les réponses sont mises au carré
 */
 
 let answers = {};
@@ -108,40 +109,62 @@ function renderQuestions(){
   });
 }
 
+// ✨ CALCUL QUADRATIQUE : Réponses au carré
 function calcProfile(){
   const scores = Object.fromEntries(DIMENSIONS.map(d=>[d.code,0]));
   Object.keys(answers).forEach(key=>{
     const [,dim] = key.split("-");
-    scores[dim] += answers[key];
+    const val = answers[key]; // 0, 1, 2, 3, 4
+    scores[dim] += val * val;  // ← QUADRATIQUE : 0, 1, 4, 9, 16
   });
   return scores;
 }
 
+// ✨ CALCUL DU POURCENTAGE AVEC MAX QUADRATIQUE
 function percentFromSum(sum){
-  return Math.round((sum/16)*100);
+  // Maximum quadratique : 4 occurrences × 4² = 4 × 16 = 64
+  const maxQuadratique = 64;
+  return Math.round((sum/maxQuadratique)*100);
 }
 
 function calcUnivers(){
   const s = calcProfile();
+  
+  // Utiliser universesData (contient id, name, icon, description, subUniverses)
+  if(typeof universesData === 'undefined'){
+    console.error("universesData n'est pas défini. Vérifiez que universes-data.js est chargé.");
+    return [];
+  }
+  
   return universesData.map(u=>{
     let score=0, max=0;
-    // Utiliser les poids de test-data.js si disponibles
-    if(typeof universes !== 'undefined' && universes.length > 0){
+    
+    // Chercher les poids correspondants dans universes (de test-data.js)
+    if(typeof universes !== 'undefined'){
       const universMatch = universes.find(uv => uv.id === u.id);
       if(universMatch && universMatch.weights){
         universMatch.weights.forEach((w,i)=>{
-          const dimCode = DIMENSIONS[i].code;
-          score += s[dimCode]*w;
-          max += 16 * w;
+          if(i < DIMENSIONS.length){
+            const dimCode = DIMENSIONS[i].code;
+            score += s[dimCode] * w;      // score quadratique × poids
+            max   += 64 * w;              // max quadratique (64) × poids
+          }
+        });
+      } else {
+        // Pas de poids trouvés, calcul par défaut égal
+        DIMENSIONS.forEach(dim => {
+          score += s[dim.code];
+          max += 64;
         });
       }
     } else {
-      // Calcul par défaut
-      Object.values(s).forEach(val => {
-        score += val;
-        max += 16;
+      // Pas de fichier universes dans test-data.js, calcul par défaut
+      DIMENSIONS.forEach(dim => {
+        score += s[dim.code];
+        max += 64;
       });
     }
+    
     const pct = max > 0 ? Math.round((score/max)*100) : 0;
     return {...u, pct};
   }).sort((a,b)=>b.pct-a.pct);
@@ -298,37 +321,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const btnUnivers = document.getElementById("goUniversesBtn");
   btnUnivers.addEventListener("click", ()=>{
-    // Recalcule les univers
-    const list = calcUnivers();
-    const root = document.getElementById("univers-results");
-    const top5 = list.slice(0,5);
-    const others = list.slice(5);
-
-    // Affiche le top 5
-    root.innerHTML = top5.map(u => renderUniversCard(u)).join("");
-    attachUniversEvents();
-    updateUniversCounter();
-
-    // Gestion du bouton "Voir tous"
-    const btnShow = document.getElementById("btn-show-all");
-    btnShow.classList.remove("hidden");
+    console.log("Bouton univers cliqué");
     
-    // Clone le bouton pour retirer les anciens événements
-    const newBtnShow = btnShow.cloneNode(true);
-    btnShow.parentNode.replaceChild(newBtnShow, btnShow);
-    
-    newBtnShow.addEventListener("click", ()=>{
-      // Affiche les autres univers
-      root.innerHTML += others.map(u => renderUniversCard(u)).join("");
+    try {
+      // Recalcule les univers
+      const list = calcUnivers();
+      console.log("Univers calculés:", list.length, "univers");
+      
+      if(list.length === 0){
+        alert("Erreur : Aucun univers n'a pu être calculé. Vérifiez que universes-data.js est bien chargé.");
+        return;
+      }
+      
+      const root = document.getElementById("univers-results");
+      const top5 = list.slice(0,5);
+      const others = list.slice(5);
+
+      // Affiche le top 5
+      root.innerHTML = top5.map(u => renderUniversCard(u)).join("");
       attachUniversEvents();
-      newBtnShow.classList.add("hidden");
-    });
+      updateUniversCounter();
 
-    document.getElementById("univers-section").classList.remove("hidden");
-    
-    setTimeout(() => {
-      document.getElementById("univers-section").scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+      // Gestion du bouton "Voir tous"
+      const btnShow = document.getElementById("btn-show-all");
+      btnShow.classList.remove("hidden");
+      
+      // Clone le bouton pour retirer les anciens événements
+      const newBtnShow = btnShow.cloneNode(true);
+      btnShow.parentNode.replaceChild(newBtnShow, btnShow);
+      
+      newBtnShow.addEventListener("click", ()=>{
+        // Affiche les autres univers
+        root.innerHTML += others.map(u => renderUniversCard(u)).join("");
+        attachUniversEvents();
+        newBtnShow.classList.add("hidden");
+      });
+
+      document.getElementById("univers-section").classList.remove("hidden");
+      
+      setTimeout(() => {
+        document.getElementById("univers-section").scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } catch(error) {
+      console.error("Erreur lors du calcul des univers:", error);
+      alert("Une erreur s'est produite : " + error.message + ". Vérifiez la console (F12) pour plus de détails.");
+    }
   });
 
   // Bouton Accueil (retour à index.html)
