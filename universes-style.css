@@ -1,352 +1,100 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f5f7;
+  color: #333;
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    overflow: hidden;
+  max-width: 900px;
+  margin: auto;
+  padding: 25px;
 }
 
-.header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 40px;
-    text-align: center;
-    position: relative;
+.page-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.instructions {
+  text-align: center;
+  color: #555;
+  margin-bottom: 35px;
 }
 
 .back-btn {
-    position: absolute;
-    left: 40px;
-    top: 40px;
-    background: rgba(255,255,255,0.2);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
-.back-btn:hover {
-    background: white;
-    color: #667eea;
-    transform: translateX(-5px);
+.universe-block {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
 
-.header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+.universe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 }
 
-.subtitle {
-    font-size: 1.2em;
-    opacity: 0.9;
+.universe-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.top-actions {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    padding: 30px 40px;
-    background: #f8f9fa;
-    flex-wrap: wrap;
+.universe-score {
+  font-weight: bold;
+  color: #0073ff;
 }
 
-.test-btn {
-    padding: 16px 32px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.05em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+.select-circle {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #888;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.test-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+.select-circle.selected {
+  background: #29a329;
+  border-color: #29a329;
 }
 
-.selection-info {
-    text-align: center;
-    padding: 15px;
-    background: #e8f5e9;
-    font-weight: 600;
-    color: #27ae60;
-    font-size: 1.1em;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    align-items: center;
+.subunivers {
+  margin-top: 12px;
+  padding-left: 10px;
+  border-left: 3px solid #e3e3e3;
+  display: none;
 }
 
-.universes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    padding: 40px;
+.sub-item {
+  margin: 6px 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
 }
 
-.universe-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    transition: all 0.3s;
-    cursor: pointer;
-    position: relative;
-    border: 3px solid #e0e0e0;
-}
-
-.universe-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.25);
-    border-color: #667eea;
-}
-
-.universe-card.selected {
-    border-color: #27ae60;
-    background: linear-gradient(135deg, #f0fff4 0%, #e8f5e9 100%);
-    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
-}
-
-.selection-checkbox {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    background: white;
-    border: 3px solid #ddd;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8em;
-    transition: all 0.3s;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.universe-card.selected .selection-checkbox {
-    background: #27ae60;
-    border-color: #27ae60;
-}
-
-.selection-checkbox:hover {
-    transform: scale(1.15);
-}
-
-.view-details-btn {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 45px;
-    height: 45px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5em;
-    cursor: pointer;
-    transition: all 0.3s;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.view-details-btn:hover {
-    background: #5568d3;
-    transform: scale(1.15);
-}
-
-.universe-image {
-    font-size: 4em;
-    text-align: center;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-}
-
-.universe-content {
-    text-align: center;
-}
-
-.universe-name {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #222;
-    margin-bottom: 12px;
-}
-
-.universe-description {
-    color: #555;
-    line-height: 1.6;
-    font-size: 0.95em;
-}
-
-/* Modal styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    animation: fadeIn 0.3s;
-}
-
-.modal-content {
-    background: white;
-    margin: 50px auto;
-    padding: 40px;
-    width: 90%;
-    max-width: 1200px;
-    max-height: 85vh;
-    overflow-y: auto;
-    border-radius: 20px;
-    position: relative;
-    animation: slideUp 0.4s;
-}
-
-.close-btn {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 2.5em;
-    color: #999;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.close-btn:hover {
-    color: #333;
-    transform: rotate(90deg);
-}
-
-#modalTitle {
-    font-size: 2em;
-    margin-bottom: 30px;
-    color: #333;
-    text-align: center;
-}
-
-.sub-universes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.sub-universe-card {
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 12px;
-    border-left: 4px solid #667eea;
-    transition: all 0.3s;
-}
-
-.sub-universe-card:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.sub-universe-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.sub-universe-icon {
-    font-size: 1.8em;
-}
-
-.sub-universe-name {
-    font-weight: 600;
-    color: #333;
-    font-size: 1.05em;
-}
-
-.sub-universe-description {
-    color: #666;
-    line-height: 1.5;
-    font-size: 0.9em;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .header {
-        padding: 30px 20px;
-    }
-    
-    .back-btn {
-        position: static;
-        display: inline-block;
-        margin-bottom: 15px;
-    }
-    
-    .header h1 {
-        font-size: 1.8em;
-    }
-    
-    .universes-grid {
-        grid-template-columns: 1fr;
-        padding: 20px;
-    }
-    
-    .top-actions {
-        flex-direction: column;
-        padding: 20px;
-    }
-    
-    .test-btn {
-        width: 100%;
-    }
-    
-    .modal-content {
-        margin: 20px;
-        width: calc(100% - 40px);
-        padding: 30px 20px;
-    }
-    
-    .sub-universes-grid {
-        grid-template-columns: 1fr;
-    }
+.main-btn {
+  display: block;
+  width: 100%;
+  background: #0073ff;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 30px;
 }
