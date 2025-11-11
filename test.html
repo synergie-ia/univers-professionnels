@@ -1,57 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test d’intérêts professionnels – IA360</title>
-  <link rel="stylesheet" href="test-style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questionnaire – Profil d'intérêts</title>
+  <!-- Style du test -->
+  <link rel="stylesheet" href="test-style.css" />
 </head>
-
 <body>
-
-  <header class="page-header">
-    <h1>🎯 Découvrir mon profil professionnel</h1>
-    <p class="subtitle">
-      Pour chaque proposition, évalue à quel point cela te ressemble.<br>
-      <strong>0 = Pas du tout</strong> → <strong>4 = Totalement</strong><br>
-      Réponds spontanément, il n’y a pas de bonne ou de mauvaise réponse.
+  <div class="container">
+    <h1 class="page-title">Découvre ton profil d'intérêts professionnels</h1>
+    <p class="intro">
+      Réponds spontanément. Il n'y a <strong>pas de bonne ou de mauvaise réponse</strong>.<br>
+      Choisis la couleur qui te correspond le mieux :
     </p>
-  </header>
-
-  <main class="container">
-
-    <!-- Zone Questionnaire -->
-    <section id="questionnaire" class="questionnaire"></section>
-
-    <!-- Bouton Calcul -->
-    <div class="actions-center">
-      <button id="btnProfile" class="main-btn">✅ Calculer mon profil</button>
-      <button id="btnRecalc" class="main-btn hidden">🔄 Recalculer</button>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;font-size:14px;">
+      <strong>Échelle utilisée :</strong><br>
+      <span style="color:var(--c0)">●</span> 0 = Pas du tout • 
+      <span style="color:var(--c1)">●</span> 1 = Un peu • 
+      <span style="color:var(--c2)">●</span> 2 = Moyennement • 
+      <span style="color:var(--c3)">●</span> 3 = Plutôt • 
+      <span style="color:var(--c4)">●</span> 4 = Totalement
     </div>
-
-    <!-- Résultat Profil -->
-    <section id="profileSection" class="hidden">
-      <h2>📊 Ton profil d’intérêts</h2>
+    
+    <!-- Conteneur des questions (rempli par test-script.js) -->
+    <div id="questionsContainer"></div>
+    
+    <!-- Bouton calcul -->
+    <div style="text-align:center;margin-top:18px;">
+      <button id="calculateBtn" class="main-btn">📊 Calculer mon profil</button>
+    </div>
+    
+    <!-- Section résultat profil -->
+    <div id="profileSection" class="hidden">
+      <h2 style="margin:24px 0 12px;font-size:24px;">📊 Ton profil d'intérêts</h2>
       <div id="profileResults"></div>
-
-      <div class="actions-center">
-        <button id="btnShowUnivers" class="main-btn">🌍 Voir mes univers métiers</button>
+      <div style="text-align:center;margin-top:18px;">
+        <button id="goUniversesBtn" class="main-btn">🌍 Voir les univers métiers</button>
       </div>
-    </section>
-
-    <!-- Résultat Univers métiers -->
-    <section id="universSection" class="hidden">
-      <h2>🌍 Univers métiers qui te correspondent</h2>
-      <div id="universResults"></div>
-
-      <div class="actions-center">
-        <button id="btnReturn" class="alt-btn">↩️ Retour au questionnaire</button>
-      </div>
-    </section>
-
-  </main>
-
+    </div>
+    
+    <!-- Section univers métiers -->
+    <div id="univers-section" class="hidden">
+      <h2 style="margin:24px 0 12px;font-size:24px;">🌍 Tes univers métiers compatibles</h2>
+      <p class="notice">Voici les univers professionnels qui correspondent le mieux à ton profil :</p>
+      <div id="univers-results"></div>
+      <button id="btn-show-all" class="alt-btn hidden">Voir tous les univers (21)</button>
+    </div>
+  </div>
+  
+  <!-- Données (ne pas modifier ce fichier) -->
   <script src="test-data.js"></script>
+  <!-- Script de logique du questionnaire & calcul -->
   <script src="test-script.js"></script>
 </body>
 </html>
