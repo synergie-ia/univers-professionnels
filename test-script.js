@@ -116,6 +116,7 @@ function calcUnivers(){
 
 function updateUniversCounter(){
   const counter = document.getElementById("selectedUniversCounter");
+  if(!counter) return;
   const n = selectedUnivers.size;
   counter.textContent = n===0
     ? "0 univers sélectionné"
@@ -126,8 +127,10 @@ function updateUniversCounter(){
 
 function renderUniversCard(u){
   const isSelected = selectedUnivers.has(u.id);
-  const subUniversHTML = u.subUniverses && u.subUniverses.length > 0
-    ? `<div class="sub-univers-list" data-univers-id="${u.id}">
+  const hasSubUnivers = u.subUniverses && u.subUniverses.length > 0;
+  
+  const subUniversHTML = hasSubUnivers
+    ? `<div class="sub-univers-list" id="sub-${u.id}">
         ${u.subUniverses.map(s => `
           <div class="sub-item">
             <div class="sub-icon">${s.icon || '•'}</div>
@@ -141,19 +144,21 @@ function renderUniversCard(u){
     : '';
 
   return `
-    <div class="univers-card ${isSelected ? 'selected' : ''}" data-univers-id="${u.id}">
-      <div class="univers-main">
-        <div class="univers-icon">${u.icon}</div>
-        <div class="univers-name">${u.name}</div>
-      </div>
-      <div class="univers-score">${u.pct}%</div>
-      <div class="univers-actions">
-        ${u.subUniverses && u.subUniverses.length > 0 
-          ? '<button class="btn-toggle-sub" data-univers-id="'+u.id+'">🔎 Voir</button>' 
-          : ''}
-        <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-univers-id="${u.id}" aria-pressed="${isSelected}">
-          <span class="tick">${isSelected ? '✓' : ''}</span>
-        </button>
+    <div class="univers-card ${isSelected ? 'selected' : ''}" id="card-${u.id}">
+      <div class="univers-header">
+        <div class="univers-main">
+          <div class="univers-icon">${u.icon}</div>
+          <div class="univers-name">${u.name}</div>
+        </div>
+        <div class="univers-score">${u.pct}%</div>
+        <div class="univers-actions">
+          ${hasSubUnivers 
+            ? `<button class="btn-toggle-sub" data-id="${u.id}">🔎 Voir</button>` 
+            : ''}
+          <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-id="${u.id}">
+            <span class="tick">${isSelected ? '✓' : ''}</span>
+          </button>
+        </div>
       </div>
       ${subUniversHTML}
     </div>
@@ -165,11 +170,13 @@ function attachUniversEvents(){
   document.querySelectorAll(".btn-toggle-sub").forEach(btn=>{
     btn.addEventListener("click", (e)=>{
       e.stopPropagation();
-      const id = btn.dataset.universId;
-      const subList = document.querySelector(`.sub-univers-list[data-univers-id="${id}"]`);
+      const id = btn.dataset.id;
+      const subList = document.getElementById(`sub-${id}`);
+      
       if(subList){
+        const isVisible = subList.classList.contains("visible");
         subList.classList.toggle("visible");
-        btn.textContent = subList.classList.contains("visible") ? "🔼 Masquer" : "🔎 Voir";
+        btn.textContent = isVisible ? "🔎 Voir" : "🔼 Masquer";
       }
     });
   });
@@ -178,20 +185,18 @@ function attachUniversEvents(){
   document.querySelectorAll(".btn-select-univers").forEach(btn=>{
     btn.addEventListener("click", (e)=>{
       e.stopPropagation();
-      const id = Number(btn.dataset.universId);
-      const card = btn.closest(".univers-card");
+      const id = Number(btn.dataset.id);
+      const card = document.getElementById(`card-${id}`);
       
       if(selectedUnivers.has(id)){
         selectedUnivers.delete(id);
         card.classList.remove("selected");
         btn.classList.remove("selected");
-        btn.setAttribute("aria-pressed", "false");
         btn.querySelector(".tick").textContent = "";
       }else{
         selectedUnivers.add(id);
         card.classList.add("selected");
         btn.classList.add("selected");
-        btn.setAttribute("aria-pressed", "true");
         btn.querySelector(".tick").textContent = "✓";
       }
       
@@ -203,8 +208,6 @@ function attachUniversEvents(){
 
 document.addEventListener('DOMContentLoaded', function() {
   loadSelections();
-  
-  // Charger les réponses sauvegardées
   const hasAnswers = loadAnswers();
   
   renderQuestions();
@@ -212,8 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnCalc = document.getElementById("calculateBtn");
   
   function calculerEtAfficherProfil() {
+    // Force le recalcul des scores
     const scores = calcProfile();
     const root = document.getElementById("profileResults");
+    
     root.innerHTML = DIMENSIONS.map(dim=>{
       const sum = scores[dim.code];
       const pct = percentFromSum(sum);
@@ -231,11 +236,10 @@ document.addEventListener('DOMContentLoaded', function() {
     btnCalc.classList.remove("needs-recalc");
     btnCalc.textContent = "🔁 Recalculer mon profil";
     
+    // Masquer la section univers pour forcer un nouveau calcul
     const universSection = document.getElementById("univers-section");
     if(universSection && !universSection.classList.contains("hidden")){
       universSection.classList.add("hidden");
-      const btnShowAll = document.getElementById("btn-show-all");
-      if(btnShowAll) btnShowAll.classList.add("hidden");
     }
   }
   
@@ -253,41 +257,45 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
+    // Recalcule les univers à chaque fois
     const list = calcUnivers();
     const root = document.getElementById("univers-results");
     const top5 = list.slice(0,5);
     const others = list.slice(5);
 
+    // Affiche le top 5
     root.innerHTML = top5.map(u => renderUniversCard(u)).join("");
     attachUniversEvents();
     updateUniversCounter();
 
+    // Gestion du bouton "Voir tous"
     const btnShow = document.getElementById("btn-show-all");
     btnShow.classList.remove("hidden");
     
+    // Clone le bouton pour retirer les anciens événements
     const newBtnShow = btnShow.cloneNode(true);
     btnShow.parentNode.replaceChild(newBtnShow, btnShow);
     
     newBtnShow.addEventListener("click", ()=>{
+      // Affiche les autres univers
       root.innerHTML += others.map(u => renderUniversCard(u)).join("");
       attachUniversEvents();
       newBtnShow.classList.add("hidden");
     });
 
     document.getElementById("univers-section").classList.remove("hidden");
+    
     setTimeout(() => {
       document.getElementById("univers-section").scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   });
 
-  // Boutons retour
-  document.getElementById("btnRetourTop").addEventListener("click", ()=>{
+  // Boutons Accueil (haut et bas)
+  document.getElementById("btnAccueil").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    document.getElementById("univers-section").classList.add("hidden");
   });
 
-  document.getElementById("btnRetourBottom").addEventListener("click", ()=>{
+  document.getElementById("btnAccueilBottom").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    document.getElementById("univers-section").classList.add("hidden");
   });
 });
