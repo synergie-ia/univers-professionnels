@@ -48,12 +48,11 @@ function renderQuestions(){
       if(profileComputed){
         const btnCalc = document.getElementById("calculateBtn");
         btnCalc.textContent = "🔁 Recalculer mon profil";
+        btnCalc.classList.add("needs-recalc");
       }
     });
   });
 }
-
-renderQuestions();
 
 /* ----- CALCUL PROFIL (12 dimensions) ----- */
 function calcProfile(){
@@ -72,57 +71,110 @@ function percentFromSum(sum){
   return Math.round((sum/16)*100);
 }
 
-// Attendre que le DOM soit complètement chargé
+/* ----- CALCUL UNIVERS (TRI PAR SCORE DÉCROISSANT) ----- */
+function calcUnivers(){
+  const s = calcProfile();
+  return universes.map(u=>{
+    let score=0, max=0;
+    u.weights.forEach((w,i)=>{
+      const dimCode = DIMENSIONS[i].code;
+      score += s[dimCode]*w;      // somme pondérée
+      max   += 16 * w;            // max possible
+    });
+    const pct = Math.round((score/max)*100);
+    return {...u, pct};
+  }).sort((a,b)=>b.pct-a.pct);  // TRI DÉCROISSANT
+}
+
+/* ----- INITIALISATION AU CHARGEMENT DU DOM ----- */
 document.addEventListener('DOMContentLoaded', function() {
   
+  // Rendre les questions
+  renderQuestions();
+
+  // Bouton calcul profil
   const btnCalc = document.getElementById("calculateBtn");
-  if (btnCalc) {
-    btnCalc.addEventListener("click", ()=>{
-      const scores = calcProfile();
-      const root = document.getElementById("profileResults");
+  
+  function calculerEtAfficherProfil() {
+    const scores = calcProfile();
+    const root = document.getElementById("profileResults");
 
-      root.innerHTML = DIMENSIONS.map(dim=>{
-        const sum = scores[dim.code];
-        const pct = percentFromSum(sum);
-        return `
-          <div class="profile-row">
-            <div class="profile-label">${dim.name}</div>
-            <div class="profile-bar"><div class="profile-fill" style="width:${pct}%"></div></div>
-            <div><strong>${pct}%</strong></div>
-          </div>
-        `;
-      }).join("");
+    root.innerHTML = DIMENSIONS.map(dim=>{
+      const sum = scores[dim.code];
+      const pct = percentFromSum(sum);
+      return `
+        <div class="profile-row">
+          <div class="profile-label">${dim.name}</div>
+          <div class="profile-bar"><div class="profile-fill" style="width:${pct}%"></div></div>
+          <div><strong>${pct}%</strong></div>
+        </div>
+      `;
+    }).join("");
 
-      document.getElementById("profileSection").classList.remove("hidden");
+    document.getElementById("profileSection").classList.remove("hidden");
 
-      // Première fois -> texte devient "Recalculer"
-      btnCalc.textContent = "🔁 Recalculer mon profil";
-      profileComputed = true;
-    });
+    // Marquer comme calculé
+    profileComputed = true;
+    btnCalc.classList.remove("needs-recalc");
+    btnCalc.textContent = "🔁 Recalculer mon profil";
+    
+    // Cacher la section univers si elle était affichée (pour forcer recalcul)
+    const universSection = document.getElementById("univers-section");
+    if(universSection && !universSection.classList.contains("hidden")){
+      universSection.classList.add("hidden");
+      // Réinitialiser le bouton "Voir tous les univers"
+      const btnShowAll = document.getElementById("btn-show-all");
+      if(btnShowAll) btnShowAll.classList.add("hidden");
+    }
   }
+  
+  btnCalc.addEventListener("click", calculerEtAfficherProfil);
 
-  /* ----- CALCUL UNIVERS ----- */
-  function calcUnivers(){
-    const s = calcProfile();
-    return universes.map(u=>{
-      let score=0, max=0;
-      u.weights.forEach((w,i)=>{
-        const dimCode = DIMENSIONS[i].code;
-        score += s[dimCode]*w;      // somme pondérée
-        max   += 16 * w;            // max possible
-      });
-      const pct = Math.round((score/max)*100);
-      return {...u, pct};
-    }).sort((a,b)=>b.pct-a.pct);
-  }
-
-  /* ----- AFFICHAGE UNIVERS ----- */
+  // Bouton vers univers
   const btnUnivers = document.getElementById("goUniversesBtn");
-  if (btnUnivers) {
-    btnUnivers.addEventListener("click", ()=>{
-      // Cette partie nécessite d'ajouter les éléments dans le HTML
-      console.log("Calcul des univers:", calcUnivers());
-      alert("Fonctionnalité univers à venir - vérifiez la console pour les résultats");
+  btnUnivers.addEventListener("click", ()=>{
+    // Vérifier si un recalcul est nécessaire
+    if(btnCalc.classList.contains("needs-recalc")){
+      alert("⚠️ Tu as modifié tes réponses. Clique d'abord sur 'Recalculer mon profil' avant de voir les univers.");
+      return;
+    }
+    
+    const list = calcUnivers();
+    const root = document.getElementById("univers-results");
+
+    const top5 = list.slice(0,5);
+    const others = list.slice(5);
+
+    // Affichage avec scores triés par ordre décroissant
+    root.innerHTML = top5.map(u => `
+      <div class="univers-card" style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:#fff;">
+        <div>${u.icon} ${u.name}</div>
+        <div><strong>${u.pct}%</strong></div>
+      </div>
+    `).join("");
+
+    const btnShow = document.getElementById("btn-show-all");
+    btnShow.classList.remove("hidden");
+    
+    // Retirer l'ancien event listener en clonant le bouton
+    const newBtnShow = btnShow.cloneNode(true);
+    btnShow.parentNode.replaceChild(newBtnShow, btnShow);
+    
+    newBtnShow.addEventListener("click", ()=>{
+      root.innerHTML += others.map(u => `
+        <div class="univers-card" style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:#fff;">
+          <div>${u.icon} ${u.name}</div>
+          <div><strong>${u.pct}%</strong></div>
+        </div>
+      `).join("");
+      newBtnShow.classList.add("hidden");
     });
-  }
+
+    document.getElementById("univers-section").classList.remove("hidden");
+    
+    // Scroll vers la section univers
+    setTimeout(() => {
+      document.getElementById("univers-section").scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  });
 });
