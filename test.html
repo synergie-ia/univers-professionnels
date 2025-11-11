@@ -2,56 +2,74 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Questionnaire – Profil d'intérêts</title>
-  <!-- Style du test -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Découvrez votre profil professionnel</title>
   <link rel="stylesheet" href="test-style.css" />
 </head>
 <body>
   <div class="container">
-    <h1 class="page-title">Découvre ton profil d'intérêts professionnels</h1>
-    <p class="intro">
-      Réponds spontanément. Il n'y a <strong>pas de bonne ou de mauvaise réponse</strong>.<br>
-      Choisis la couleur qui te correspond le mieux :
-    </p>
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;font-size:14px;">
-      <strong>Échelle utilisée :</strong><br>
-      <span style="color:var(--c0)">●</span> 0 = Pas du tout • 
-      <span style="color:var(--c1)">●</span> 1 = Un peu • 
-      <span style="color:var(--c2)">●</span> 2 = Moyennement • 
-      <span style="color:var(--c3)">●</span> 3 = Plutôt • 
-      <span style="color:var(--c4)">●</span> 4 = Totalement
+    <h1 class="page-title">Découvrez votre profil professionnel et les univers métiers compatibles</h1>
+    
+    <div class="info-box">
+      <p><strong>ℹ️ À propos de ce questionnaire</strong></p>
+      <p>Ce questionnaire n'est pas un test psychologique ni un outil scientifique. Il ne mesure pas des qualités ou des capacités, et il n'y a aucun bon ou mauvais résultat.</p>
+      <p>Il sert simplement à mettre en lumière ce qui vous attire spontanément, afin de vous aider à identifier des univers métiers dans lesquels vous pourriez vous sentir motivé(e) et à l'aise.</p>
     </div>
     
-    <!-- Conteneur des questions (rempli par test-script.js) -->
+    <p class="intro">
+      <strong>Répondez spontanément. Il n'y a pas de bonne ou de mauvaise réponse.</strong><br>
+      Choisissez la note qui vous correspond le mieux :
+    </p>
+    
+    <div class="legend-box">
+      <strong>Échelle utilisée :</strong><br>
+      <span style="color:var(--c0);font-weight:bold">●</span> 0 = Pas du tout • 
+      <span style="color:var(--c1);font-weight:bold">●</span> 1 = Un peu • 
+      <span style="color:var(--c2);font-weight:bold">●</span> 2 = Moyennement • 
+      <span style="color:var(--c3);font-weight:bold">●</span> 3 = Plutôt • 
+      <span style="color:var(--c4);font-weight:bold">●</span> 4 = Totalement
+    </div>
+    
+    <!-- Conteneur des questions -->
     <div id="questionsContainer"></div>
     
     <!-- Bouton calcul -->
-    <div style="text-align:center;margin-top:18px;">
+    <div style="text-align:center;margin-top:24px;">
       <button id="calculateBtn" class="main-btn">📊 Calculer mon profil</button>
     </div>
     
     <!-- Section résultat profil -->
     <div id="profileSection" class="hidden">
-      <h2 style="margin:24px 0 12px;font-size:24px;">📊 Ton profil d'intérêts</h2>
+      <h2 style="margin:32px 0 16px;font-size:24px;">📊 Votre profil d'intérêts</h2>
       <div id="profileResults"></div>
-      <div style="text-align:center;margin-top:18px;">
-        <button id="goUniversesBtn" class="main-btn">🌍 Voir les univers métiers</button>
+      <div style="text-align:center;margin-top:24px;">
+        <button id="goUniversesBtn" class="main-btn">🌍 Voir les univers métiers compatibles</button>
       </div>
     </div>
     
     <!-- Section univers métiers -->
     <div id="univers-section" class="hidden">
-      <h2 style="margin:24px 0 12px;font-size:24px;">🌍 Tes univers métiers compatibles</h2>
-      <p class="notice">Voici les univers professionnels qui correspondent le mieux à ton profil :</p>
+      <div class="section-header">
+        <button id="btnRetourTop" class="btn-retour">← Retour au questionnaire</button>
+      </div>
+      
+      <h2 style="margin:24px 0 12px;font-size:24px;">🌍 Vos univers métiers compatibles</h2>
+      
+      <div id="selectedUniversCounter" class="counter-univers">0 univers sélectionné</div>
+      
+      <p class="notice">Voici les univers professionnels qui correspondent le mieux à votre profil. Vous pouvez sélectionner ceux qui vous intéressent :</p>
+      
       <div id="univers-results"></div>
+      
       <button id="btn-show-all" class="alt-btn hidden">Voir tous les univers (21)</button>
+      
+      <div class="section-footer">
+        <button id="btnRetourBottom" class="btn-retour">← Retour au questionnaire</button>
+      </div>
     </div>
   </div>
   
-  <!-- Données (ne pas modifier ce fichier) -->
   <script src="test-data.js"></script>
-  <!-- Script de logique du questionnaire & calcul -->
-  <script src="test-script.js"></script>
+  <script src="test-script.js?v=4"></script>
 </body>
 </html>
