@@ -1,3 +1,39 @@
+/* Bouton retour en haut de page */
+.top-nav{
+  margin:0 0 20px 0;
+  padding:12px 0;
+}
+
+.btn-retour-top{
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--line);
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:15px;
+  transition:all .2s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn-retour-top:hover{
+  background:#f3f4f6;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  transform:translateX(-3px);
+}
+
+.btn-retour-top .arrow{
+  font-size:18px;
+  transition:transform .2s ease;
+}
+
+.btn-retour-top:hover .arrow{
+  transform:translateX(-3px);
+}
+
 /* ---------- Layout de page ---------- */
 :root{
   --bg:#f5f6fb;
