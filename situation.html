@@ -1,218 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilan de Situation - Reconversion 360 IA</title>
-    <link rel="stylesheet" href="situation-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bilan de situation - Reconversion 360 IA</title>
+  <link rel="stylesheet" href="situation-style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="index.html" class="back-btn">← Retour</a>
-            <h1>📋 Faites votre bilan de situation professionnelle</h1>
-            <p class="subtitle">Répondez précisément à toutes les questions pour un accompagnement optimal</p>
-        </div>
-
-        <div class="content">
-            <form id="situationForm">
-                <!-- Informations générales -->
-                <div class="section">
-                    <h2>👤 Informations générales</h2>
-                    
-                    <div class="question-block">
-                        <label>Âge *</label>
-                        <input type="number" name="age" min="16" max="99" required>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Situation actuelle *</label>
-                        <textarea name="situation" rows="2" required placeholder="Décrivez votre situation actuelle (salarié, demandeur d'emploi, étudiant...)"></textarea>
-                        <small>Apportez des précisions sur votre situation</small>
-                    </div>
-                </div>
-
-                <!-- Parcours et expérience -->
-                <div class="section">
-                    <h2>🎓 Parcours et expérience</h2>
-                    
-                    <div class="question-block">
-                        <label>Niveau d'études *</label>
-                        <select name="niveau_etudes" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="sans_diplome">Sans diplôme</option>
-                            <option value="cap_bep">CAP / BEP</option>
-                            <option value="bac">Baccalauréat</option>
-                            <option value="bac_2">Bac +2 (BTS, DUT, DEUG)</option>
-                            <option value="bac_3">Bac +3 (Licence)</option>
-                            <option value="bac_5">Bac +5 (Master, Ingénieur)</option>
-                            <option value="bac_8">Bac +8 et plus (Doctorat)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Domaine de formation principal *</label>
-                        <input type="text" name="domaine_formation" required placeholder="Ex: Commerce, Informatique, Santé...">
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Années d'expérience professionnelle *</label>
-                        <select name="experience" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="0">Aucune expérience</option>
-                            <option value="0-2">Moins de 2 ans</option>
-                            <option value="2-5">2 à 5 ans</option>
-                            <option value="5-10">5 à 10 ans</option>
-                            <option value="10-20">10 à 20 ans</option>
-                            <option value="20+">Plus de 20 ans</option>
-                        </select>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Secteur(s) d'activité où vous avez travaillé *</label>
-                        <textarea name="secteurs" rows="3" required placeholder="Listez les secteurs dans lesquels vous avez une expérience..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Projet professionnel -->
-                <div class="section">
-                    <h2>🎯 Projet professionnel</h2>
-                    
-                    <div class="question-block">
-                        <label>Type de projet *</label>
-                        <select name="type_projet" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="premier_emploi">Recherche de premier emploi</option>
-                            <option value="evolution">Évolution dans mon métier actuel</option>
-                            <option value="reconversion">Reconversion professionnelle</option>
-                            <option value="creation">Création d'entreprise</option>
-                            <option value="formation">Formation / Montée en compétences</option>
-                            <option value="reprise_etudes">Reprise d'études</option>
-                            <option value="exploration">Phase d'exploration</option>
-                        </select>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Échéance de votre projet *</label>
-                        <select name="echeance" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="immediat">Immédiat (moins de 3 mois)</option>
-                            <option value="court_terme">Court terme (3 à 6 mois)</option>
-                            <option value="moyen_terme">Moyen terme (6 mois à 1 an)</option>
-                            <option value="long_terme">Long terme (1 à 2 ans)</option>
-                            <option value="reflexion">En réflexion (plus de 2 ans)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Décrivez votre projet professionnel *</label>
-                        <textarea name="description_projet" rows="4" required placeholder="Expliquez ce que vous souhaitez faire, vos objectifs, vos motivations..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Contraintes et préférences -->
-                <div class="section">
-                    <h2>⚖️ Contraintes et préférences</h2>
-                    
-                    <div class="question-block">
-                        <label>Mobilité géographique *</label>
-                        <select name="mobilite" id="mobiliteSelect" required onchange="checkMobilite()">
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="locale">Locale uniquement</option>
-                            <option value="regionale">Régionale</option>
-                            <option value="nationale">Nationale (toute la France)</option>
-                            <option value="internationale">Internationale</option>
-                            <option value="teletravail">Télétravail prioritaire</option>
-                        </select>
-                        <div id="mobilitePrecision" style="display: none; margin-top: 10px;">
-                            <input type="text" name="mobilite_precision" placeholder="Précisez la ville ou la région">
-                        </div>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Type de contrat recherché *</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="contrat" value="cdi"> CDI</label>
-                            <label><input type="checkbox" name="contrat" value="cdd"> CDD</label>
-                            <label><input type="checkbox" name="contrat" value="interim"> Intérim</label>
-                            <label><input type="checkbox" name="contrat" value="alternance"> Alternance</label>
-                            <label><input type="checkbox" name="contrat" value="stage"> Stage</label>
-                            <label><input type="checkbox" name="contrat" value="independant"> Indépendant</label>
-                        </div>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Temps de travail souhaité *</label>
-                        <select name="temps_travail" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="temps_plein">Temps plein</option>
-                            <option value="temps_partiel">Temps partiel</option>
-                            <option value="flexible">Flexible</option>
-                        </select>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Contraintes personnelles à prendre en compte</label>
-                        <textarea name="contraintes" rows="3" placeholder="Ex: Horaires, famille, santé, déplacements..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Compétences et atouts -->
-                <div class="section">
-                    <h2>💪 Compétences et atouts</h2>
-                    
-                    <div class="question-block">
-                        <label>Vos principales compétences techniques *</label>
-                        <textarea name="competences_techniques" rows="3" required placeholder="Ex: Langages informatiques, utilisation de logiciels, conduite d'engins..."></textarea>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Vos principales qualités personnelles *</label>
-                        <textarea name="qualites" rows="3" required placeholder="Ex: Autonomie, créativité, rigueur, empathie..."></textarea>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Langues parlées (et niveau)</label>
-                        <textarea name="langues" rows="2" placeholder="Ex: Anglais (courant), Espagnol (intermédiaire)..."></textarea>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Permis et habilitations</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="permis" value="b"> Permis B</label>
-                            <label><input type="checkbox" name="permis" value="moto"> Permis moto</label>
-                            <label><input type="checkbox" name="permis" value="poids_lourds"> Poids lourds</label>
-                            <label><input type="checkbox" name="permis" value="caces"> CACES</label>
-                            <label><input type="checkbox" name="permis" value="autre" onchange="toggleAutrePermis()"> Autre</label>
-                        </div>
-                        <div id="autrePermis" style="display: none; margin-top: 10px;">
-                            <input type="text" name="autre_permis" placeholder="Apportez des précisions">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Motivations -->
-                <div class="section">
-                    <h2>🔥 Motivations</h2>
-                    
-                    <div class="question-block">
-                        <label>Qu'est-ce qui est le plus important pour vous dans un métier ? *</label>
-                        <textarea name="motivations" rows="4" required placeholder="Ex: Sens du travail, rémunération, équilibre vie pro/perso, contact humain, créativité..."></textarea>
-                    </div>
-                    
-                    <div class="question-block">
-                        <label>Qu'est-ce qui vous freine ou vous inquiète dans votre projet ?</label>
-                        <textarea name="freins" rows="3" placeholder="Ex: Financier, peur de l'échec, manque de compétences, âge..."></textarea>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn">✅ Valider mon bilan de situation</button>
-                </div>
-            </form>
-        </div>
+  <div class="container">
+    
+    <!-- Bouton retour accueil -->
+    <div class="top-nav">
+      <button onclick="window.location.href='index.html'" class="btn-retour-top">
+        <span class="arrow">←</span> Retour à l'accueil
+      </button>
     </div>
-
-    <script src="situation-script.js"></script>
+    
+    <h1 class="page-title">Réalisez le bilan de votre situation actuelle</h1>
+    
+    <p class="intro">
+      Prenez le temps de décrire votre parcours, vos compétences et vos aspirations. Ces informations permettront de construire un accompagnement personnalisé.
+    </p>
+    
+    <form id="situationForm" class="situation-form">
+      
+      <div class="form-section">
+        <h2 class="section-title">Informations personnelles</h2>
+        
+        <div class="form-group">
+          <label for="nom">Prénom et nom</label>
+          <input type="text" id="nom" name="nom" placeholder="Ex: Marie Dupont">
+        </div>
+        
+        <div class="form-group">
+          <label for="age">Âge</label>
+          <input type="number" id="age" name="age" min="16" max="99" placeholder="Ex: 35">
+        </div>
+        
+        <div class="form-group">
+          <label for="situation">Situation professionnelle actuelle</label>
+          <select id="situation" name="situation">
+            <option value="">Sélectionnez...</option>
+            <option value="en-poste">En poste (CDI/CDD)</option>
+            <option value="independant">Indépendant / Freelance</option>
+            <option value="recherche">En recherche d'emploi</option>
+            <option value="etudiant">Étudiant</option>
+            <option value="reconversion">En reconversion</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2 class="section-title">Parcours professionnel</h2>
+        
+        <div class="form-group">
+          <label for="experience">Décrivez votre expérience professionnelle</label>
+          <textarea id="experience" name="experience" rows="4" placeholder="Fonctions occupées, secteurs d'activité, durée..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="formation">Formation et diplômes</label>
+          <textarea id="formation" name="formation" rows="3" placeholder="Niveau d'études, diplômes obtenus, formations suivies..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="competences">Vos compétences principales</label>
+          <textarea id="competences" name="competences" rows="4" placeholder="Compétences techniques, savoir-faire, langues..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2 class="section-title">Projet professionnel</h2>
+        
+        <div class="form-group">
+          <label for="motivations">Vos motivations pour la reconversion</label>
+          <textarea id="motivations" name="motivations" rows="4" placeholder="Qu'est-ce qui vous pousse à changer ? Quelles sont vos aspirations ?"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="contraintes">Vos contraintes et disponibilités</label>
+          <textarea id="contraintes" name="contraintes" rows="3" placeholder="Mobilité géographique, disponibilité, contraintes familiales ou financières..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="main-btn">💾 Enregistrer mon bilan</button>
+      </div>
+      
+    </form>
+    
+    <div class="section-footer">
+      <button onclick="window.location.href='index.html'" class="btn-retour">🏠 Retour à l'accueil</button>
+    </div>
+    
+  </div>
+  
+  <script src="situation-script.js"></script>
 </body>
 </html>
