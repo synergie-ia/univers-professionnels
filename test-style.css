@@ -12,6 +12,7 @@
   --c4:#16a34a;
   --accent:#5a4af4;
   --green:#22c55e;
+  --red:#ef4444;
 }
 
 *{box-sizing:border-box}
@@ -38,7 +39,7 @@ html,body{
   text-align:center;
 }
 
-/* Boîte d'information - Version compacte */
+/* Boîte d'information */
 .info-box{
   background:#fff3cd;
   border:1px solid #ffc107;
@@ -62,6 +63,25 @@ html,body{
   margin-bottom:0;
 }
 
+/* Message d'erreur */
+.error-message{
+  background:#fee;
+  border:2px solid var(--red);
+  border-radius:10px;
+  padding:14px;
+  margin:16px 0;
+  color:var(--red);
+  font-weight:600;
+  text-align:center;
+  animation:shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
 .intro{
   color:var(--ink);
   margin:12px 0 10px;
@@ -69,7 +89,7 @@ html,body{
   text-align:center;
 }
 
-/* Légende de l'échelle - Version compacte */
+/* Légende de l'échelle */
 .legend-box{
   background:var(--card);
   border:1px solid var(--line);
@@ -273,10 +293,16 @@ html,body{
   flex:1;
 }
 
+.univers-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+
 .univers-score{
   font-weight:700;
   font-size:18px;
-  margin:0 12px;
   flex-shrink:0;
 }
 
@@ -289,15 +315,15 @@ html,body{
 
 .btn-toggle-sub{
   background:#f3f4f6;
-  border:1px solid var(--line);
+  border:2px solid var(--line);
   border-radius:8px;
-  padding:8px 12px;
-  font-size:18px;
+  padding:8px;
+  font-size:20px;
   cursor:pointer;
   transition:all .2s ease;
   line-height:1;
   min-width:40px;
-  height:36px;
+  height:40px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -305,12 +331,13 @@ html,body{
 
 .btn-toggle-sub:hover{
   background:#e5e7eb;
-  transform:scale(1.05);
+  transform:scale(1.1);
+  border-color:#9ca3af;
 }
 
 .btn-select-univers{
-  width:36px;
-  height:36px;
+  width:40px;
+  height:40px;
   border-radius:50%;
   border:2px solid var(--line);
   background:#fff;
@@ -341,12 +368,9 @@ html,body{
 
 /* Sous-univers */
 .sub-univers-list{
-  margin-top:14px;
-  padding-top:14px;
-  border-top:1px dashed var(--line);
   display:none;
   background:#f9fafb;
-  padding:12px;
+  padding:14px;
   border-radius:8px;
   margin-top:12px;
 }
@@ -393,8 +417,8 @@ html,body{
   border-radius:8px;
 }
 
-.section-header, .section-footer{
-  margin:16px 0;
+.section-footer{
+  margin:20px 0 10px;
   text-align:center;
 }
 
@@ -402,7 +426,7 @@ html,body{
   background:#fff;
   color:var(--ink);
   border:1px solid var(--line);
-  padding:10px 20px;
+  padding:12px 24px;
   border-radius:10px;
   cursor:pointer;
   font-weight:600;
@@ -413,6 +437,7 @@ html,body{
 .btn-retour:hover{
   background:#f3f4f6;
   box-shadow:0 2px 6px rgba(0,0,0,.08);
+  transform:translateY(-2px);
 }
 
 /* ---------- Boutons principaux ---------- */
@@ -461,18 +486,19 @@ html,body{
     flex-wrap:wrap;
   }
   
-  .univers-score{
-    order:3;
-  }
-  
-  .univers-actions{
+  .univers-right{
     order:2;
     margin-left:auto;
   }
   
   .btn-toggle-sub{
-    font-size:16px;
+    font-size:18px;
     min-width:36px;
-    height:32px;
+    height:36px;
+  }
+  
+  .btn-select-univers{
+    width:36px;
+    height:36px;
   }
 }
