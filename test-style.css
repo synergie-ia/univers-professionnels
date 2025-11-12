@@ -1,4 +1,4 @@
-/* ---------- Layout de page ---------- */
+/* ===== VARIABLES COULEURS ===== */
 :root{
   --bg:#f5f6fb;
   --card:#ffffff;
@@ -8,13 +8,14 @@
   --c0:#e74c3c;
   --c1:#f39c12;
   --c2:#9ca3af;
-  --c3:#f1c40f;
+  --c3:#bbf7d0;
   --c4:#16a34a;
   --accent:#5a4af4;
   --green:#22c55e;
   --red:#ef4444;
 }
 
+/* ===== RESET & BASE ===== */
 *{box-sizing:border-box}
 
 html,body{
@@ -32,7 +33,9 @@ html,body{
   padding:16px;
 }
 
-/* Bouton retour en haut de page */
+.hidden{display:none}
+
+/* ===== NAVIGATION ===== */
 .top-nav{
   margin:0 0 20px 0;
   padding:12px 0;
@@ -68,6 +71,7 @@ html,body{
   transform:translateX(-3px);
 }
 
+/* ===== TITRES ===== */
 .page-title{
   font-size:clamp(20px,4.5vw,30px);
   margin:12px 0;
@@ -75,7 +79,14 @@ html,body{
   text-align:center;
 }
 
-/* Boîte d'information */
+.intro{
+  color:var(--ink);
+  margin:12px 0 10px;
+  font-size:clamp(14px,2.7vw,15px);
+  text-align:center;
+}
+
+/* ===== BOÎTE D'INFORMATION ===== */
 .info-box{
   background:#fff3cd;
   border:1px solid #ffc107;
@@ -99,7 +110,21 @@ html,body{
   margin-bottom:0;
 }
 
-/* Message d'erreur */
+/* ===== LÉGENDE PLUS VISIBLE ===== */
+.legend-box{
+  background:#fff;
+  border:3px solid #cbd5e1;
+  border-radius:12px;
+  padding:14px 16px;
+  margin:10px 0 20px;
+  font-size:clamp(13px,2.7vw,14px);
+  text-align:center;
+  line-height:1.8;
+  font-weight:600;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* ===== MESSAGE D'ERREUR ===== */
 .error-message{
   background:#fee;
   border:2px solid var(--red);
@@ -118,28 +143,7 @@ html,body{
   75% { transform: translateX(10px); }
 }
 
-.intro{
-  color:var(--ink);
-  margin:12px 0 10px;
-  font-size:clamp(14px,2.7vw,15px);
-  text-align:center;
-}
-
-/* Légende de l'échelle */
-.legend-box{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:10px 12px;
-  margin:10px 0 16px;
-  font-size:clamp(12px,2.5vw,13px);
-  text-align:center;
-  line-height:1.6;
-}
-
-.hidden{display:none}
-
-/* ---------- Blocs questions ---------- */
+/* ===== BLOCS QUESTIONS ===== */
 .question-block{
   background:var(--card);
   border:1px solid var(--line);
@@ -157,6 +161,7 @@ html,body{
   color:var(--ink);
 }
 
+/* ===== OPTIONS DE RÉPONSE ===== */
 .option-row{
   display:flex;
   align-items:center;
@@ -200,7 +205,7 @@ html,body{
   }
 }
 
-/* ---------- Ronds ---------- */
+/* ===== BOUTONS DE NOTATION (RONDS) ===== */
 .rate-btn{
   min-width:38px;
   width:38px;
@@ -239,14 +244,66 @@ html,body{
   }
 }
 
-.rate-btn.selected.v0{background:var(--c0);border-color:var(--c0);color:#fff}
-.rate-btn.selected.v1{background:var(--c1);border-color:var(--c1);color:#fff}
-.rate-btn.selected.v2{background:var(--c2);border-color:var(--c2);color:#fff}
-.rate-btn.selected.v3{background:var(--c3);border-color:var(--c3);color:#111}
-.rate-btn.selected.v4{background:var(--c4);border-color:var(--c4);color:#fff}
+/* ===== ÉTATS SÉLECTIONNÉS (COULEURS) ===== */
+.rate-btn.selected.v0{
+  background:var(--c0);
+  border-color:var(--c0);
+  color:#fff;
+}
 
-/* ---------- Résultats profil / univers ---------- */
-#profileSection,#univers-section{
+.rate-btn.selected.v1{
+  background:var(--c1);
+  border-color:var(--c1);
+  color:#fff;
+}
+
+.rate-btn.selected.v2{
+  background:var(--c2);
+  border-color:var(--c2);
+  color:#fff;
+}
+
+.rate-btn.selected.v3{
+  background:var(--c3);
+  border-color:#86efac;
+  color:#166534;
+}
+
+.rate-btn.selected.v4{
+  background:var(--c4);
+  border-color:var(--c4);
+  color:#fff;
+}
+
+/* ===== QUESTIONS NON RÉPONDUES ===== */
+.option-row.unanswered{
+  background:#fee;
+  border:2px solid #ef4444;
+  border-radius:10px;
+  padding:10px;
+  margin:8px 0;
+  animation:pulse-red 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { 
+    background:#fee;
+    border-color:#ef4444;
+  }
+  50% { 
+    background:#fecaca;
+    border-color:#dc2626;
+  }
+}
+
+.option-row.unanswered .option-text{
+  font-weight:600;
+  color:#991b1b;
+}
+
+/* ===== RÉSULTATS PROFIL / UNIVERS ===== */
+#profileSection,
+#univers-section{
   background:var(--card);
   border:1px solid var(--line);
   border-radius:16px;
@@ -283,7 +340,7 @@ html,body{
   background:linear-gradient(90deg,#60a5fa,#22c55e);
 }
 
-/* ---------- Cartes univers ---------- */
+/* ===== CARTES UNIVERS ===== */
 .univers-card{
   border:2px solid var(--line);
   border-radius:12px;
@@ -402,7 +459,7 @@ html,body{
   font-weight:bold;
 }
 
-/* Sous-univers */
+/* ===== SOUS-UNIVERS ===== */
 .sub-univers-list{
   display:none;
   background:#f9fafb;
@@ -442,6 +499,7 @@ html,body{
   font-size:13px;
 }
 
+/* ===== COMPTEUR UNIVERS ===== */
 .counter-univers{
   text-align:center;
   font-weight:600;
@@ -453,31 +511,17 @@ html,body{
   border-radius:8px;
 }
 
-.section-footer{
-  margin:20px 0 10px;
+/* ===== NOTICE ===== */
+.notice{
+  margin:12px 0;
+  font-size:14px;
+  color:var(--muted);
   text-align:center;
 }
 
-.btn-retour{
-  background:#fff;
-  color:var(--ink);
-  border:1px solid var(--line);
-  padding:12px 24px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:15px;
-  transition:all .2s ease;
-}
-
-.btn-retour:hover{
-  background:#f3f4f6;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-  transform:translateY(-2px);
-}
-
-/* ---------- Boutons principaux ---------- */
-.main-btn,.alt-btn{
+/* ===== BOUTONS PRINCIPAUX ===== */
+.main-btn,
+.alt-btn{
   width:100%;
   max-width:400px;
   border:none;
@@ -510,13 +554,31 @@ html,body{
   background:#e0e7ff;
 }
 
-.notice{
-  margin:12px 0;
-  font-size:14px;
-  color:var(--muted);
+/* ===== SECTION FOOTER ===== */
+.section-footer{
+  margin:20px 0 10px;
   text-align:center;
 }
 
+.btn-retour{
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--line);
+  padding:12px 24px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:15px;
+  transition:all .2s ease;
+}
+
+.btn-retour:hover{
+  background:#f3f4f6;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  transform:translateY(-2px);
+}
+
+/* ===== RESPONSIVE MOBILE ===== */
 @media (max-width: 640px) {
   .univers-header{
     flex-wrap:wrap;
@@ -537,70 +599,4 @@ html,body{
     width:36px;
     height:36px;
   }
-}
-/* ===== QUESTIONS NON RÉPONDUES ===== */
-.option-row.unanswered{
-  background:#fee;
-  border:2px solid #ef4444;
-  border-radius:10px;
-  padding:10px;
-  margin:8px 0;
-  animation:pulse-red 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse-red {
-  0%, 100% { 
-    background:#fee;
-    border-color:#ef4444;
-  }
-  50% { 
-    background:#fecaca;
-    border-color:#dc2626;
-  }
-}
-
-.option-row.unanswered .option-text{
-  font-weight:600;
-  color:#991b1b;
-}
-
-
-/* ===== LÉGENDE PLUS VISIBLE ===== */
-.legend-box{
-  background:#fff;
-  border:3px solid #cbd5e1;
-  border-radius:12px;
-  padding:14px 16px;
-  margin:10px 0 20px;
-  font-size:clamp(13px,2.7vw,14px);
-  text-align:center;
-  line-height:1.8;
-  font-weight:600;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-/* ===== QUESTIONS NON RÉPONDUES ===== */
-.option-row.unanswered{
-  background:#fee;
-  border:2px solid #ef4444;
-  border-radius:10px;
-  padding:10px;
-  margin:8px 0;
-  animation:pulse-red 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse-red {
-  0%, 100% { 
-    background:#fee;
-    border-color:#ef4444;
-  }
-  50% { 
-    background:#fecaca;
-    border-color:#dc2626;
-  }
-}
-
-.option-row.unanswered .option-text{
-  font-weight:600;
-  color:#991b1b;
 }
