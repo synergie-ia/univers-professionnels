@@ -36,7 +36,7 @@ html,body{
 }
 
 .hero-title{
-  font-size:clamp(28px,5.5vw,48px);
+  font-size:clamp(24px,4.5vw,38px);
   font-weight:700;
   line-height:1.2;
   margin:0 0 20px;
@@ -133,10 +133,17 @@ html,body{
   border:1px solid #e0e7ff;
 }
 
-.card-btn:hover{
+.card-btn:hover:not(:disabled){
   background:#e0e7ff;
   transform:translateY(-2px);
   box-shadow:0 6px 16px rgba(109,94,252,.25);
+}
+
+.card-btn:disabled{
+  opacity:0.4;
+  cursor:not-allowed;
+  background:#f3f4f6;
+  color:#9ca3af;
 }
 
 /* ===== SECTION COPIE ===== */
@@ -164,7 +171,7 @@ html,body{
   transition:all .2s ease;
 }
 
-.copy-btn:hover{
+.copy-btn:hover:not(:disabled){
   background:#f9fafb;
   border-color:var(--accent);
   color:var(--accent);
@@ -173,8 +180,10 @@ html,body{
 }
 
 .copy-btn:disabled{
-  opacity:0.5;
+  opacity:0.4;
   cursor:not-allowed;
+  background:#f3f4f6;
+  color:#9ca3af;
 }
 
 .copy-icon{
