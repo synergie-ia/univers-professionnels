@@ -1,11 +1,21 @@
 /* 
-  Script pour la page d'accueil avec validation complète
+  Script pour la page d'accueil avec validation complète + Réinitialisation
 */
 
 document.addEventListener('DOMContentLoaded', function() {
   
   const btnCopy = document.getElementById('btnCopyResults');
   const btnProject = document.getElementById('btnProject');
+  const btnReset = document.getElementById('btnResetData');
+  
+  // Vérifier si des données existent
+  function hasAnyData(){
+    const answers = localStorage.getItem('questionnaire_answers');
+    const selectedUnivers = localStorage.getItem('selectedUnivers');
+    const situationData = localStorage.getItem('situation_data');
+    
+    return !!(answers || selectedUnivers || situationData);
+  }
   
   // Vérifier si au moins 3 univers ont été sélectionnés
   function hasMinimumUniversSelected(){
@@ -40,6 +50,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Vérifier si les données ont été copiées
   function hasBeenCopied(){
     return localStorage.getItem('data_copied') === 'true';
+  }
+  
+  // Mettre à jour l'état du bouton Réinitialiser
+  function updateResetButton(){
+    if(btnReset){
+      btnReset.disabled = !hasAnyData();
+    }
   }
   
   // Calculer le profil d'intérêts avec pourcentages
@@ -101,7 +118,65 @@ document.addEventListener('DOMContentLoaded', function() {
     }).sort((a, b) => b.percent - a.percent);
   }
   
-  /* ===== BOUTON COPIER (TOUJOURS ACTIF) ===== */
+  /* ===== BOUTON RÉINITIALISER ===== */
+  if(btnReset){
+    btnReset.addEventListener('click', function(){
+      
+      if(!hasAnyData()){
+        alert("ℹ️ Aucune donnée à réinitialiser.");
+        return;
+      }
+      
+      // Message d'avertissement
+      const confirmation = confirm(
+        "⚠️ ATTENTION : RÉINITIALISATION DES DONNÉES\n\n" +
+        "Vous êtes sur le point de supprimer TOUTES vos données :\n\n" +
+        "• Votre profil d'intérêts (questionnaire)\n" +
+        "• Vos univers-métiers sélectionnés\n" +
+        "• Votre bilan de situation\n" +
+        "• Les données copiées\n\n" +
+        "Cette action est IRRÉVERSIBLE.\n\n" +
+        "Voulez-vous vraiment continuer ?"
+      );
+      
+      if(!confirmation) return;
+      
+      // Double confirmation
+      const doubleConfirm = confirm(
+        "🔴 DERNIÈRE CONFIRMATION\n\n" +
+        "Êtes-vous ABSOLUMENT SÛR(E) de vouloir supprimer toutes vos données ?\n\n" +
+        "Cette action ne peut pas être annulée."
+      );
+      
+      if(!doubleConfirm) return;
+      
+      // Supprimer toutes les données
+      try {
+        localStorage.removeItem('questionnaire_answers');
+        localStorage.removeItem('selectedUnivers');
+        localStorage.removeItem('univers_percentages');
+        localStorage.removeItem('situation_data');
+        localStorage.removeItem('data_copied');
+        
+        console.log('✅ Toutes les données ont été supprimées');
+        
+        // Feedback visuel
+        btnReset.innerHTML = '<span style="color:#22c55e">✓ Données supprimées !</span>';
+        btnReset.disabled = true;
+        
+        setTimeout(() => {
+          alert("✅ Toutes vos données ont été supprimées.\n\nVous pouvez maintenant recommencer une nouvelle saisie.");
+          location.reload(); // Recharger la page
+        }, 1000);
+        
+      } catch(e) {
+        console.error('❌ Erreur lors de la suppression:', e);
+        alert("❌ Erreur lors de la suppression des données.\n\nVeuillez réessayer.");
+      }
+    });
+  }
+  
+  /* ===== BOUTON COPIER ===== */
   if(btnCopy){
     btnCopy.addEventListener('click', function(){
       
@@ -215,5 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
       window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
     });
   }
+  
+  // ===== INITIALISATION =====
+  updateResetButton();
   
 });
