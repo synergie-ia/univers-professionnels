@@ -2,8 +2,6 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  Algorithme OPTIMISÉ avec sauvegarde des noms d'univers
-  Toutes les données sont chargées depuis universes-data.js
 */
 
 let answers = {};
@@ -182,13 +180,13 @@ function percentFromSum(sum){
   return Math.round((sum / maxQuadratique) * 100);
 }
 
-/* ===== CALCUL DES UNIVERS (MOYENNE PONDÉRÉE OPTIMISÉE) ===== */
+/* ===== CALCUL DES UNIVERS (MOYENNE PONDÉRÉE) ===== */
 
 function calcUnivers(){
   const s = calcProfile();
   
   if(typeof universesData === 'undefined'){
-    console.error("universesData n'est pas défini. Vérifiez que universes-data.js est chargé.");
+    console.error("universesData n'est pas défini.");
     return [];
   }
   
@@ -374,11 +372,11 @@ function displayUnivers(){
     console.log(`${list.length} univers calculés`);
     
     if(list.length === 0){
-      alert("Erreur : Aucun univers n'a pu être calculé. Vérifiez que universes-data.js est bien chargé.");
+      alert("Erreur : Aucun univers n'a pu être calculé.");
       return;
     }
     
-    // SAUVEGARDER LES POURCENTAGES DES UNIVERS
+    // Sauvegarder les pourcentages
     const percentages = {};
     list.forEach(u => {
       percentages[u.id] = u.pct;
@@ -420,25 +418,25 @@ function displayUnivers(){
   }
 }
 
-/* ===== INITIALISATION AU CHARGEMENT DE LA PAGE ===== */
+/* ===== INITIALISATION ===== */
 
 document.addEventListener('DOMContentLoaded', function() {
   
-  // Vérifier que les données sont bien chargées
+  // Vérification des données
   if(typeof QUESTIONS === 'undefined'){
-    console.error("❌ ERREUR : QUESTIONS non défini. Vérifiez que universes-data.js est chargé.");
+    console.error("❌ QUESTIONS non défini");
     alert("Erreur de chargement des données. Veuillez actualiser la page.");
     return;
   }
   
   if(typeof DIMENSIONS === 'undefined'){
-    console.error("❌ ERREUR : DIMENSIONS non défini. Vérifiez que universes-data.js est chargé.");
+    console.error("❌ DIMENSIONS non défini");
     alert("Erreur de chargement des données. Veuillez actualiser la page.");
     return;
   }
   
   if(typeof universesData === 'undefined'){
-    console.error("❌ ERREUR : universesData non défini. Vérifiez que universes-data.js est chargé.");
+    console.error("❌ universesData non défini");
     alert("Erreur de chargement des données. Veuillez actualiser la page.");
     return;
   }
@@ -456,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   renderQuestions();
 
+  // Bouton validation questionnaire
   const btnValidate = document.getElementById("validateBtn");
   const errorMessage = document.getElementById("errorMessage");
   
@@ -464,7 +463,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if(!allQuestionsAnswered()){
       const unanswered = highlightUnansweredQuestions();
-      
       errorMessage.classList.remove("hidden");
       
       if(unanswered.length > 0){
@@ -480,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 100);
         }
       }
-      
       return;
     }
     
@@ -488,10 +485,11 @@ document.addEventListener('DOMContentLoaded', function() {
     displayProfile();
   });
 
+  // Bouton voir univers
   const btnUnivers = document.getElementById("goUniversesBtn");
   btnUnivers.addEventListener("click", displayUnivers);
 
-  /* ===== BOUTON VALIDATION SÉLECTION UNIVERS ===== */
+  // Bouton validation sélection univers
   const btnValidateSelection = document.getElementById('btnValidateSelection');
   if(btnValidateSelection){
     btnValidateSelection.addEventListener('click', ()=>{
@@ -502,10 +500,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       try {
-        // Récupérer la liste complète des univers calculés avec leurs vrais noms
         const allUnivers = calcUnivers();
-        
-        // Construire un objet avec ID, NOM et POURCENTAGE pour chaque univers sélectionné
         const selectedUniversDetails = {};
         
         selectedUnivers.forEach(id => {
@@ -518,12 +513,10 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
         
-        // Sauvegarder les détails complets
         localStorage.setItem('selected_univers_details', JSON.stringify(selectedUniversDetails));
         
         console.log('✅ Sélection validée:', selectedUniversDetails);
         
-        // Feedback visuel
         const originalText = btnValidateSelection.innerHTML;
         btnValidateSelection.innerHTML = '✅ Sélection enregistrée !';
         btnValidateSelection.style.background = '#22c55e';
@@ -541,10 +534,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('❌ Erreur lors de la validation:', error);
         alert("❌ Erreur lors de la sauvegarde. Veuillez réessayer.");
       }
-      
     });
   }
 
+  // Boutons retour accueil
   const btnAccueilTop = document.getElementById("btnAccueilTop");
   if(btnAccueilTop){
     btnAccueilTop.addEventListener("click", ()=>{
