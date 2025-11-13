@@ -1,4 +1,8 @@
-// Données des 21 univers professionnels avec 252 sous-univers
+// ============================================
+// RECONVERSION 360 IA - DONNÉES DES UNIVERS
+// ============================================
+
+// Liste complète des 21 univers avec leurs sous-domaines
 const universesData = [
   {
     id: 1,
@@ -424,4 +428,34 @@ const universesData = [
       { icon: "🌐", name: "Économie collaborative & plateformes", description: "Partage, freelance, gig economy." }
     ]
   }
+];
+
+// ============================================
+// MATRICE DE CORRÉLATION (ORDRE DES DIMENSIONS)
+// ============================================
+// Index des dimensions (ordre fixe et immuable) :
+// 0:MO, 1:PT, 2:AL, 3:SI, 4:CS, 5:EC, 6:CP, 7:IP, 8:MP, 9:AE, 10:AA, 11:RI
+
+const universes = [
+  { id: 1, weights: [4, 10, 4, 5, 3, 2, 4, 4, 9, 8, 3, 2] },  // Agriculture, nature & animaux
+  { id: 2, weights: [3, 3, 2, 2, 10, 10, 4, 9, 2, 2, 3, 5] },  // Arts, design & création
+  { id: 3, weights: [4, 1, 3, 2, 6, 4, 6, 9, 3, 5, 4, 10] },   // Commerce, marketing & vente
+  { id: 4, weights: [4, 2, 4, 3, 9, 9, 5, 9, 1, 3, 3, 8] },    // Communication, médias & culture
+  { id: 5, weights: [5, 10, 4, 5, 4, 1, 4, 3, 8, 9, 1, 2] },   // Construction, BTP & habitat
+  { id: 6, weights: [9, 0, 10, 2, 8, 1, 5, 4, 0, 2, 3, 6] },   // Droit, administration & politique publique
+  { id: 7, weights: [5, 2, 4, 2, 4, 3, 8, 5, 2, 3, 10, 8] },   // Éducation, formation & apprentissage (= Social, éducation & insertion)
+  { id: 8, weights: [5, 6, 8, 10, 7, 2, 5, 9, 4, 5, 3, 4] },   // Environnement, climat & énergies
+  { id: 9, weights: [10, 0, 10, 2, 4, 0, 6, 3, 0, 1, 1, 3] },  // Gestion, finance & comptabilité
+  { id: 10, weights: [7, 5, 3, 2, 4, 3, 7, 5, 4, 8, 8, 8] },   // Hôtellerie, restauration & tourisme
+  { id: 11, weights: [7, 5, 5, 3, 6, 2, 6, 8, 2, 4, 3, 9] },   // Immobilier & patrimoine
+  { id: 12, weights: [7, 10, 7, 8, 5, 0, 6, 4, 1, 5, 1, 2] },  // Industrie, ingénierie & production
+  { id: 13, weights: [9, 6, 5, 3, 3, 0, 8, 4, 6, 9, 2, 3] },   // Logistique, transport & mobilité
+  { id: 14, weights: [6, 1, 6, 4, 9, 2, 10, 10, 1, 3, 3, 9] }, // Management, entrepreneuriat & stratégie
+  { id: 15, weights: [5, 6, 9, 10, 7, 2, 4, 7, 0, 2, 1, 3] },  // Numérique, informatique & data
+  { id: 16, weights: [6, 6, 8, 9, 4, 1, 5, 4, 3, 5, 10, 4] },  // Santé, médical & paramédical
+  { id: 17, weights: [5, 3, 9, 10, 8, 1, 4, 8, 0, 1, 1, 3] },  // Sciences, recherche & innovation
+  { id: 18, weights: [5, 5, 4, 2, 2, 0, 7, 4, 8, 10, 6, 5] },  // Sécurité, défense & protection
+  { id: 19, weights: [5, 2, 4, 2, 4, 3, 8, 5, 2, 3, 10, 8] },  // Social, aide & solidarité
+  { id: 20, weights: [3, 3, 2, 2, 3, 2, 4, 4, 10, 8, 6, 6] },  // Sport, loisirs & vie active
+  { id: 21, weights: [3, 2, 7, 10, 9, 3, 5, 10, 1, 2, 1, 5] }  // Technologies émergentes & futur du travail
 ];
