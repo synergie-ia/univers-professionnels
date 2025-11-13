@@ -2,8 +2,7 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  Algorithme OPTIMISÉ avec moyenne pondérée normalisée
-  + Sauvegarde des pourcentages des univers
+  Algorithme OPTIMISÉ avec sauvegarde des noms d'univers
 */
 
 let answers = {};
@@ -150,7 +149,6 @@ function attachRatingEvents(){
         row.classList.remove('unanswered');
       }
 
-      // ✅ CORRECTION : Vérifier immédiatement après sauvegarde
       if(allQuestionsAnswered()){
         document.getElementById("errorMessage").classList.add("hidden");
       }
@@ -379,7 +377,7 @@ function displayUnivers(){
       return;
     }
     
-    // ✨ SAUVEGARDER LES POURCENTAGES DES UNIVERS
+    // SAUVEGARDER LES POURCENTAGES DES UNIVERS
     const percentages = {};
     list.forEach(u => {
       percentages[u.id] = u.pct;
@@ -437,7 +435,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const errorMessage = document.getElementById("errorMessage");
   
   btnValidate.addEventListener("click", ()=>{
-    // ✅ Recharger depuis localStorage pour être sûr d'avoir les dernières données
     loadAnswers();
     
     if(!allQuestionsAnswered()){
@@ -468,6 +465,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const btnUnivers = document.getElementById("goUniversesBtn");
   btnUnivers.addEventListener("click", displayUnivers);
+
+  /* ===== BOUTON VALIDATION SÉLECTION UNIVERS ===== */
+  const btnValidateSelection = document.getElementById('btnValidateSelection');
+  if(btnValidateSelection){
+    btnValidateSelection.addEventListener('click', ()=>{
+      
+      if(selectedUnivers.size < 3){
+        alert("⚠️ Vous devez sélectionner au moins 3 univers avant de valider.\n\nActuellement : " + selectedUnivers.size + " univers sélectionné(s).");
+        return;
+      }
+      
+      try {
+        // Récupérer la liste complète des univers calculés avec leurs vrais noms
+        const allUnivers = calcUnivers();
+        
+        // Construire un objet avec ID, NOM et POURCENTAGE pour chaque univers sélectionné
+        const selectedUniversDetails = {};
+        
+        selectedUnivers.forEach(id => {
+          const univers = allUnivers.find(u => u.id === id);
+          if(univers){
+            selectedUniversDetails[id] = {
+              name: univers.name,
+              percent: univers.pct
+            };
+          }
+        });
+        
+        // Sauvegarder les détails complets
+        localStorage.setItem('selected_univers_details', JSON.stringify(selectedUniversDetails));
+        
+        console.log('✅ Sélection validée:', selectedUniversDetails);
+        
+        // Feedback visuel
+        const originalText = btnValidateSelection.innerHTML;
+        btnValidateSelection.innerHTML = '✅ Sélection enregistrée !';
+        btnValidateSelection.style.background = '#22c55e';
+        btnValidateSelection.style.color = '#fff';
+        
+        setTimeout(() => {
+          btnValidateSelection.innerHTML = originalText;
+          btnValidateSelection.style.background = '';
+          btnValidateSelection.style.color = '';
+        }, 3000);
+        
+        alert("✅ Votre sélection de " + selectedUnivers.size + " univers a été enregistrée avec succès !\n\nVous pouvez maintenant retourner à l'accueil et compléter votre bilan de situation.");
+        
+      } catch(error) {
+        console.error('❌ Erreur lors de la validation:', error);
+        alert("❌ Erreur lors de la sauvegarde. Veuillez réessayer.");
+      }
+      
+    });
+  }
 
   const btnAccueilTop = document.getElementById("btnAccueilTop");
   if(btnAccueilTop){
