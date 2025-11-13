@@ -2,7 +2,7 @@
   ============================================
   RECONVERSION 360 IA - PAGE D'ACCUEIL
   ============================================
-  Script avec récupération des vrais noms d'univers
+  Script avec récupération des vrais noms d'univers + libellés
 */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
     return percentages;
   }
   
-  // Récupérer les univers sélectionnés avec VRAIS noms et pourcentages
-  function getSelectedUniversWithPercentages(){
+  // Récupérer les univers sélectionnés avec VRAIS noms et libellés
+  function getSelectedUniversWithLevels(){
     // Charger les détails sauvegardés lors de la validation
     const selectedDetails = localStorage.getItem('selected_univers_details');
     
@@ -106,12 +106,23 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         const details = JSON.parse(selectedDetails);
         
-        // Convertir en tableau et trier par pourcentage décroissant
+        // Convertir en tableau et trier par ordre de compatibilité
         return Object.entries(details).map(([id, data]) => ({
           id: parseInt(id),
           name: data.name,
-          percent: data.percent
-        })).sort((a, b) => b.percent - a.percent);
+          level: data.level,
+          stars: data.stars
+        })).sort((a, b) => {
+          // Tri par ordre de compatibilité (niveau 5 à 1)
+          const levelOrder = {
+            'Très compatible': 5,
+            'Compatible': 4,
+            'Assez compatible': 3,
+            'Peu compatible': 2,
+            'Très peu compatible': 1
+          };
+          return (levelOrder[b.level] || 0) - (levelOrder[a.level] || 0);
+        });
         
       } catch(e) {
         console.error('Erreur parsing selected_univers_details:', e);
@@ -122,13 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.warn('⚠️ Aucun détail d\'univers sauvegardé. Utilisez le bouton "Valider ma sélection" dans le questionnaire.');
     
     const selectedIds = JSON.parse(localStorage.getItem('selectedUnivers') || '[]');
-    const universPercentages = JSON.parse(localStorage.getItem('univers_percentages') || '{}');
     
     return selectedIds.map(id => ({
       id: id,
       name: `Univers ${id} (non validé)`,
-      percent: universPercentages[id] || 0
-    })).sort((a, b) => b.percent - a.percent);
+      level: 'Non défini',
+      stars: '❓'
+    }));
   }
   
   /* ===== BOUTON RÉINITIALISER ===== */
@@ -201,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       const profileData = calcProfileWithPercentages();
-      const universData = getSelectedUniversWithPercentages();
+      const universData = getSelectedUniversWithLevels();
       const situationData = JSON.parse(localStorage.getItem('situation_data'));
       
       let textToCopy = "=== MES DONNÉES RECONVERSION 360 IA ===\n\n";
@@ -213,10 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       textToCopy += "\n";
       
-      // 🌍 UNIVERS-MÉTIERS SÉLECTIONNÉS (format: Nom Pourcentage%)
+      // 🌍 UNIVERS-MÉTIERS SÉLECTIONNÉS (format: Nom - Libellé)
       textToCopy += "🌍 UNIVERS-MÉTIERS SÉLECTIONNÉS\n\n";
       universData.forEach(u => {
-        textToCopy += `${u.name} ${u.percent}%\n`;
+        textToCopy += `${u.stars} ${u.name} - ${u.level}\n`;
       });
       textToCopy += "\n";
       
