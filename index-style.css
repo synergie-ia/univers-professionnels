@@ -46,10 +46,14 @@ body {
    TITRE PRINCIPAL (TOUJOURS MULTI-LIGNES)
    ===================================================== */
 
-.hero {
-  text-align: center;
-  padding-top: 10px;
-}
+<!-- ===== TITRE PRINCIPAL ===== -->
+<header class="hero">
+  <h1 class="hero-title">
+    L'intelligence artificielle au service de la reconversion professionnelle<br>
+    et du bilan de compétences
+  </h1>
+</header>
+
 
 /* 🖥️ PC + tablette + mobile : multi-lignes + plus petit */
 .hero-title {
