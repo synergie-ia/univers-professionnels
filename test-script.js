@@ -2,6 +2,12 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
+  VERSION CORRIGÉE - 14 novembre 2025
+  
+  CORRECTIONS APPLIQUÉES :
+  - Diviseur changé de 64 à 48 (pour 3 occurrences par dimension)
+  - Seuils de compatibilité ajustés (35%, 30%, 25%, 20%)
+  - Code dimension "PT" (pratique manuelle & technique) vérifié
   
   ALGORITHME DE CALCUL :
   
@@ -9,45 +15,16 @@
   ------------------------------------------------
   Pour chaque dimension, on additionne le CARRÉ des réponses.
   
-  Exemple pour la dimension "SI" (Sciences & innovation) :
-  - Réponses : 4, 3, 4, 2
-  - Calcul : 4² + 3² + 4² + 2² = 16 + 9 + 16 + 4 = 45
-  - Score brut : 45
-  - Pourcentage : (45 / 64) × 100 = 70%
+  Exemple pour la dimension "CS" avec 9 questions :
+  - Réponses : 4, 3, 2 (3 occurrences)
+  - Calcul : 4² + 3² + 2² = 16 + 9 + 4 = 29
+  - Pourcentage : (29 / 48) × 100 = 60%
   
-  Pourquoi 64 ? 
-  → Maximum théorique = 4 réponses × 4² = 4 × 16 = 64
-  
-  Pourquoi le carré ?
-  → Accentue les préférences fortes (4² = 16 vs 2² = 4)
-  → Minimise les réponses faibles (1² = 1)
-  → Évite les profils "moyens partout"
-  
+  Maximum théorique = 3 × 4² = 48
   
   ÉTAPE 2 - CALCUL DES UNIVERS (Moyenne pondérée)
   ------------------------------------------------
-  Pour chaque univers, on calcule une moyenne pondérée des scores quadratiques.
-  
-  Exemple pour l'univers "Sciences, recherche & innovation" :
-  
-  Poids de corrélation : [5, 3, 9, 10, 8, 1, 4, 8, 0, 1, 1, 3]
-  Dimensions :           MO  PT  AL  SI  CS  EC  CP  IP  MP  AE  AA  RI
-  
-  Scores utilisateur (quadratiques) :
-  MO=16, PT=0, AL=36, SI=45, CS=36, EC=1, CP=42, IP=48, MP=7, AE=16, AA=4, RI=26
-  
-  Calcul de la somme pondérée :
-  = (16×5) + (0×3) + (36×9) + (45×10) + (36×8) + (1×1) + (42×4) + (48×8) + (7×0) + (16×1) + (4×1) + (26×3)
-  = 80 + 0 + 324 + 450 + 288 + 1 + 168 + 384 + 0 + 16 + 4 + 78
-  = 1793
-  
-  Somme des poids : 5+3+9+10+8+1+4+8+0+1+1+3 = 53
-  
-  Moyenne pondérée : 1793 / 53 = 33.83
-  
-  Pourcentage final : (33.83 / 64) × 100 = 53%
-  
-  → L'univers "Sciences" a un score de 53% pour cet utilisateur
+  Score_Univers = (Σ Score × Poids) / (Σ Poids) / 48 × 100
   
   ============================================
 */
@@ -211,19 +188,8 @@ function attachRatingEvents(){
 
 /* 
   ============================================
-  ÉTAPE 1 : CALCUL DU PROFIL (QUADRATIQUE)
+  CALCUL DU PROFIL (QUADRATIQUE)
   ============================================
-  
-  Cette fonction calcule le score de chaque dimension en additionnant
-  le CARRÉ de chaque réponse.
-  
-  Pourquoi le carré ?
-  - Valorise les préférences fortes (4² = 16)
-  - Minimise les réponses neutres (2² = 4)
-  - Accentue les contrastes dans le profil
-  
-  Retour : Objet avec les scores bruts (non convertis en %)
-  Exemple : { MO: 30, PT: 16, AL: 45, SI: 50, ... }
 */
 function calcProfile(){
   const scores = Object.fromEntries(DIMENSIONS.map(d => [d.code, 0]));
@@ -240,54 +206,38 @@ function calcProfile(){
 }
 
 /* 
-  Convertit un score quadratique brut en pourcentage
-  
-  Max théorique = 64 (si l'utilisateur met 4 aux 4 réponses d'une dimension)
-  Calcul : 4² + 4² + 4² + 4² = 16 + 16 + 16 + 16 = 64
-  
-  Exemple : score de 32 → (32/64) × 100 = 50%
+  CORRECTION : Max = 48 (3 occurrences × 16)
 */
 function percentFromSum(sum){
-  const MAX_SCORE_QUADRATIQUE = 64;
+  const MAX_SCORE_QUADRATIQUE = 48;
   return Math.round((sum / MAX_SCORE_QUADRATIQUE) * 100);
 }
 
 /* 
   ============================================
-  ÉCHELLE OFFICIELLE DE COMPATIBILITÉ
+  ÉCHELLE DE COMPATIBILITÉ (SEUILS AJUSTÉS)
   ============================================
-  
-  Nouvelle échelle à 5 niveaux basée sur les pourcentages :
-  
-  Pourcentage    Niveau                    Symboles
-  ≥ 52 %         Très compatible           🟢🟢🟢
-  48 % – 51 %    Compatible                🔵🔵
-  44 % – 47 %    Assez compatible          🟠
-  40 % – 43 %    Peu compatible            ⚪
-  ≤ 39 %         Très peu compatible       ⚫
-  
-  Retourne un objet avec le niveau, les symboles et la classe CSS
 */
 function getCompatibilityLevel(pct){
-  if(pct >= 52){
+  if(pct >= 35){
     return {
       level: "Très compatible",
       stars: "🟢🟢🟢",
       class: "level-5"
     };
-  } else if(pct >= 48){
+  } else if(pct >= 30){
     return {
       level: "Compatible",
       stars: "🔵🔵",
       class: "level-4"
     };
-  } else if(pct >= 44){
+  } else if(pct >= 25){
     return {
       level: "Assez compatible",
       stars: "🟠",
       class: "level-3"
     };
-  } else if(pct >= 40){
+  } else if(pct >= 20){
     return {
       level: "Peu compatible",
       stars: "⚪",
@@ -304,22 +254,14 @@ function getCompatibilityLevel(pct){
 
 /* 
   ============================================
-  ÉTAPE 2 : CALCUL DES UNIVERS (MOYENNE PONDÉRÉE)
+  CALCUL DES UNIVERS
   ============================================
-  
-  Pour chaque univers professionnel, on calcule un score de compatibilité
-  en utilisant une moyenne pondérée des scores quadratiques.
-  
-  Formule complète :
-  Score_Univers = (Σ(Score_Dimension_Quadratique × Poids_Corrélation)) / (Σ Poids) / 64 × 100
-  
-  Retour : Liste des 21 univers triés par score décroissant
 */
 function calcUnivers(){
   const scoresQuadratiques = calcProfile();
   
   if(typeof universesData === 'undefined'){
-    console.error("❌ universesData n'est pas défini.");
+    console.error("❌ universesData non défini");
     return [];
   }
   
@@ -353,15 +295,15 @@ function calcUnivers(){
     }
     
     const moyennePonderee = sommePoids > 0 ? sommePonderee / sommePoids : 0;
-    const pourcentage = Math.round((moyennePonderee / 64) * 100);
+    const pourcentage = Math.round((moyennePonderee / 48) * 100); // ← CORRECTION : 48
     
     if(univers.id === 1){
       console.log(`
-🔬 Calcul détaillé pour "${univers.name}" :
+🔬 Calcul pour "${univers.name}" :
    Somme pondérée : ${sommePonderee.toFixed(2)}
-   Somme des poids : ${sommePoids}
-   Moyenne pondérée : ${moyennePonderee.toFixed(2)}
-   Pourcentage final : ${pourcentage}%
+   Somme poids : ${sommePoids}
+   Moyenne : ${moyennePonderee.toFixed(2)}
+   % : ${pourcentage}%
       `);
     }
     
@@ -370,7 +312,7 @@ function calcUnivers(){
   
   const universTries = universAvecScores.sort((a, b) => b.pct - a.pct);
   
-  console.log("🏆 Top 5 des univers compatibles:");
+  console.log("🏆 Top 5:");
   universTries.slice(0, 5).forEach((u, i) => {
     console.log(`   ${i+1}. ${u.name} : ${u.pct}%`);
   });
@@ -382,9 +324,6 @@ function calcUnivers(){
   ============================================
   AFFICHAGE DU PROFIL
   ============================================
-  
-  Affiche les 12 dimensions avec leurs scores en pourcentage,
-  triées par ordre décroissant.
 */
 function displayProfile(){
   const scoresQuadratiques = calcProfile();
@@ -398,9 +337,9 @@ function displayProfile(){
   
   dimensionsAvecScores.sort((a, b) => b.pct - a.pct);
   
-  console.log("👤 Profil de l'utilisateur :");
+  console.log("👤 Profil utilisateur :");
   dimensionsAvecScores.forEach(dim => {
-    console.log(`   ${dim.name} : ${dim.pct}% (score quadratique: ${dim.scoreQuadratique})`);
+    console.log(`   ${dim.name} : ${dim.pct}% (quad: ${dim.scoreQuadratique})`);
   });
   
   root.innerHTML = dimensionsAvecScores.map(dim => `
@@ -424,7 +363,7 @@ function displayProfile(){
   }, 100);
 }
 
-/* ===== COMPTEUR UNIVERS SÉLECTIONNÉS ===== */
+/* ===== COMPTEUR UNIVERS ===== */
 
 function updateUniversCounter(){
   const counter = document.getElementById("selectedUniversCounter");
@@ -438,7 +377,7 @@ function updateUniversCounter(){
       : `${n} univers sélectionnés`;
 }
 
-/* ===== RENDU D'UNE CARTE UNIVERS ===== */
+/* ===== CARTE UNIVERS ===== */
 
 function renderUniversCard(u){
   const isSelected = selectedUnivers.has(u.id);
@@ -471,9 +410,9 @@ function renderUniversCard(u){
           <div class="univers-stars">${compatibility.stars}</div>
           <div class="univers-actions">
             ${hasSubUnivers 
-              ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir les sous-univers">🔎</button>` 
+              ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir sous-univers">🔎</button>` 
               : '<div style="width:40px"></div>'}
-            <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-id="${u.id}" title="Sélectionner cet univers">
+            <button class="btn-select-univers ${isSelected ? 'selected' : ''}" data-id="${u.id}" title="Sélectionner">
               <span class="tick">${isSelected ? '✓' : ''}</span>
             </button>
           </div>
@@ -484,7 +423,7 @@ function renderUniversCard(u){
   `;
 }
 
-/* ===== ÉVÉNEMENTS SUR LES CARTES UNIVERS ===== */
+/* ===== ÉVÉNEMENTS UNIVERS ===== */
 
 function attachUniversEvents(){
   document.querySelectorAll(".btn-toggle-sub").forEach(btn=>{
@@ -497,7 +436,7 @@ function attachUniversEvents(){
         const isVisible = subList.classList.contains("visible");
         subList.classList.toggle("visible");
         btn.textContent = isVisible ? "🔎" : "❌";
-        btn.title = isVisible ? "Voir les sous-univers" : "Masquer les sous-univers";
+        btn.title = isVisible ? "Voir sous-univers" : "Masquer";
       }
     });
   });
@@ -526,17 +465,17 @@ function attachUniversEvents(){
   });
 }
 
-/* ===== AFFICHAGE DES UNIVERS ===== */
+/* ===== AFFICHAGE UNIVERS ===== */
 
 function displayUnivers(){
-  console.log("Calcul des univers...");
+  console.log("Calcul univers...");
   
   try {
     const list = calcUnivers();
     console.log(`${list.length} univers calculés`);
     
     if(list.length === 0){
-      alert("Erreur : Aucun univers n'a pu être calculé.");
+      alert("Erreur : Aucun univers calculé.");
       return;
     }
     
@@ -548,17 +487,16 @@ function displayUnivers(){
     
     const root = document.getElementById("univers-results");
     const top5 = list.slice(0, 5);
-    const others = list.slice(5);
 
     const legendHTML = `
       <div class="stars-legend">
         <div class="legend-title">📊 Échelle de compatibilité :</div>
         <div class="legend-items">
-          <div class="legend-item">🟢🟢🟢 Très compatible</div>
-          <div class="legend-item">🔵🔵 Compatible</div>
-          <div class="legend-item">🟠 Assez compatible</div>
-          <div class="legend-item">⚪ Peu compatible</div>
-          <div class="legend-item">⚫ Très peu compatible</div>
+          <div class="legend-item">🟢🟢🟢 Très compatible (≥35%)</div>
+          <div class="legend-item">🔵🔵 Compatible (30-34%)</div>
+          <div class="legend-item">🟠 Assez compatible (25-29%)</div>
+          <div class="legend-item">⚪ Peu compatible (20-24%)</div>
+          <div class="legend-item">⚫ Très peu compatible (<20%)</div>
         </div>
       </div>
     `;
@@ -589,8 +527,8 @@ function displayUnivers(){
     }, 100);
     
   } catch(error) {
-    console.error("Erreur lors du calcul des univers:", error);
-    alert("Une erreur s'est produite : " + error.message);
+    console.error("Erreur:", error);
+    alert("Erreur : " + error.message);
   }
 }
 
@@ -600,32 +538,32 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if(typeof QUESTIONS === 'undefined'){
     console.error("❌ QUESTIONS non défini");
-    alert("Erreur de chargement des données. Veuillez actualiser la page.");
+    alert("Erreur de chargement.");
     return;
   }
   
   if(typeof DIMENSIONS === 'undefined'){
     console.error("❌ DIMENSIONS non défini");
-    alert("Erreur de chargement des données. Veuillez actualiser la page.");
+    alert("Erreur de chargement.");
     return;
   }
   
   if(typeof universesData === 'undefined'){
     console.error("❌ universesData non défini");
-    alert("Erreur de chargement des données. Veuillez actualiser la page.");
+    alert("Erreur de chargement.");
     return;
   }
   
-  console.log("✅ Toutes les données sont chargées correctement");
-  console.log(`📋 ${QUESTIONS.length} questions chargées`);
-  console.log(`🎯 ${DIMENSIONS.length} dimensions chargées`);
-  console.log(`🌍 ${universesData.length} univers chargés`);
+  console.log("✅ Données chargées");
+  console.log(`📋 ${QUESTIONS.length} questions`);
+  console.log(`🎯 ${DIMENSIONS.length} dimensions`);
+  console.log(`🌍 ${universesData.length} univers`);
   
   loadSelections();
   loadAnswers();
   
   totalQuestions = countTotalQuestions();
-  console.log(`Total de questions attendues: ${totalQuestions}`);
+  console.log(`Total questions: ${totalQuestions}`);
   
   renderQuestions();
 
@@ -640,15 +578,10 @@ document.addEventListener('DOMContentLoaded', function() {
       errorMessage.classList.remove("hidden");
       
       if(unanswered.length > 0){
-        const firstUnansweredKey = unanswered[0].key;
-        const firstUnansweredRow = document.querySelector(`.option-row[data-key="${firstUnansweredKey}"]`);
-        
-        if(firstUnansweredRow){
+        const firstRow = document.querySelector(`.option-row[data-key="${unanswered[0].key}"]`);
+        if(firstRow){
           setTimeout(() => {
-            firstUnansweredRow.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center' 
-            });
+            firstRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }, 100);
         }
       }
@@ -667,7 +600,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnValidateSelection.addEventListener('click', ()=>{
       
       if(selectedUnivers.size < 3){
-        alert("⚠️ Vous devez sélectionner au moins 3 univers avant de valider.\n\nActuellement : " + selectedUnivers.size + " univers sélectionné(s).");
+        alert("⚠️ Minimum 3 univers requis.\n\nActuellement : " + selectedUnivers.size);
         return;
       }
       
@@ -692,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Sélection validée:', selectedUniversDetails);
         
         const originalText = btnValidateSelection.innerHTML;
-        btnValidateSelection.innerHTML = '✅ Sélection enregistrée !';
+        btnValidateSelection.innerHTML = '✅ Enregistré !';
         btnValidateSelection.style.background = '#22c55e';
         btnValidateSelection.style.color = '#fff';
         
@@ -702,11 +635,11 @@ document.addEventListener('DOMContentLoaded', function() {
           btnValidateSelection.style.color = '';
         }, 3000);
         
-        alert("✅ Votre sélection de " + selectedUnivers.size + " univers a été enregistrée avec succès !\n\nVous pouvez maintenant retourner à l'accueil et compléter votre bilan de situation.");
+        alert("✅ Sélection de " + selectedUnivers.size + " univers enregistrée !\n\nVous pouvez retourner à l'accueil.");
         
       } catch(error) {
-        console.error('❌ Erreur lors de la validation:', error);
-        alert("❌ Erreur lors de la sauvegarde. Veuillez réessayer.");
+        console.error('❌ Erreur:', error);
+        alert("❌ Erreur de sauvegarde.");
       }
     });
   }
