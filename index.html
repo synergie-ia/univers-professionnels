@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reconversion 360 IA</title>
-  <link rel="stylesheet" href="index-style.css?v=26" />
+  <link rel="stylesheet" href="index-style.css?v=30" />
 </head>
 
 <body>
 
   <div class="container">
 
-    <!-- ===== TITRE PRINCIPAL (NOUVEAU) ===== -->
+    <!-- ===== TITRE PRINCIPAL ===== -->
     <header class="hero">
       <h1 class="hero-title">
-        L'intelligence artificielle au service de la reconversion professionnelle et du bilan de compétences
+        <span class="title-line1">
+          L'intelligence artificielle au service de la reconversion professionnelle
+        </span>
+        <span class="title-line2">
+          et du bilan de compétences
+        </span>
       </h1>
     </header>
 
-    <!-- ===== GRILLE DES CARTES ===== -->
+    <!-- ===== CARTES ===== -->
     <div class="cards-grid">
 
       <!-- CARTE 1 -->
       <div class="action-card">
         <div class="card-icon">🎯</div>
-        <h2 class="card-title">Découvrez votre profil professionnel et les univers-métiers compatibles</h2>
-        <p class="card-desc">Identifiez vos centres d’intérêt et explorez les univers professionnels correspondant le mieux à votre personnalité.</p>
+        <h2 class="card-title">Découvrez votre profil professionnel</h2>
+        <p class="card-desc">Identifiez vos centres d’intérêt et explorez les univers-métiers qui vous correspondent.</p>
         <button class="card-btn" onclick="window.location.href='test.html'">
           Démarrer le questionnaire
         </button>
@@ -35,8 +39,8 @@
       <!-- CARTE 2 -->
       <div class="action-card">
         <div class="card-icon">📋</div>
-        <h2 class="card-title">Réalisez le bilan de votre situation actuelle</h2>
-        <p class="card-desc">Analysez vos compétences, votre parcours, vos leviers d’évolution et vos aspirations.</p>
+        <h2 class="card-title">Réalisez votre bilan personnel</h2>
+        <p class="card-desc">Faites le point sur votre situation, vos compétences, votre parcours et vos aspirations.</p>
         <button class="card-btn" onclick="window.location.href='situation.html'">
           Compléter mon bilan
         </button>
@@ -45,9 +49,9 @@
       <!-- CARTE 3 -->
       <div class="action-card">
         <div class="card-icon">🧭</div>
-        <h2 class="card-title">Construisez votre projet avec l’aide de l’IA</h2>
-        <p class="card-desc">Obtenez une synthèse intelligente et créez un projet réaliste et réalisable.</p>
-        <button class="card-btn" id="btnProject">
+        <h2 class="card-title">Construisez votre projet professionnel</h2>
+        <p class="card-desc">Bénéficiez d'un accompagnement intelligent pour structurer un projet réaliste et réalisable.</p>
+        <button class="card-btn">
           Construire mon projet
         </button>
       </div>
@@ -57,7 +61,6 @@
     <!-- ===== BOUTONS BAS ===== -->
     <div class="action-buttons-section">
 
-      <!-- BOUTON RÉINITIALISER -->
       <button id="btnResetData" class="action-btn-small reset-btn">
         <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="1 4 1 10 7 10"></polyline>
@@ -66,27 +69,25 @@
         <span>Réinitialiser mes données</span>
       </button>
 
-      <!-- BOUTON COPIER -->
       <button id="btnCopyResults" class="action-btn-small copy-btn">
         <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
         </svg>
-        <span>Copier mes résultats pour l’IA</span>
+        <span>Copier mes résultats pour l'IA</span>
       </button>
 
     </div>
 
-    <p class="action-notice">Copiez vos résultats (profil, univers, situation) et transmettez-les à l’assistant IA.</p>
+    <p class="action-notice">Copiez vos résultats pour les transmettre à l’IA</p>
 
-    <!-- ===== FOOTER ===== -->
     <footer class="page-footer">
-      © 2025 Synergie IA – Reconversion 360 IA
+      © 2025 Synergie IA - Reconversion 360 IA
     </footer>
 
   </div>
 
-  <script src="index-script.js?v=26"></script>
+  <script src="index-script.js?v=30"></script>
 
 </body>
 </html>
