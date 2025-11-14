@@ -46,13 +46,15 @@ body {
    TITRE PRINCIPAL (NOUVELLE VERSION)
    ========================================== */
 .hero-title {
-  font-size: clamp(26px, 4vw, 40px);
+  font-size: clamp(20px, 3vw, 30px); /* réduit pour tenir sur 1 ligne */
   font-weight: 800;
   text-align: center;
-  line-height: 1.25;
+  line-height: 1.2;
   margin-bottom: 10px;
   color: var(--text);
+  white-space: nowrap; /* FORCE UNE SEULE LIGNE */
 }
+
 
 /* ==========================================
    CARTES
