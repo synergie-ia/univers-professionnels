@@ -1,7 +1,7 @@
 /*
   =====================================================
-  RECONVERSION 360 IA — STYLE (VERSION FINALE)
-  PC = 1 ligne · Smartphone = multi-lignes
+  RECONVERSION 360 IA — STYLE (VERSION MULTI-LIGNES)
+  Titre multi-lignes PC / tablette / smartphone
   =====================================================
 */
 
@@ -43,9 +43,7 @@ body {
 }
 
 /* =====================================================
-   TITRE PRINCIPAL
-   PC/TABLETTE = UNE LIGNE
-   SMARTPHONE = MULTI-LIGNES
+   TITRE PRINCIPAL (TOUJOURS MULTI-LIGNES)
    ===================================================== */
 
 .hero {
@@ -53,15 +51,16 @@ body {
   padding-top: 10px;
 }
 
-/* PC et tablettes : une ligne */
+/* 🖥️ PC + tablette + mobile : multi-lignes + plus petit */
 .hero-title {
-  font-size: clamp(20px, 3vw, 30px);
+  font-size: clamp(18px, 2.5vw, 26px);  /* taille réduite + responsive */
   font-weight: 800;
+  line-height: 1.3;
   text-align: center;
-  line-height: 1.2;
   margin-bottom: 10px;
   color: var(--text);
-  white-space: nowrap; /* 🌟 1 ligne PC + tablette */
+  white-space: normal; /* 🌟 Multi-lignes partout */
+  padding: 0 10px;
 }
 
 /* =====================================================
@@ -96,12 +95,12 @@ body {
 }
 
 .card-icon {
-  font-size: 42px;
+  font-size: 40px;
   margin-bottom: 10px;
 }
 
 .card-title {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   margin-bottom: 6px;
 }
@@ -115,7 +114,7 @@ body {
 /* ===== Bouton des cartes ===== */
 .card-btn {
   padding: 14px 20px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   border-radius: 10px;
   background: white;
@@ -134,7 +133,7 @@ body {
    ===================================================== */
 
 .action-buttons-section {
-  margin-top: 8px;         
+  margin-top: 8px;
   display: flex;
   justify-content: center;
   gap: 14px;
@@ -172,7 +171,9 @@ body {
   color: #ef4444 !important;
 }
 
-/* ============================================================== */
+/* =====================================================
+   NOTICE
+   ===================================================== */
 
 .action-notice {
   text-align: center;
@@ -180,7 +181,9 @@ body {
   color: var(--muted);
 }
 
-/* ============================================================== */
+/* =====================================================
+   FOOTER
+   ===================================================== */
 
 .page-footer {
   text-align: center;
@@ -189,23 +192,21 @@ body {
   color: var(--muted);
 }
 
-/* ==============================================================  
-   RESPONSIVE MOBILE — TITRE MULTI-LIGNES  
-   ============================================================== */
+/* =====================================================
+   RESPONSIVE MOBILE
+   ===================================================== */
 
 @media (max-width: 640px) {
-
-  /* Smartphone : plusieurs lignes autorisées */
-  .hero-title {
-    white-space: normal;   /* 🌟 MULTI-LIGNES SUR SMARTPHONE */
-    font-size: 20px;
-    line-height: 1.3;
-    padding: 0 12px;
-  }
 
   .container {
     gap: 24px;
     padding: 16px;
+  }
+
+  .hero-title {
+    font-size: 18px;      /* mobile plus petit encore */
+    line-height: 1.35;
+    padding: 0 12px;
   }
 
   .action-card {
