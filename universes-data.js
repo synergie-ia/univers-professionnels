@@ -123,28 +123,70 @@ const QUESTIONS = [
 // ===== MATRICES DE CORRÉLATION =====
 // Ordre : MO, PT, AL, SI, CS, EC, CP, IP, MP, AE, AA, RI
 const universes = [
-  { id: 1, weights: [4, 10, 4, 5, 3, 2, 4, 4, 9, 8, 3, 2] },
-  { id: 2, weights: [3, 3, 2, 2, 10, 10, 4, 9, 2, 2, 3, 5] },
-  { id: 3, weights: [4, 1, 3, 2, 6, 4, 6, 9, 3, 5, 4, 10] },
-  { id: 4, weights: [4, 2, 4, 3, 9, 9, 5, 9, 1, 3, 3, 8] },
-  { id: 5, weights: [5, 10, 4, 5, 4, 1, 4, 3, 8, 9, 1, 2] },
-  { id: 6, weights: [9, 0, 10, 2, 8, 1, 5, 4, 0, 2, 3, 6] },
-  { id: 7, weights: [5, 2, 4, 2, 4, 3, 8, 5, 2, 3, 10, 8] },
-  { id: 8, weights: [5, 6, 8, 10, 7, 2, 5, 9, 4, 5, 3, 4] },
-  { id: 9, weights: [10, 0, 10, 2, 4, 0, 6, 3, 0, 1, 1, 3] },
-  { id: 10, weights: [7, 5, 3, 2, 4, 3, 7, 5, 4, 8, 8, 8] },
-  { id: 11, weights: [7, 5, 5, 3, 6, 2, 6, 8, 2, 4, 3, 9] },
-  { id: 12, weights: [7, 10, 7, 8, 5, 0, 6, 4, 1, 5, 1, 2] },
-  { id: 13, weights: [9, 6, 5, 3, 3, 0, 8, 4, 6, 9, 2, 3] },
-  { id: 14, weights: [6, 1, 6, 4, 9, 2, 10, 10, 1, 3, 3, 9] },
-  { id: 15, weights: [5, 6, 9, 10, 7, 2, 4, 7, 0, 2, 1, 3] },
-  { id: 16, weights: [6, 6, 8, 9, 4, 1, 5, 4, 3, 5, 10, 4] },
-  { id: 17, weights: [5, 3, 9, 10, 8, 1, 4, 8, 0, 1, 1, 3] },
-  { id: 18, weights: [5, 5, 4, 2, 2, 0, 7, 4, 8, 10, 6, 5] },
-  { id: 19, weights: [5, 2, 4, 2, 4, 3, 8, 5, 2, 3, 10, 8] },
-  { id: 20, weights: [3, 3, 2, 2, 3, 2, 4, 4, 10, 8, 6, 6] },
-  { id: 21, weights: [3, 2, 7, 10, 9, 3, 5, 10, 1, 2, 1, 5] }
+  // 1 — Agriculture, nature & animaux
+  { id: 1,  weights: [1, 4, 1, 1, 0, 0, 1, 1, 4, 3, 2, 0] },
+
+  // 2 — Arts, design & création
+  { id: 2,  weights: [0, 1, 0, 0, 3, 4, 0, 1, 0, 0, 0, 3] },
+
+  // 3 — Commerce, marketing & vente
+  { id: 3,  weights: [1, 1, 1, 0, 1, 2, 2, 4, 0, 1, 0, 4] },
+
+  // 4 — Communication, médias & culture
+  { id: 4,  weights: [0, 0, 1, 0, 2, 4, 2, 1, 0, 0, 0, 4] },
+
+  // 5 — Construction, BTP & habitat
+  { id: 5,  weights: [2, 4, 1, 0, 0, 0, 2, 1, 1, 3, 0, 0] },
+
+  // 6 — Droit, administration & politique publique
+  { id: 6,  weights: [2, 0, 4, 1, 0, 0, 3, 1, 0, 0, 1, 3] },
+
+  // 7 — Éducation, formation & apprentissage
+  { id: 7,  weights: [1, 0, 1, 0, 2, 1, 2, 1, 0, 0, 4, 4] },
+
+  // 8 — Environnement, climat & énergies
+  { id: 8,  weights: [2, 1, 3, 4, 1, 0, 2, 1, 1, 1, 0, 0] },
+
+  // 9 — Gestion, finance & comptabilité
+  { id: 9,  weights: [2, 0, 4, 1, 0, 0, 3, 1, 0, 0, 0, 1] },
+
+  // 10 — Hôtellerie, restauration & tourisme
+  { id: 10, weights: [1, 1, 0, 0, 0, 0, 2, 1, 2, 3, 1, 2] },
+
+  // 11 — Immobilier & patrimoine
+  { id: 11, weights: [2, 1, 1, 0, 0, 0, 3, 2, 0, 1, 0, 3] },
+
+  // 12 — Industrie, fabrication & production
+  { id: 12, weights: [1, 4, 1, 2, 0, 0, 2, 1, 0, 3, 0, 0] },
+
+  // 13 — Logistique, transport & mobilité
+  { id: 13, weights: [2, 3, 1, 0, 0, 0, 4, 1, 1, 3, 0, 0] },
+
+  // 14 — Management, entrepreneuriat & stratégie
+  { id: 14, weights: [2, 0, 2, 1, 1, 0, 3, 4, 0, 0, 0, 3] },
+
+  // 15 — Numérique, informatique & data
+  { id: 15, weights: [1, 0, 3, 4, 1, 0, 2, 1, 0, 0, 0, 0] },
+
+  // 16 — Santé, bien-être & médical
+  { id: 16, weights: [1, 0, 1, 1, 0, 0, 1, 0, 0, 2, 4, 2] },
+
+  // 17 — Sciences, recherche & innovation
+  { id: 17, weights: [1, 0, 4, 4, 1, 0, 2, 1, 0, 0, 0, 0] },
+
+  // 18 — Sécurité, défense & urgence
+  { id: 18, weights: [1, 1, 0, 0, 0, 0, 2, 1, 2, 4, 1, 0] },
+
+  // 19 — Social, aide & solidarité
+  { id: 19, weights: [1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 4, 4] },
+
+  // 20 — Sport, loisirs & vie active
+  { id: 20, weights: [0, 1, 0, 0, 0, 0, 1, 0, 4, 4, 1, 0] },
+
+  // 21 — Technologies émergentes & futur du travail
+  { id: 21, weights: [1, 0, 2, 4, 1, 0, 2, 3, 0, 0, 0, 1] }
 ];
+
 
 // ===== DONNÉES DES UNIVERS =====
 const universesData = [
