@@ -388,4 +388,39 @@ const universesData = [
       { icon: "🏠", name: "Hébergement d'urgence", description: "Accueil de personnes en précarité." },
       { icon: "🤝", name: "Médiation sociale", description: "Résolution de conflits." },
       { icon: "🌍", name: "Action humanitaire", description: "Interventions solidaires." },
-      { icon: "♿", name: "Accompagnement du handicap", description: "Soutien aux personnes
+      { icon: "♿", name: "Accompagnement du handicap", description: "Soutien aux personnes handicapées." }
+    ]
+  },
+  {
+    id: 20,
+    name: "Sport, loisirs & vie active",
+    icon: "⚽",
+    description: "Entraînez, animez, organisez des activités sportives.",
+    subUniverses: [
+      { icon: "🏃", name: "Éducation sportive", description: "Enseignement et animation." },
+      { icon: "🏋️", name: "Préparation physique", description: "Optimisation des performances." },
+      { icon: "🏆", name: "Sport de haut niveau", description: "Pratique professionnelle." },
+      { icon: "🏢", name: "Management sportif", description: "Gestion d'équipements." },
+      { icon: "🎭", name: "Animation socioculturelle", description: "Activités récréatives." }
+    ]
+  },
+  {
+    id: 21,
+    name: "Technologies émergentes & futur du travail",
+    icon: "🚀",
+    description: "Explorez l'IA, la robotique, le métavers.",
+    subUniverses: [
+      { icon: "🤖", name: "Intelligence artificielle générative", description: "Création de contenus par l'IA." },
+      { icon: "🧠", name: "IA éthique", description: "Encadrement responsable des systèmes." },
+      { icon: "🦾", name: "Robotique humanoïde", description: "Robots pour assistance." },
+      { icon: "🌌", name: "Exploration spatiale", description: "Satellites et lanceurs." },
+      { icon: "🏠", name: "Travail hybride", description: "Nouvelles organisations du travail." }
+    ]
+  }
+];
+
+console.log("✅ universes-data.js chargé avec succès");
+console.log("📊", DIMENSIONS.length, "dimensions");
+console.log("❓", QUESTIONS.length, "questions");
+console.log("🌍", universesData.length, "univers");
+console.log("⚙️", UNIVERS_WEIGHTS.length, "matrices");
