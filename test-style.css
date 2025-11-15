@@ -13,6 +13,13 @@
   --accent:#5a4af4;
   --green:#22c55e;
   --red:#ef4444;
+  
+  /* Couleurs compatibilité */
+  --very-compatible:#047857;
+  --compatible:#10b981;
+  --medium-compatible:#d1d5db;
+  --low-compatible:#f97316;
+  --not-compatible:#dc2626;
 }
 
 /* ===== RESET & BASE ===== */
@@ -153,7 +160,7 @@ html,body{
 .dot-3{background:var(--c3)}
 .dot-4{background:var(--c4)}
 
-/* ===== LÉGENDE DES ÉTOILES ===== */
+/* ===== LÉGENDE DES RONDS DE COMPATIBILITÉ ===== */
 .stars-legend{
   background:#fff;
   border:3px solid #cbd5e1;
@@ -165,7 +172,7 @@ html,body{
 
 .legend-title{
   font-weight:700;
-  font-size:16px;
+  font-size:clamp(15px, 3vw, 16px);
   color:var(--ink);
   margin-bottom:12px;
   text-align:center;
@@ -181,7 +188,7 @@ html,body{
   background:#f9fafb;
   padding:8px 12px;
   border-radius:8px;
-  font-size:14px;
+  font-size:clamp(13px, 2.5vw, 14px);
   font-weight:600;
   display:flex;
   align-items:center;
@@ -447,7 +454,7 @@ html,body{
 }
 
 .univers-icon{
-  font-size:28px;
+  font-size:clamp(24px, 5vw, 28px);
   flex-shrink:0;
 }
 
@@ -455,6 +462,7 @@ html,body{
   font-weight:600;
   font-size:clamp(15px,3vw,17px);
   flex:1;
+  line-height:1.3;
 }
 
 .univers-right{
@@ -464,96 +472,122 @@ html,body{
   flex-shrink:0;
 }
 
-/* ===== ÉTOILES ET RONDS DE COMPATIBILITÉ ===== */
-.univers-stars{
-  font-size:26px;
-  line-height:1;
-  letter-spacing:2px;
+/* ===== ROND DE COMPATIBILITÉ ===== */
+.univers-compatibility-dot{
+  width:clamp(32px, 7vw, 40px);
+  height:clamp(32px, 7vw, 40px);
+  border-radius:50%;
   flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  transition:transform .2s ease;
+}
+
+.univers-card:hover .univers-compatibility-dot{
+  transform:scale(1.1);
 }
 
 /* Couleurs par niveau de compatibilité */
 
-/* Niveau 5 - Très compatible (⭐⭐⭐) */
+/* Niveau 5 - Très compatible (≥14) */
+.univers-card.level-5 .univers-compatibility-dot{
+  background:var(--very-compatible);
+  box-shadow:0 2px 12px rgba(4, 120, 87, 0.4);
+}
+
 .univers-card.level-5{
-  border-left:5px solid #10b981;
-  background:linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+  border-left:5px solid var(--very-compatible);
+  background:linear-gradient(135deg, #d1fae5 0%, #ffffff 100%);
 }
 
 .univers-card.level-5:hover{
-  box-shadow:0 8px 24px rgba(16, 185, 129, 0.2);
+  box-shadow:0 8px 24px rgba(4, 120, 87, 0.2);
 }
 
-/* Niveau 4 - Compatible (⭐⭐) */
+/* Niveau 4 - Compatible (10-13) */
+.univers-card.level-4 .univers-compatibility-dot{
+  background:var(--compatible);
+  box-shadow:0 2px 12px rgba(16, 185, 129, 0.4);
+}
+
 .univers-card.level-4{
-  border-left:5px solid #3b82f6;
-  background:linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+  border-left:5px solid var(--compatible);
+  background:linear-gradient(135deg, #d1fae5 0%, #ffffff 100%);
 }
 
 .univers-card.level-4:hover{
-  box-shadow:0 8px 24px rgba(59, 130, 246, 0.2);
+  box-shadow:0 8px 24px rgba(16, 185, 129, 0.2);
 }
 
-/* Niveau 3 - Assez compatible (⭐) */
+/* Niveau 3 - Moyennement compatible (7-9) */
+.univers-card.level-3 .univers-compatibility-dot{
+  background:var(--medium-compatible);
+  box-shadow:0 2px 12px rgba(209, 213, 219, 0.4);
+}
+
 .univers-card.level-3{
-  border-left:5px solid #f59e0b;
-  background:linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+  border-left:5px solid var(--medium-compatible);
+  background:linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
 }
 
 .univers-card.level-3:hover{
-  box-shadow:0 8px 24px rgba(245, 158, 11, 0.2);
+  box-shadow:0 8px 24px rgba(209, 213, 219, 0.2);
 }
 
-/* Niveau 2 - Peu compatible (⚪) */
+/* Niveau 2 - Peu compatible (4-6) */
+.univers-card.level-2 .univers-compatibility-dot{
+  background:var(--low-compatible);
+  box-shadow:0 2px 12px rgba(249, 115, 22, 0.4);
+}
+
 .univers-card.level-2{
-  border-left:5px solid #94a3b8;
-  background:linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border-left:5px solid var(--low-compatible);
+  background:linear-gradient(135deg, #ffedd5 0%, #ffffff 100%);
 }
 
 .univers-card.level-2:hover{
-  box-shadow:0 8px 24px rgba(148, 163, 184, 0.2);
+  box-shadow:0 8px 24px rgba(249, 115, 22, 0.2);
 }
 
-/* Niveau 1 - Très peu compatible (⚫) */
+/* Niveau 1 - Pas compatible (0-3) */
+.univers-card.level-1 .univers-compatibility-dot{
+  background:var(--not-compatible);
+  box-shadow:0 2px 12px rgba(220, 38, 38, 0.4);
+}
+
 .univers-card.level-1{
-  border-left:5px solid #6b7280;
-  background:linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
+  border-left:5px solid var(--not-compatible);
+  background:linear-gradient(135deg, #fee2e2 0%, #ffffff 100%);
   opacity:0.85;
 }
 
 .univers-card.level-1:hover{
-  box-shadow:0 8px 24px rgba(107, 114, 128, 0.15);
+  box-shadow:0 8px 24px rgba(220, 38, 38, 0.2);
 }
 
 /* État sélectionné - accentué pour tous les niveaux */
-.univers-card.selected.level-5{
-  border-left-width:8px;
-  background:linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
-  box-shadow:0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
+.univers-card.selected.level-5,
 .univers-card.selected.level-4{
   border-left-width:8px;
-  background:linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-  box-shadow:0 4px 12px rgba(59, 130, 246, 0.3);
+  background:linear-gradient(135deg, #a7f3d0 0%, #d1fae5 100%);
+  box-shadow:0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .univers-card.selected.level-3{
   border-left-width:8px;
-  background:linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
-  box-shadow:0 4px 12px rgba(245, 158, 11, 0.3);
+  background:linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+  box-shadow:0 4px 12px rgba(209, 213, 219, 0.3);
 }
 
 .univers-card.selected.level-2{
   border-left-width:8px;
-  background:linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
-  box-shadow:0 4px 12px rgba(148, 163, 184, 0.3);
+  background:linear-gradient(135deg, #fed7aa 0%, #ffedd5 100%);
+  box-shadow:0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .univers-card.selected.level-1{
   border-left-width:8px;
-  background:linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
-  box-shadow:0 4px 12px rgba(107, 114, 128, 0.25);
+  background:linear-gradient(135deg, #fecaca 0%, #fee2e2 100%);
+  box-shadow:0 4px 12px rgba(220, 38, 38, 0.3);
   opacity:1;
 }
 
@@ -569,12 +603,12 @@ html,body{
   border:2px solid var(--line);
   border-radius:8px;
   padding:8px;
-  font-size:20px;
+  font-size:clamp(18px, 4vw, 20px);
   cursor:pointer;
   transition:all .2s ease;
   line-height:1;
-  min-width:40px;
-  height:40px;
+  min-width:clamp(36px, 8vw, 40px);
+  height:clamp(36px, 8vw, 40px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -587,8 +621,8 @@ html,body{
 }
 
 .btn-select-univers{
-  width:40px;
-  height:40px;
+  width:clamp(36px, 8vw, 40px);
+  height:clamp(36px, 8vw, 40px);
   border-radius:50%;
   border:2px solid var(--line);
   background:#fff;
@@ -612,7 +646,7 @@ html,body{
 }
 
 .tick{
-  font-size:18px;
+  font-size:clamp(16px, 3.5vw, 18px);
   line-height:1;
   font-weight:bold;
 }
@@ -634,7 +668,7 @@ html,body{
   display:flex;
   gap:10px;
   padding:10px 0;
-  font-size:14px;
+  font-size:clamp(13px, 2.5vw, 14px);
   border-bottom:1px dashed #e5e7eb;
 }
 
@@ -644,24 +678,26 @@ html,body{
 
 .sub-icon{
   flex-shrink:0;
-  font-size:20px;
+  font-size:clamp(18px, 4vw, 20px);
 }
 
 .sub-name{
   font-weight:600;
   margin-bottom:4px;
+  line-height:1.3;
 }
 
 .sub-desc{
   color:var(--muted);
-  font-size:13px;
+  font-size:clamp(12px, 2.3vw, 13px);
+  line-height:1.4;
 }
 
 /* ===== COMPTEUR UNIVERS ===== */
 .counter-univers{
   text-align:center;
   font-weight:600;
-  font-size:16px;
+  font-size:clamp(15px, 3vw, 16px);
   color:var(--accent);
   margin:12px 0;
   padding:10px;
@@ -672,9 +708,10 @@ html,body{
 /* ===== NOTICE ===== */
 .notice{
   margin:12px 0;
-  font-size:14px;
+  font-size:clamp(13px, 2.5vw, 14px);
   color:var(--muted);
   text-align:center;
+  line-height:1.5;
 }
 
 /* ===== BOUTONS PRINCIPAUX ===== */
@@ -686,7 +723,7 @@ html,body{
   border-radius:12px;
   padding:14px 20px;
   font-weight:700;
-  font-size:16px;
+  font-size:clamp(15px, 3vw, 16px);
   cursor:pointer;
   margin-top:12px;
   transition:all .2s ease;
@@ -726,7 +763,7 @@ html,body{
   border-radius:10px;
   cursor:pointer;
   font-weight:600;
-  font-size:15px;
+  font-size:clamp(14px, 2.8vw, 15px);
   transition:all .2s ease;
 }
 
@@ -745,21 +782,6 @@ html,body{
   .univers-right{
     order:2;
     margin-left:auto;
-  }
-  
-  .univers-stars{
-    font-size:22px;
-  }
-  
-  .btn-toggle-sub{
-    font-size:18px;
-    min-width:36px;
-    height:36px;
-  }
-  
-  .btn-select-univers{
-    width:36px;
-    height:36px;
   }
   
   .legend-box{
