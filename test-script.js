@@ -2,14 +2,15 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  VERSION OPTIMISÉE - Méthode de calcul améliorée
+  VERSION OPTIMISÉE - Avec ronds de compatibilité
   Date : Novembre 2025
   
   AMÉLIORATIONS :
   ✅ Extraction intelligente des dimensions principales (top 3 + égalités à 10%)
   ✅ Calcul par addition des coefficients des dimensions communes
-  ✅ Catégorisation basée sur les scores absolus
-  ✅ Sauvegarde complète des détails univers
+  ✅ Ronds de couleur au lieu d'étoiles
+  ✅ Score masqué pour l'utilisateur
+  ✅ Design responsive optimisé
   
   ============================================
 */
@@ -279,38 +280,38 @@ function calcUnivers(){
 /* 
   ============================================
   ÉCHELLE DE COMPATIBILITÉ
-  Basée sur les scores absolus
+  Basée sur les scores absolus - AVEC RONDS DE COULEUR
   ============================================
 */
 function getCompatibilityLevel(score){
   if(score >= 14){
     return {
-      level: "Très compatible",
-      stars: "⭐⭐⭐",
+      level: "TRÈS COMPATIBLE",
+      color: "#047857",
       class: "level-5"
     };
   } else if(score >= 10){
     return {
-      level: "Compatible",
-      stars: "⭐⭐",
+      level: "COMPATIBLE",
+      color: "#10b981",
       class: "level-4"
     };
   } else if(score >= 7){
     return {
-      level: "Assez compatible",
-      stars: "⭐",
+      level: "MOYENNEMENT COMPATIBLE",
+      color: "#d1d5db",
       class: "level-3"
     };
   } else if(score >= 4){
     return {
-      level: "Peu compatible",
-      stars: "⚪",
+      level: "PEU COMPATIBLE",
+      color: "#f97316",
       class: "level-2"
     };
   } else {
     return {
-      level: "Très peu compatible",
-      stars: "⚫",
+      level: "PAS COMPATIBLE",
+      color: "#dc2626",
       class: "level-1"
     };
   }
@@ -417,8 +418,7 @@ function renderUniversCard(u){
           <div class="univers-name">${u.name}</div>
         </div>
         <div class="univers-right">
-          <div class="univers-stars">${compatibility.stars}</div>
-          <div class="univers-pct">${u.score} pts</div>
+          <div class="univers-compatibility-dot"></div>
           <div class="univers-actions">
             ${hasSubUnivers 
               ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir sous-univers">🔎</button>` 
@@ -498,7 +498,7 @@ function displayUnivers(){
         name: u.name,
         score: u.score,
         level: compatibility.level,
-        stars: compatibility.stars
+        color: compatibility.color
       };
     });
     localStorage.setItem('univers_details', JSON.stringify(universDetails));
@@ -511,11 +511,11 @@ function displayUnivers(){
       <div class="stars-legend">
         <div class="legend-title">📊 Échelle de compatibilité :</div>
         <div class="legend-items">
-          <div class="legend-item">⭐⭐⭐ Très compatible (≥14 pts)</div>
-          <div class="legend-item">⭐⭐ Compatible (10-13 pts)</div>
-          <div class="legend-item">⭐ Assez compatible (7-9 pts)</div>
-          <div class="legend-item">⚪ Peu compatible (4-6 pts)</div>
-          <div class="legend-item">⚫ Très peu compatible (0-3 pts)</div>
+          <div class="legend-item"><span class="dot" style="background:#047857;width:16px;height:16px;"></span> TRÈS COMPATIBLE (score ≥ 14)</div>
+          <div class="legend-item"><span class="dot" style="background:#10b981;width:16px;height:16px;"></span> COMPATIBLE (score 10-13)</div>
+          <div class="legend-item"><span class="dot" style="background:#d1d5db;width:16px;height:16px;"></span> MOYENNEMENT COMPATIBLE (score 7-9)</div>
+          <div class="legend-item"><span class="dot" style="background:#f97316;width:16px;height:16px;"></span> PEU COMPATIBLE (score 4-6)</div>
+          <div class="legend-item"><span class="dot" style="background:#dc2626;width:16px;height:16px;"></span> PAS COMPATIBLE (score 0-3)</div>
         </div>
       </div>
     `;
