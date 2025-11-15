@@ -2,13 +2,14 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  VERSION 2.2 - AFFICHAGE SIMPLIFIÉ
-  Date : 14 novembre 2025
+  VERSION OPTIMISÉE - Méthode de calcul améliorée
+  Date : Novembre 2025
   
-  CORRECTIONS :
-  ✅ Un seul rond vert/bleu au lieu de trois/deux
-  ✅ Pas de pourcentages dans l'échelle de compatibilité
-  ✅ Sauvegarde complète des univers avec noms et compatibilité
+  AMÉLIORATIONS :
+  ✅ Extraction intelligente des dimensions principales (top 3 + égalités à 10%)
+  ✅ Calcul par addition des coefficients des dimensions communes
+  ✅ Catégorisation basée sur les scores absolus
+  ✅ Sauvegarde complète des détails univers
   
   ============================================
 */
@@ -172,53 +173,135 @@ function attachRatingEvents(){
 
 /* 
   ============================================
-  CALCUL DU PROFIL (QUADRATIQUE)
+  CALCUL DU PROFIL - MÉTHODE SIMPLE
   ============================================
 */
 function calcProfile(){
   const scores = Object.fromEntries(DIMENSIONS.map(d => [d.code, 0]));
   
+  // Somme simple des valeurs (0-4)
   Object.keys(answers).forEach(key => {
     const [, dim] = key.split("-");
     const val = answers[key];
-    scores[dim] += val * val;
+    scores[dim] += val;
   });
   
-  console.log("📊 Scores quadratiques par dimension:", scores);
+  console.log("📊 Scores bruts par dimension:", scores);
   
   return scores;
 }
 
-function percentFromSum(sum){
-  const MAX_SCORE_QUADRATIQUE = 48;
-  return Math.round((sum / MAX_SCORE_QUADRATIQUE) * 100);
+/* 
+  ============================================
+  EXTRACTION DES DIMENSIONS PRINCIPALES
+  Selon l'algorithme : Top 3 + égalités à 10%
+  ============================================
+*/
+function extractMainDimensions(scores){
+  // Tri décroissant
+  const sorted = Object.entries(scores)
+    .sort((a, b) => b[1] - a[1]);
+  
+  // Top 3
+  const mainDims = sorted.slice(0, 3).map(([code]) => code);
+  
+  // Valeur de la 3ème dimension
+  const thirdValue = sorted[2][1];
+  const threshold = thirdValue * 0.9; // 10% de tolérance
+  
+  // Ajout des dimensions proches (écart ≤ 10%)
+  for(let i = 3; i < sorted.length; i++){
+    const [code, value] = sorted[i];
+    if(value >= threshold){
+      mainDims.push(code);
+    }
+  }
+  
+  console.log("🎯 Dimensions principales extraites:", mainDims);
+  console.log(`   (Top 3 + égalités dans les 10% de la 3ème : ${thirdValue})`);
+  
+  return mainDims;
 }
 
 /* 
   ============================================
-  ÉCHELLE DE COMPATIBILITÉ (SIMPLIFIÉE)
+  CALCUL DES UNIVERS - NOUVELLE MÉTHODE
+  Addition des coefficients des dimensions communes
   ============================================
 */
-function getCompatibilityLevel(pct){
-  if(pct >= 50){
+function calcUnivers(){
+  const scores = calcProfile();
+  const mainDims = extractMainDimensions(scores);
+  
+  if(typeof universesData === 'undefined' || typeof UNIVERS_WEIGHTS === 'undefined'){
+    console.error("❌ Données univers non chargées");
+    return [];
+  }
+  
+  const universAvecScores = universesData.map(univers => {
+    const universWeights = UNIVERS_WEIGHTS.find(uw => uw.id === univers.id);
+    
+    if(!universWeights || !universWeights.weights){
+      return {...univers, score: 0};
+    }
+    
+    let score = 0;
+    
+    // Pour chaque dimension de l'univers
+    universWeights.weights.forEach((coeff, index) => {
+      if(index < DIMENSIONS.length){
+        const dimCode = DIMENSIONS[index].code;
+        
+        // Si la dimension est dans les principales de la personne
+        if(mainDims.includes(dimCode)){
+          score += coeff; // Addition du coefficient
+        }
+      }
+    });
+    
+    return {...univers, score: score};
+  });
+  
+  // Tri par score décroissant
+  const universTries = universAvecScores.sort((a, b) => b.score - a.score);
+  
+  console.log("🏆 Top 5 univers:");
+  universTries.slice(0, 5).forEach((u, i) => {
+    console.log(`   ${i+1}. ${u.name} : ${u.score} pts`);
+  });
+  
+  const ecartTop1Top5 = universTries[0].score - universTries[4].score;
+  console.log(`📊 Écart Top1-Top5 : ${ecartTop1Top5} pts`);
+  
+  return universTries;
+}
+
+/* 
+  ============================================
+  ÉCHELLE DE COMPATIBILITÉ
+  Basée sur les scores absolus
+  ============================================
+*/
+function getCompatibilityLevel(score){
+  if(score >= 14){
     return {
       level: "Très compatible",
-      stars: "🟢",
+      stars: "⭐⭐⭐",
       class: "level-5"
     };
-  } else if(pct >= 40){
+  } else if(score >= 10){
     return {
       level: "Compatible",
-      stars: "🔵",
+      stars: "⭐⭐",
       class: "level-4"
     };
-  } else if(pct >= 30){
+  } else if(score >= 7){
     return {
       level: "Assez compatible",
-      stars: "🟠",
+      stars: "⭐",
       class: "level-3"
     };
-  } else if(pct >= 20){
+  } else if(score >= 4){
     return {
       level: "Peu compatible",
       stars: "⚪",
@@ -235,108 +318,39 @@ function getCompatibilityLevel(pct){
 
 /* 
   ============================================
-  CALCUL DES UNIVERS - VERSION QUADRATIQUE
-  ============================================
-*/
-function calcUnivers(){
-  const scoresQuadratiques = calcProfile();
-  
-  if(typeof universesData === 'undefined'){
-    console.error("❌ universesData non défini");
-    return [];
-  }
-  
-  if(typeof UNIVERS_WEIGHTS === 'undefined'){
-    console.error("❌ UNIVERS_WEIGHTS non défini");
-    return [];
-  }
-  
-  const universAvecScores = universesData.map(univers => {
-    let sommePonderee = 0;
-    let sommePoidsCarre = 0;
-    
-    const universWeights = UNIVERS_WEIGHTS.find(uw => uw.id === univers.id);
-    
-    if(universWeights && universWeights.weights){
-      universWeights.weights.forEach((poids, index) => {
-        if(index < DIMENSIONS.length){
-          const dimCode = DIMENSIONS[index].code;
-          const scoreQuadratique = scoresQuadratiques[dimCode];
-          
-          const poidsCarre = poids * poids;
-          
-          sommePonderee += scoreQuadratique * poidsCarre;
-          sommePoidsCarre += poidsCarre;
-        }
-      });
-    } else {
-      DIMENSIONS.forEach(dim => {
-        sommePonderee += scoresQuadratiques[dim.code];
-        sommePoidsCarre += 1;
-      });
-    }
-    
-    const moyennePonderee = sommePoidsCarre > 0 ? sommePonderee / sommePoidsCarre : 0;
-    const pourcentage = Math.round((moyennePonderee / 48) * 100);
-    
-    if(univers.id === 1){
-      console.log(`
-🔬 Calcul QUADRATIQUE pour "${univers.name}" :
-   Somme pondérée : ${sommePonderee.toFixed(2)}
-   Somme poids² : ${sommePoidsCarre}
-   Moyenne : ${moyennePonderee.toFixed(2)}
-   % : ${pourcentage}%
-      `);
-    }
-    
-    return {...univers, pct: pourcentage};
-  });
-  
-  const universTries = universAvecScores.sort((a, b) => b.pct - a.pct);
-  
-  console.log("🏆 Top 5 (méthode QUADRATIQUE):");
-  universTries.slice(0, 5).forEach((u, i) => {
-    console.log(`   ${i+1}. ${u.name} : ${u.pct}%`);
-  });
-  
-  const ecartTop1Top5 = universTries[0].pct - universTries[4].pct;
-  console.log(`📊 Écart Top1-Top5 : ${ecartTop1Top5}% (objectif > 10%)`);
-  
-  return universTries;
-}
-
-/* 
-  ============================================
   AFFICHAGE DU PROFIL
   ============================================
 */
 function displayProfile(){
-  const scoresQuadratiques = calcProfile();
+  const scores = calcProfile();
   const root = document.getElementById("profileResults");
+  
+  const MAX_SCORE = 12; // 3 questions max par dimension × 4 points max
   
   const dimensionsAvecScores = DIMENSIONS.map(dim => ({
     ...dim,
-    scoreQuadratique: scoresQuadratiques[dim.code],
-    pct: percentFromSum(scoresQuadratiques[dim.code])
+    score: scores[dim.code],
+    pct: Math.round((scores[dim.code] / MAX_SCORE) * 100)
   }));
   
   dimensionsAvecScores.sort((a, b) => b.pct - a.pct);
   
   console.log("👤 Profil utilisateur :");
   dimensionsAvecScores.forEach(dim => {
-    console.log(`   ${dim.name} : ${dim.pct}% (quad: ${dim.scoreQuadratique})`);
+    console.log(`   ${dim.name} : ${dim.pct}% (${dim.score}/${MAX_SCORE})`);
   });
   
-  // 🔥 SAUVEGARDE DES POURCENTAGES DANS LOCALSTORAGE
+  // Sauvegarde du profil
   const profilePercentages = {};
   dimensionsAvecScores.forEach(dim => {
     profilePercentages[dim.code] = {
       name: dim.name,
-      pct: dim.pct
+      pct: dim.pct,
+      score: dim.score
     };
   });
   localStorage.setItem('profile_percentages', JSON.stringify(profilePercentages));
-  console.log('✅ Profil sauvegardé:', profilePercentages);
+  console.log('✅ Profil sauvegardé');
   
   root.innerHTML = dimensionsAvecScores.map(dim => `
     <div class="profile-row">
@@ -379,7 +393,7 @@ function renderUniversCard(u){
   const isSelected = selectedUnivers.has(u.id);
   const hasSubUnivers = u.subUniverses && u.subUniverses.length > 0;
   
-  const compatibility = getCompatibilityLevel(u.pct);
+  const compatibility = getCompatibilityLevel(u.score);
   
   const subUniversHTML = hasSubUnivers
     ? `<div class="sub-univers-list" id="sub-${u.id}">
@@ -404,7 +418,7 @@ function renderUniversCard(u){
         </div>
         <div class="univers-right">
           <div class="univers-stars">${compatibility.stars}</div>
-          <div class="univers-pct">${u.pct}%</div>
+          <div class="univers-pct">${u.score} pts</div>
           <div class="univers-actions">
             ${hasSubUnivers 
               ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir sous-univers">🔎</button>` 
@@ -465,7 +479,7 @@ function attachUniversEvents(){
 /* ===== AFFICHAGE UNIVERS ===== */
 
 function displayUnivers(){
-  console.log("Calcul univers (PONDÉRATION QUADRATIQUE)...");
+  console.log("Calcul univers (nouvelle méthode)...");
   
   try {
     const list = calcUnivers();
@@ -476,32 +490,32 @@ function displayUnivers(){
       return;
     }
     
-    // 🔥 SAUVEGARDE COMPLÈTE DES UNIVERS AVEC NOM ET COMPATIBILITÉ
+    // Sauvegarde complète des univers
     const universDetails = {};
     list.forEach(u => {
-      const compatibility = getCompatibilityLevel(u.pct);
+      const compatibility = getCompatibilityLevel(u.score);
       universDetails[u.id] = {
         name: u.name,
-        pct: u.pct,
+        score: u.score,
         level: compatibility.level,
         stars: compatibility.stars
       };
     });
     localStorage.setItem('univers_details', JSON.stringify(universDetails));
-    console.log('✅ Détails univers sauvegardés:', universDetails);
+    console.log('✅ Détails univers sauvegardés');
     
     const root = document.getElementById("univers-results");
     const top10 = list.slice(0, 10);
 
     const legendHTML = `
       <div class="stars-legend">
-        <div class="legend-title">📊 Échelle de compatibilité (méthode quadratique) :</div>
+        <div class="legend-title">📊 Échelle de compatibilité :</div>
         <div class="legend-items">
-          <div class="legend-item">🟢 Très compatible</div>
-          <div class="legend-item">🔵 Compatible</div>
-          <div class="legend-item">🟠 Assez compatible</div>
-          <div class="legend-item">⚪ Peu compatible</div>
-          <div class="legend-item">⚫ Très peu compatible</div>
+          <div class="legend-item">⭐⭐⭐ Très compatible (≥14 pts)</div>
+          <div class="legend-item">⭐⭐ Compatible (10-13 pts)</div>
+          <div class="legend-item">⭐ Assez compatible (7-9 pts)</div>
+          <div class="legend-item">⚪ Peu compatible (4-6 pts)</div>
+          <div class="legend-item">⚫ Très peu compatible (0-3 pts)</div>
         </div>
       </div>
     `;
