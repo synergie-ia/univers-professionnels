@@ -2,15 +2,14 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  VERSION OPTIMISÉE - Cartouches colorés sans ronds
-  Date : Novembre 2025
+  VERSION CORRIGÉE - Novembre 2025
   
-  AMÉLIORATIONS :
-  ✅ Extraction intelligente des dimensions principales (top 3 + égalités à 10%)
-  ✅ Calcul par addition des coefficients des dimensions communes
-  ✅ Cartouches colorés selon compatibilité
-  ✅ Score masqué pour l'utilisateur
-  ✅ Design responsive optimisé
+  CORRECTIONS APPORTÉES :
+  ✅ Vérification de l'ordre des dimensions
+  ✅ Debug du calcul des scores
+  ✅ Debug de l'extraction des dimensions principales
+  ✅ Debug du calcul des univers
+  ✅ Ajout de logs détaillés
   
   ============================================
 */
@@ -174,7 +173,7 @@ function attachRatingEvents(){
 
 /* 
   ============================================
-  CALCUL DU PROFIL - MÉTHODE SIMPLE
+  CALCUL DU PROFIL - VERSION DEBUGGÉE
   ============================================
 */
 function calcProfile(){
@@ -187,7 +186,10 @@ function calcProfile(){
     scores[dim] += val;
   });
   
-  console.log("📊 Scores bruts par dimension:", scores);
+  console.log("📊 Scores bruts par dimension:");
+  DIMENSIONS.forEach(d => {
+    console.log(`   ${d.code} (${d.name}): ${scores[d.code]}`);
+  });
   
   return scores;
 }
@@ -195,13 +197,19 @@ function calcProfile(){
 /* 
   ============================================
   EXTRACTION DES DIMENSIONS PRINCIPALES
-  Selon l'algorithme : Top 3 + égalités à 10%
+  VERSION DEBUGGÉE
   ============================================
 */
 function extractMainDimensions(scores){
   // Tri décroissant
   const sorted = Object.entries(scores)
     .sort((a, b) => b[1] - a[1]);
+  
+  console.log("🔍 Toutes dimensions triées:");
+  sorted.forEach(([code, value], index) => {
+    const dimName = DIMENSIONS.find(d => d.code === code)?.name || code;
+    console.log(`   ${index + 1}. ${code} (${dimName}): ${value}`);
+  });
   
   // Top 3
   const mainDims = sorted.slice(0, 3).map(([code]) => code);
@@ -210,24 +218,27 @@ function extractMainDimensions(scores){
   const thirdValue = sorted[2][1];
   const threshold = thirdValue * 0.9; // 10% de tolérance
   
+  console.log(`📏 Seuil d'égalité: ${threshold.toFixed(1)} (90% de ${thirdValue})`);
+  
   // Ajout des dimensions proches (écart ≤ 10%)
   for(let i = 3; i < sorted.length; i++){
     const [code, value] = sorted[i];
     if(value >= threshold){
+      console.log(`   ✓ ${code} ajouté (${value} >= ${threshold.toFixed(1)})`);
       mainDims.push(code);
+    } else {
+      console.log(`   ✗ ${code} exclu (${value} < ${threshold.toFixed(1)})`);
     }
   }
   
-  console.log("🎯 Dimensions principales extraites:", mainDims);
-  console.log(`   (Top 3 + égalités dans les 10% de la 3ème : ${thirdValue})`);
+  console.log("🎯 Dimensions principales finales:", mainDims);
   
   return mainDims;
 }
 
 /* 
   ============================================
-  CALCUL DES UNIVERS - NOUVELLE MÉTHODE
-  Addition des coefficients des dimensions communes
+  CALCUL DES UNIVERS - VERSION DEBUGGÉE
   ============================================
 */
 function calcUnivers(){
@@ -239,26 +250,37 @@ function calcUnivers(){
     return [];
   }
   
+  console.log("\n🔬 CALCUL DÉTAILLÉ DES UNIVERS");
+  console.log("================================");
+  
   const universAvecScores = universesData.map(univers => {
     const universWeights = UNIVERS_WEIGHTS.find(uw => uw.id === univers.id);
     
     if(!universWeights || !universWeights.weights){
+      console.log(`⚠️ ${univers.name}: Pas de poids trouvés`);
       return {...univers, score: 0};
     }
     
     let score = 0;
+    const details = [];
     
     // Pour chaque dimension de l'univers
     universWeights.weights.forEach((coeff, index) => {
       if(index < DIMENSIONS.length){
         const dimCode = DIMENSIONS[index].code;
+        const dimName = DIMENSIONS[index].name;
         
         // Si la dimension est dans les principales de la personne
-        if(mainDims.includes(dimCode)){
-          score += coeff; // Addition du coefficient
+        if(mainDims.includes(dimCode) && coeff > 0){
+          score += coeff;
+          details.push(`${dimCode}(${coeff})`);
         }
       }
     });
+    
+    if(score > 0){
+      console.log(`${univers.name}: ${score} pts [${details.join(' + ')}]`);
+    }
     
     return {...univers, score: score};
   });
@@ -266,13 +288,14 @@ function calcUnivers(){
   // Tri par score décroissant
   const universTries = universAvecScores.sort((a, b) => b.score - a.score);
   
-  console.log("🏆 Top 5 univers:");
-  universTries.slice(0, 5).forEach((u, i) => {
-    console.log(`   ${i+1}. ${u.name} : ${u.score} pts`);
+  console.log("\n🏆 TOP 10 UNIVERS:");
+  console.log("==================");
+  universTries.slice(0, 10).forEach((u, i) => {
+    console.log(`${i+1}. ${u.name}: ${u.score} pts`);
   });
   
   const ecartTop1Top5 = universTries[0].score - universTries[4].score;
-  console.log(`📊 Écart Top1-Top5 : ${ecartTop1Top5} pts`);
+  console.log(`\n📊 Écart Top1-Top5 : ${ecartTop1Top5} pts`);
   
   return universTries;
 }
@@ -280,7 +303,6 @@ function calcUnivers(){
 /* 
   ============================================
   ÉCHELLE DE COMPATIBILITÉ
-  Basée sur les scores absolus - CARTOUCHES COLORÉS
   ============================================
 */
 function getCompatibilityLevel(score){
@@ -334,11 +356,12 @@ function displayProfile(){
     pct: Math.round((scores[dim.code] / MAX_SCORE) * 100)
   }));
   
-  dimensionsAvecScores.sort((a, b) => b.pct - a.pct);
+  dimensionsAvecScores.sort((a, b) => b.score - a.score);
   
-  console.log("👤 Profil utilisateur :");
+  console.log("\n👤 PROFIL UTILISATEUR :");
+  console.log("======================");
   dimensionsAvecScores.forEach(dim => {
-    console.log(`   ${dim.name} : ${dim.pct}% (${dim.score}/${MAX_SCORE})`);
+    console.log(`${dim.name}: ${dim.pct}% (${dim.score}/${MAX_SCORE})`);
   });
   
   // Sauvegarde du profil
@@ -478,11 +501,12 @@ function attachUniversEvents(){
 /* ===== AFFICHAGE UNIVERS ===== */
 
 function displayUnivers(){
-  console.log("Calcul univers (nouvelle méthode)...");
+  console.log("\n🚀 LANCEMENT CALCUL UNIVERS");
+  console.log("============================\n");
   
   try {
     const list = calcUnivers();
-    console.log(`${list.length} univers calculés`);
+    console.log(`\n✅ ${list.length} univers calculés avec succès`);
     
     if(list.length === 0){
       alert("Erreur : Aucun univers calculé.");
@@ -501,7 +525,7 @@ function displayUnivers(){
       };
     });
     localStorage.setItem('univers_details', JSON.stringify(universDetails));
-    console.log('✅ Détails univers sauvegardés');
+    console.log('✅ Détails univers sauvegardés\n');
     
     const root = document.getElementById("univers-results");
     const top10 = list.slice(0, 10);
@@ -545,7 +569,7 @@ function displayUnivers(){
     }, 100);
     
   } catch(error) {
-    console.error("Erreur:", error);
+    console.error("❌ ERREUR:", error);
     alert("Erreur : " + error.message);
   }
 }
@@ -553,6 +577,9 @@ function displayUnivers(){
 /* ===== INITIALISATION ===== */
 
 document.addEventListener('DOMContentLoaded', function() {
+  
+  console.log("🔧 INITIALISATION DU SYSTÈME");
+  console.log("=============================\n");
   
   if(typeof QUESTIONS === 'undefined'){
     console.error("❌ QUESTIONS non défini");
@@ -582,13 +609,20 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log(`📋 ${QUESTIONS.length} questions`);
   console.log(`🎯 ${DIMENSIONS.length} dimensions`);
   console.log(`🌍 ${universesData.length} univers`);
-  console.log(`⚙️ ${UNIVERS_WEIGHTS.length} matrices`);
+  console.log(`⚙️ ${UNIVERS_WEIGHTS.length} matrices\n`);
+  
+  // Vérification de l'ordre des dimensions
+  console.log("🔍 Ordre des dimensions:");
+  DIMENSIONS.forEach((d, i) => {
+    console.log(`   ${i}. ${d.code} - ${d.name}`);
+  });
+  console.log("");
   
   loadSelections();
   loadAnswers();
   
   totalQuestions = countTotalQuestions();
-  console.log(`Total questions: ${totalQuestions}`);
+  console.log(`Total questions: ${totalQuestions}\n`);
   
   renderQuestions();
 
