@@ -2,12 +2,12 @@
   ============================================
   RECONVERSION 360 IA - QUESTIONNAIRE PROFIL
   ============================================
-  VERSION AVEC HIÉRARCHISATION OBLIGATOIRE
+  VERSION AVEC 2 UTILISATIONS PAR NOTE
   Novembre 2025
   
   FONCTIONNALITÉ :
-  ✅ Chaque note (0-4) ne peut être utilisée qu'une seule fois par question
-  ✅ Validation en temps réel des doublons
+  ✅ Chaque note (0-4) peut être utilisée 2 fois maximum par question
+  ✅ Validation en temps réel des limites d'utilisation
   ✅ Feedback visuel sur les notes disponibles/indisponibles
   
   ============================================
@@ -98,45 +98,72 @@ function highlightUnansweredQuestions(){
   return unanswered;
 }
 
-/* ===== VALIDATION HIÉRARCHIE ===== */
+/* ===== VALIDATION HIÉRARCHIE (2 UTILISATIONS MAX) ===== */
 
-// Vérifie si une valeur est déjà utilisée dans une question
-function isValueUsedInQuestion(questionId, value){
+// Compte combien de fois une valeur est utilisée dans une question
+function countValueUsageInQuestion(questionId, value){
   const question = QUESTIONS.find(q => q.id === questionId);
-  if(!question) return false;
+  if(!question) return 0;
   
+  let count = 0;
   for(const opt of question.options){
     const key = `${questionId}-${opt.dim}`;
     if(answers[key] === value){
-      return true;
+      count++;
     }
   }
-  return false;
+  return count;
 }
 
-// Récupère les valeurs disponibles pour une question
+// Vérifie si une valeur peut encore être utilisée (max 2 fois)
+function canUseValueInQuestion(questionId, value, currentKey){
+  const usageCount = countValueUsageInQuestion(questionId, value);
+  
+  // Si c'est déjà la valeur sélectionnée pour cette option, on peut la réutiliser
+  if(answers[currentKey] === value){
+    return true;
+  }
+  
+  // Sinon, on vérifie si la limite de 2 utilisations n'est pas atteinte
+  return usageCount < 2;
+}
+
+// Récupère les valeurs disponibles pour une question (avec compteur)
 function getAvailableValuesForQuestion(questionId){
-  const available = [0, 1, 2, 3, 4]; // Toutes les valeurs possibles
-  const used = new Set();
+  const available = [0, 1, 2, 3, 4];
+  const usage = {};
+  
+  // Initialiser le compteur
+  available.forEach(v => {
+    usage[v] = 0;
+  });
   
   const question = QUESTIONS.find(q => q.id === questionId);
   if(!question) return available;
   
-  // Parcourir toutes les options de cette question
+  // Compter les utilisations
   question.options.forEach(opt => {
     const key = `${questionId}-${opt.dim}`;
     const value = answers[key];
     if(value !== undefined){
-      used.add(value);
+      usage[value]++;
     }
   });
   
-  return available.filter(v => !used.has(v));
+  // Retourner les valeurs utilisables (< 2 fois)
+  return available.filter(v => usage[v] < 2);
 }
 
 // Met à jour l'état visuel des boutons d'une question
 function updateButtonStatesForQuestion(questionId){
-  const availableValues = getAvailableValuesForQuestion(questionId);
+  const question = QUESTIONS.find(q => q.id === questionId);
+  if(!question) return;
+  
+  // Compter les utilisations de chaque valeur
+  const usage = {};
+  [0, 1, 2, 3, 4].forEach(v => {
+    usage[v] = countValueUsageInQuestion(questionId, v);
+  });
   
   // Mettre à jour tous les boutons de cette question
   document.querySelectorAll(`.rate-btn[data-q='${questionId}']`).forEach(btn => {
@@ -148,14 +175,35 @@ function updateButtonStatesForQuestion(questionId){
     // Si le bouton est sélectionné, le garder actif
     if(isSelected){
       btn.classList.remove('disabled');
+      btn.classList.add('usage-count');
+      
+      // Afficher le compteur si la valeur est utilisée 2 fois
+      if(usage[value] === 2){
+        btn.setAttribute('data-usage', '2/2');
+      } else if(usage[value] === 1){
+        btn.setAttribute('data-usage', '1/2');
+      } else {
+        btn.removeAttribute('data-usage');
+      }
       return;
     }
     
-    // Sinon, vérifier si la valeur est disponible
-    if(availableValues.includes(value)){
+    // Sinon, vérifier si la valeur peut encore être utilisée
+    if(usage[value] < 2){
       btn.classList.remove('disabled');
+      
+      // Afficher le compteur
+      if(usage[value] === 1){
+        btn.setAttribute('data-usage', '1/2');
+        btn.classList.add('usage-count');
+      } else {
+        btn.removeAttribute('data-usage');
+        btn.classList.remove('usage-count');
+      }
     } else {
       btn.classList.add('disabled');
+      btn.setAttribute('data-usage', '2/2');
+      btn.classList.add('usage-count');
     }
   });
 }
@@ -205,16 +253,6 @@ function renderQuestions(){
 function attachRatingEvents(){
   document.querySelectorAll(".rate-btn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
-      // Ne pas permettre de cliquer sur un bouton désactivé
-      if(btn.classList.contains('disabled')){
-        // Feedback visuel
-        btn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          btn.style.transform = '';
-        }, 100);
-        return;
-      }
-
       const q = btn.dataset.q;
       const dim = btn.dataset.dim;
       const v = Number(btn.dataset.val);
@@ -224,9 +262,14 @@ function attachRatingEvents(){
       if(answers[key] === v){
         delete answers[key];
       } else {
-        // Vérifier que la valeur n'est pas déjà utilisée
-        if(isValueUsedInQuestion(q, v)){
-          alert("⚠️ Cette note est déjà utilisée pour une autre option de cette question.\n\nChaque note de 0 à 4 ne peut être attribuée qu'une seule fois par question.");
+        // Vérifier que la valeur peut encore être utilisée (max 2 fois)
+        if(!canUseValueInQuestion(q, v, key)){
+          // Feedback visuel
+          btn.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            btn.style.transform = '';
+          }, 100);
+          alert("⚠️ Cette note est déjà utilisée 2 fois dans cette question.\n\nChaque note peut être attribuée au maximum 2 fois par question.");
           return;
         }
         
@@ -787,23 +830,4 @@ document.addEventListener('DOMContentLoaded', function() {
         alert("✅ Sélection de " + selectedUnivers.size + " univers enregistrée !\n\nVous pouvez retourner à l'accueil.");
         
       } catch(error) {
-        console.error('❌ Erreur:', error);
-        alert("❌ Erreur de sauvegarde.");
-      }
-    });
-  }
-
-  const btnAccueilTop = document.getElementById("btnAccueilTop");
-  if(btnAccueilTop){
-    btnAccueilTop.addEventListener("click", ()=>{
-      window.location.href = 'index.html';
-    });
-  }
-
-  const btnAccueilBottom = document.getElementById("btnAccueilBottom");
-  if(btnAccueilBottom){
-    btnAccueilBottom.addEventListener("click", ()=>{
-      window.location.href = 'index.html';
-    });
-  }
-});
+        console.error('❌
