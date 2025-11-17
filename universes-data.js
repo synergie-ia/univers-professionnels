@@ -2,7 +2,7 @@
 // RECONVERSION 360 IA - DONNÉES COMPLÈTES
 // ============================================
 // VERSION OPTIMISÉE - Coefficients selon l'algorithme
-// Ordre des dimensions : MO, PT, AL, SI, CS, EC, CP, IP, MP, AE, AA, RI
+// Ordre des dimensions : MP, MT, IN, ST, AE, IC, AA, RS, LS, AI, RM, DC
 
 // ===== DIMENSIONS =====
 const DIMENSIONS = [
@@ -20,106 +20,106 @@ const DIMENSIONS = [
   { code: "DC", name: "Données & Chiffres" }
 ];
 
-// ===== QUESTIONS DU QUESTIONNAIRE - VERSION CORRIGÉE =====
+// ===== QUESTIONS DU QUESTIONNAIRE - VERSION EXACTE =====
 // Chaque dimension apparaît EXACTEMENT 3 fois
 
 const QUESTIONS = [
   {
     id: "q1",
-    title: "SITUATION 1 — Découvrir un nouveau sujet",
+    title: "Au travail, vous êtes plus à l'aise quand…",
     options: [
-      { text: "J'ai besoin de mettre de l'ordre dans les informations (étapes, catégories, priorités) pour commencer à être à l'aise.", dim: "RM" },
-      { text: "J'ai envie de manipuler concrètement quelque chose en lien avec le sujet (objet, outil, support, dispositif) pour mieux le comprendre.", dim: "MT" },
-      { text: "Je cherche spontanément à observer, comparer et analyser pour comprendre les causes et les conséquences.", dim: "IN" },
-      { text: "Ce qui m'attire le plus, c'est d'explorer des idées, des hypothèses ou des découvertes liées à ce sujet.", dim: "ST" }
+      { text: "Vous pouvez privilégier les activités qui impliquent de bouger votre corps, être debout, marcher, porter des charges ou être physiquement actif.", dim: "MP" },
+      { text: "Vous pouvez utiliser vos mains pour assembler, démonter, ajuster ou réparer des objets, outils ou équipements.", dim: "MT" },
+      { text: "Vous pouvez collecter des informations auprès de plusieurs sources, comparer les versions, vérifier la cohérence des faits.", dim: "IN" },
+      { text: "Vous pouvez tester des hypothèses, expérimenter de nouvelles approches techniques, vous documenter sur les innovations.", dim: "ST" }
     ]
   },
 
   {
     id: "q2",
-    title: "SITUATION 2 — Contribuer à un projet",
+    title: "Quand vous produisez quelque chose, vous passez du temps à…",
     options: [
-      { text: "J'aime concevoir la structure globale du projet : l'architecture, les grands axes, le scénario d'ensemble.", dim: "IC" },
-      { text: "Je prends plaisir à imaginer et produire des contenus créatifs (idées visuelles, textes, ambiances, mises en forme).", dim: "AE" },
-      { text: "Je suis naturellement porté(e) vers le fait de superviser, planifier et gérer les priorités pour que le projet avance.", dim: "LS" },
-      { text: "Je me reconnais dans le fait de lancer, entreprendre, oser : proposer de nouveaux projets, prendre l'initiative, démarrer quelque chose.", dim: "AI" }
+      { text: "Soigner l'aspect visuel, travailler les couleurs, les formes, la mise en page ou l'esthétique générale.", dim: "AE" },
+      { text: "Définir la structure d'ensemble, organiser les parties entre elles, établir un schéma ou un plan directeur.", dim: "IC" },
+      { text: "Adapter votre production aux besoins spécifiques des personnes qui vont l'utiliser, anticiper leurs difficultés.", dim: "AA" },
+      { text: "Échanger avec différents interlocuteurs, recueillir leurs avis, ajuster en fonction des retours.", dim: "RS" }
     ]
   },
 
   {
     id: "q3",
-    title: "SITUATION 3 — Agir avec et pour les autres",
+    title: "Dans une réunion de travail, vous êtes souvent celui qui…",
     options: [
-      { text: "J'aime quand une activité me permet de bouger, me déplacer, être physiquement actif(ve) plutôt que de rester toujours au même endroit.", dim: "MP" },
-      { text: "Je suis à l'aise quand il faut intervenir vite, passer à l'action et être efficace sur le terrain.", dim: "DC" },
-      { text: "Je me retrouve bien dans le fait de soutenir, écouter, former ou prendre soin des autres.", dim: "AA" },
-      { text: "Je me sens dans mon élément lorsque je peux convaincre, négocier, influencer ou représenter un groupe, une idée, une position.", dim: "RS" }
+      { text: "Recentre la discussion sur les objectifs, synthétise les débats, propose une direction à suivre.", dim: "LS" },
+      { text: "Suggère de passer rapidement à la phase test, propose d'essayer une solution même imparfaite pour avancer.", dim: "AI" },
+      { text: "Note les décisions, récapitule les étapes, reformule le plan d'action avec les échéances.", dim: "RM" },
+      { text: "Ramène la discussion à des éléments chiffrés, pose des questions sur les budgets ou les délais précis.", dim: "DC" }
     ]
   },
 
   {
     id: "q4",
-    title: "SITUATION 4 — Porter une responsabilité ou un dossier",
+    title: "Face à un problème que personne ne comprend, votre réflexe est de…",
     options: [
-      { text: "Je veille naturellement à structurer le travail : procédures, méthodes, outils d'organisation, suivi rigoureux.", dim: "RM" },
-      { text: "Je me vois bien dans un rôle où je supervise, coordonne et ajuste le travail des autres au fil du temps.", dim: "LS" },
-      { text: "Ce qui me correspond, c'est de prendre des initiatives, proposer des projets, ouvrir des pistes nouvelles plutôt que d'attendre qu'on me dise quoi faire.", dim: "AI" },
-      { text: "J'accorde une place importante au fait d'accompagner les personnes, les soutenir, les rassurer, les aider à progresser.", dim: "AA" }
+      { text: "Aller physiquement sur place, inspecter l'environnement en vous déplaçant, explorer l'espace de manière active.", dim: "MP" },
+      { text: "Examiner le matériel concerné, vérifier son fonctionnement, identifier où se situe la défaillance technique.", dim: "MT" },
+      { text: "Interroger les personnes impliquées, reconstituer la chronologie, chercher des indices dans les documents.", dim: "IN" },
+      { text: "Chercher dans la littérature technique ou scientifique si ce type de problème a déjà été documenté.", dim: "ST" }
     ]
   },
 
   {
     id: "q5",
-    title: "SITUATION 5 — Résoudre un problème concret",
+    title: "Vous vous sentez dans votre élément quand vous…",
     options: [
-      { text: "J'aime être en lien avec la dimension pratique ou technique : manipuler, ajuster, bricoler, faire fonctionner un dispositif ou un outil.", dim: "MT" },
-      { text: "Mon premier réflexe est souvent d'analyser calmement la situation : observer, poser un diagnostic, comprendre ce qui cloche.", dim: "IN" },
-      { text: "Je prends plaisir à formuler des hypothèses, à tester des pistes, à chercher des explications scientifiques ou rationnelles.", dim: "ST" },
-      { text: "Ce qui m'attire, c'est de passer rapidement à l'action pour tester une solution concrète et voir si elle fonctionne.", dim: "AI" }
+      { text: "Composez un visuel, rédigez un texte créatif, imaginez un univers graphique ou une atmosphère particulière.", dim: "AE" },
+      { text: "Élaborez un modèle théorique, dessinez un schéma conceptuel, structurez une idée complexe.", dim: "IC" },
+      { text: "Expliquez quelque chose à quelqu'un qui ne comprend pas, l'aidez à surmonter une difficulté.", dim: "AA" },
+      { text: "Animez une discussion collective, facilitez les échanges entre personnes qui ne se connaissent pas.", dim: "RS" }
     ]
   },
 
   {
     id: "q6",
-    title: "SITUATION 6 — Activités qui vous nourrissent vraiment",
+    title: "Dans un projet collectif, on vous retrouve naturellement en train de…",
     options: [
-      { text: "Je suis stimulé(e) par le fait de concevoir des idées structurées, des concepts, des scénarios, des plans d'ensemble.", dim: "IC" },
-      { text: "Je ressens un vrai plaisir à créer : écrire, dessiner, imaginer des univers, produire des choses expressives ou artistiques.", dim: "AE" },
-      { text: "J'aime que mon activité me permette d'être en mouvement, de changer de lieu, d'avoir une part physique ou plein air.", dim: "MP" },
-      { text: "Je me sens vivant(e) quand je peux parler, argumenter, influencer, créer un lien fort par la parole ou la présence.", dim: "RS" }
+      { text: "Faire le point régulièrement sur l'avancement global, ajuster les priorités, réallouer les ressources.", dim: "LS" },
+      { text: "Lancer des initiatives parallèles, tester des pistes non prévues au départ, improviser des solutions.", dim: "AI" },
+      { text: "Tenir à jour les documents de suivi, vérifier que les procédures sont respectées, archiver les livrables.", dim: "RM" },
+      { text: "Mettre à jour les tableaux de suivi, calculer les écarts entre prévu et réalisé, suivre les indicateurs.", dim: "DC" }
     ]
   },
 
   {
     id: "q7",
-    title: "SITUATION 7 — Une journée de travail variée",
+    title: "Pour acquérir une nouvelle compétence, vous préférez…",
     options: [
-      { text: "J'apprécie les moments où je peux organiser : préparer un planning, structurer des dossiers, clarifier les priorités.", dim: "RM" },
-      { text: "J'aime aussi les moments où je peux faire quelque chose de concret avec mes mains : assembler, installer, ajuster, manipuler des outils ou du matériel.", dim: "MT" },
-      { text: "Je suis à l'aise dès que mon activité me permet de bouger, d'alterner les lieux ou les postures, de ne pas rester figé.", dim: "MP" },
-      { text: "Je me retrouve bien dans des tâches où il faut agir efficacement, aller au résultat, être utile de façon très pratique.", dim: "DC" }
+      { text: "Pratiquer en conditions réelles avec une forte dimension corporelle : gestes sportifs, déplacements, coordination physique.", dim: "MP" },
+      { text: "Apprendre par la pratique répétée : manipuler, fabriquer, répéter les gestes jusqu'à maîtriser le savoir-faire.", dim: "MT" },
+      { text: "Lire plusieurs sources d'information, comparer les approches, analyser les études de cas existantes.", dim: "IN" },
+      { text: "Suivre un cours structuré avec des fondamentaux théoriques, comprendre les principes scientifiques sous-jacents.", dim: "ST" }
     ]
   },
 
   {
     id: "q8",
-    title: "SITUATION 8 — Réfléchir à une décision importante",
+    title: "Vos collègues disent de vous que vous…",
     options: [
-      { text: "Je prends le temps d'observer la situation sous plusieurs angles, d'identifier les signaux faibles, les risques, les effets possibles.", dim: "IN" },
-      { text: "Je cherche à m'appuyer sur des principes généraux, des connaissances, des explications solides pour orienter mon choix.", dim: "ST" },
-      { text: "Je pense naturellement à la répartition des rôles, au calendrier, aux priorités, comme si j'organisais un petit système.", dim: "LS" },
-      { text: "Je tiens compte de la façon dont je pourrai expliquer, défendre et faire accepter cette décision aux autres.", dim: "RS" }
+      { text: "Avez un sens du détail esthétique, remarquez les aspects visuels ou sonores que d'autres ne perçoivent pas.", dim: "AE" },
+      { text: "Voyez les liens entre des éléments apparemment séparés, comprenez les logiques d'ensemble.", dim: "IC" },
+      { text: "Remarquez rapidement quand quelqu'un va mal, êtes attentif aux signaux de difficulté chez les autres.", dim: "AA" },
+      { text: "Connaissez beaucoup de monde, faites facilement le lien entre des personnes qui pourraient collaborer.", dim: "RS" }
     ]
   },
 
   {
     id: "q9",
-    title: "SITUATION 9 — Imaginer un projet qui a du sens pour vous",
+    title: "Sous pression, avec un délai très court, vous…",
     options: [
-      { text: "J'aimerais pouvoir concevoir la logique d'ensemble d'un projet : son concept, son architecture, la façon dont tout s'articule.", dim: "IC" },
-      { text: "J'aimerais aussi que ce projet laisse de la place à l'expression, la créativité, la production de contenus originaux.", dim: "AE" },
-      { text: "Il serait important pour moi que ce projet me permette d'accompagner, former, soutenir ou prendre soin d'autres personnes.", dim: "AA" },
-      { text: "Je me vois bien dans un projet que je pourrais lancer moi-même, faire évoluer, développer avec une part de prise de risque ou d'innovation.", dim: "DC" }
+      { text: "Décidez rapidement ce qui est prioritaire, supprimez ce qui est secondaire, concentrez l'énergie sur l'essentiel.", dim: "LS" },
+      { text: "Passez directement à l'action sans attendre d'avoir toutes les informations, quitte à corriger ensuite.", dim: "AI" },
+      { text: "Suivez la méthode habituelle mais en accéléré, vérifiez que vous n'oubliez aucune étape importante.", dim: "RM" },
+      { text: "Calculez rapidement ce qui est réaliste en fonction du temps restant, chiffrez ce qui peut être livré.", dim: "DC" }
     ]
   }
 ];
@@ -193,6 +193,7 @@ const UNIVERS_WEIGHTS = [
   // 21 — Technologies émergentes & futur du travail
   { id: 21, weights: [0, 0, 2, 6, 0, 4, 0, 0, 0, 0, 0, 0] }
 ];
+
 // ===== DONNÉES DES UNIVERS =====
 const universesData = [
   {
