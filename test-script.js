@@ -782,11 +782,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         alert("✅ Sélection de " + selectedUnivers.size + " univers enregistrée !\n\nVous pouvez retourner à l'accueil.");
         
-          } catch(error) {
-        console.error('❌ Erreur lors de la validation de la sélection :', error);
+              } catch(error) {
+        console.error('❌ Erreur:', error);
+        alert("❌ Erreur de sauvegarde.");
       }
+    }); // ← fermeture du addEventListener(btnValidateSelection)
+  } // ← fermeture du if(btnValidateSelection)
 
-    }); // ← fermeture de l'event listener btnValidateSelection
+  const btnAccueilTop = document.getElementById("btnAccueilTop");
+  if(btnAccueilTop){
+    btnAccueilTop.addEventListener("click", ()=>{
+      window.location.href = 'index.html';
+    });
+  }
 
-  }); // ← fermeture du DOMContentLoaded
+  const btnAccueilBottom = document.getElementById("btnAccueilBottom");
+  if(btnAccueilBottom){
+    btnAccueilBottom.addEventListener("click", ()=>{
+      window.location.href = 'index.html';
+    });
+  }
+
+}); // ← fermeture du DOMContentLoaded
+
 
