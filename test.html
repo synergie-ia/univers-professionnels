@@ -1,102 +1,76 @@
-<!DOCTYPE html>
+          <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Découvrez votre profil professionnel - Reconversion 360 IA</title>
-  <link rel="stylesheet" href="test-style.css" />
+  <title>Reconversion 360 IA</title>
+  <link rel="stylesheet" href="index-style.css?v=32" />
 </head>
 <body>
   <div class="container">
-    <!-- Bouton retour accueil en haut -->
-    <div class="top-nav">
-      <button id="btnAccueilTop" class="btn-retour-top">
-        <span class="arrow">←</span> Retour à l'accueil
+    <!-- ===== TITRE PRINCIPAL ===== -->
+    <header class="hero">
+      <h1 class="hero-title">
+        <span class="title-line1">
+          L'intelligence artificielle au service de la reconversion professionnelle
+        </span>
+        <span class="title-line2">
+          et du bilan de compétences
+        </span>
+      </h1>
+    </header>
+    <!-- ===== CARTES ===== -->
+    <div class="cards-grid">
+      <!-- CARTE 1 -->
+      <div class="action-card">
+        <div class="card-icon">🎯</div>
+        <h2 class="card-title">Découvrez votre profil professionnel</h2>
+        <p class="card-desc">Identifiez vos centres d'intérêt et explorez les univers-métiers qui vous correspondent.</p>
+        <button class="card-btn" onclick="window.location.href='test.html'">
+          Démarrer le questionnaire
+        </button>
+      </div>
+      <!-- CARTE 2 -->
+      <div class="action-card">
+        <div class="card-icon">📋</div>
+        <h2 class="card-title">Réalisez votre bilan personnel</h2>
+        <p class="card-desc">Faites le point sur votre situation, vos compétences, votre parcours et vos aspirations.</p>
+        <button class="card-btn" onclick="window.location.href='situation.html'">
+          Compléter mon bilan
+        </button>
+      </div>
+      <!-- CARTE 3 -->
+      <div class="action-card">
+        <div class="card-icon">🧭</div>
+        <h2 class="card-title">Construisez votre projet professionnel</h2>
+        <p class="card-desc">Bénéficiez d'un accompagnement intelligent pour structurer un projet réaliste et réalisable.</p>
+        <button class="card-btn">
+          Construire mon projet
+        </button>
+      </div>
+    </div>
+    <!-- ===== BOUTONS BAS ===== -->
+    <div class="action-buttons-section">
+      <button id="btnResetData" class="action-btn-small reset-btn">
+        <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+        </svg>
+        <span>Réinitialiser mes données</span>
+      </button>
+      <button id="btnCopyResults" class="action-btn-small copy-btn">
+        <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span>Copier mes résultats pour l'IA</span>
       </button>
     </div>
-    
-    <h1 class="page-title">Découvrez votre profil professionnel et les univers-métiers compatibles</h1>
-    
-    <div class="info-box">
-      <p><strong>ℹ️ À propos de ce questionnaire</strong></p>
-      <p>Ce questionnaire met en lumière ce qui vous attire spontanément, afin de vous aider à identifier des univers métiers dans lesquels vous pourriez vous sentir motivé(e) et à l'aise. Il ne s'agit pas d'un test psychologique : il n'y a aucun bon ou mauvais résultat.</p>
-    </div>
-   
-    
-    <!-- LÉGENDE AVEC AVERTISSEMENT -->
-    <div class="legend-box">
-      <div class="legend-warning">⚠️ Chaque note de 0 à 4 ne peut être utilisée qu'une seule fois par question</div>
-      <div class="legend-scale">
-        <span class="legend-item">
-          <span class="dot dot-0"></span>
-          <span class="label">0 = Pas du tout</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-1"></span>
-          <span class="label">1 = Un peu</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-2"></span>
-          <span class="label">2 = Moyennement</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-3"></span>
-          <span class="label">3 = Plutôt</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-4"></span>
-          <span class="label">4 = Totalement</span>
-        </span>
-      </div>
-    </div>
-    
-    <!-- Conteneur des questions -->
-    <div id="questionsContainer"></div>
-    
-    <!-- Message d'erreur -->
-    <div id="errorMessage" class="error-message hidden">
-      ⚠️ Veuillez répondre à toutes les questions avant de valider.
-    </div>
-    
-    <!-- Bouton validation -->
-    <div style="text-align:center;margin-top:24px;">
-      <button id="validateBtn" class="main-btn">✅ Valider la saisie</button>
-    </div>
-    
-    <!-- Section résultat profil -->
-    <div id="profileSection" class="hidden">
-      <h2 style="margin:32px 0 16px;font-size:24px;">📊 Votre profil d'intérêts</h2>
-      <div id="profileResults"></div>
-      <div style="text-align:center;margin-top:24px;">
-        <button id="goUniversesBtn" class="main-btn">🌍 Voir vos univers compatibles</button>
-      </div>
-    </div>
-    
-    <!-- Section univers métiers -->
-    <div id="univers-section" class="hidden">
-      <h2 style="margin:32px 0 16px;font-size:24px;">🌍 Vos univers-métiers compatibles</h2>
-      
-      <div id="selectedUniversCounter" class="counter-univers">0 univers sélectionné</div>
-      
-      <p class="notice">Sélectionnez au moins 3 univers qui vous intéressent et cliquez sur 🔎 pour explorer leurs sous-domaines :</p>
-      
-      <div id="univers-results"></div>
-      
-      <button id="btn-show-all" class="alt-btn hidden">Voir tous les univers (21)</button>
-      
-      <!-- BOUTON VALIDATION SÉLECTION -->
-      <div style="text-align:center;margin:32px 0 24px;">
-        <button id="btnValidateSelection" class="main-btn">✅ Valider ma sélection d'univers</button>
-      </div>
-      
-      <div class="section-footer">
-        <button id="btnAccueilBottom" class="btn-retour">🏠 Retour à l'accueil</button>
-      </div>
-    </div>
+    <p class="action-notice">Copiez vos résultats pour les transmettre à l'IA</p>
+    <footer class="page-footer">
+      © 2025 Synergie IA - Reconversion 360 IA
+    </footer>
   </div>
-  
-  <!-- CHARGEMENT DES FICHIERS JAVASCRIPT -->
-  <script src="universes-data.js"></script>
-  <script src="test-script.js"></script>
+  <script src="index-script.js?v=32"></script>
 </body>
 </html>
