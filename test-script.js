@@ -128,32 +128,6 @@ function canUseValueInQuestion(questionId, value, currentKey){
   return usageCount < 2;
 }
 
-// Récupère les valeurs disponibles pour une question (avec compteur)
-function getAvailableValuesForQuestion(questionId){
-  const available = [0, 1, 2, 3, 4];
-  const usage = {};
-  
-  // Initialiser le compteur
-  available.forEach(v => {
-    usage[v] = 0;
-  });
-  
-  const question = QUESTIONS.find(q => q.id === questionId);
-  if(!question) return available;
-  
-  // Compter les utilisations
-  question.options.forEach(opt => {
-    const key = `${questionId}-${opt.dim}`;
-    const value = answers[key];
-    if(value !== undefined){
-      usage[value]++;
-    }
-  });
-  
-  // Retourner les valeurs utilisables (< 2 fois)
-  return available.filter(v => usage[v] < 2);
-}
-
 // Met à jour l'état visuel des boutons d'une question
 function updateButtonStatesForQuestion(questionId){
   const question = QUESTIONS.find(q => q.id === questionId);
@@ -175,35 +149,14 @@ function updateButtonStatesForQuestion(questionId){
     // Si le bouton est sélectionné, le garder actif
     if(isSelected){
       btn.classList.remove('disabled');
-      btn.classList.add('usage-count');
-      
-      // Afficher le compteur si la valeur est utilisée 2 fois
-      if(usage[value] === 2){
-        btn.setAttribute('data-usage', '2/2');
-      } else if(usage[value] === 1){
-        btn.setAttribute('data-usage', '1/2');
-      } else {
-        btn.removeAttribute('data-usage');
-      }
       return;
     }
     
     // Sinon, vérifier si la valeur peut encore être utilisée
     if(usage[value] < 2){
       btn.classList.remove('disabled');
-      
-      // Afficher le compteur
-      if(usage[value] === 1){
-        btn.setAttribute('data-usage', '1/2');
-        btn.classList.add('usage-count');
-      } else {
-        btn.removeAttribute('data-usage');
-        btn.classList.remove('usage-count');
-      }
     } else {
       btn.classList.add('disabled');
-      btn.setAttribute('data-usage', '2/2');
-      btn.classList.add('usage-count');
     }
   });
 }
