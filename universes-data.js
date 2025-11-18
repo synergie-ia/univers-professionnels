@@ -20,7 +20,7 @@ const DIMENSIONS = [
   { code: "DC", name: "Données & Chiffres" }
 ];
 
-/ ===== QUESTIONS DU QUESTIONNAIRE - VERSION 48 ITEMS =====
+// ===== QUESTIONS DU QUESTIONNAIRE - VERSION 48 ITEMS =====
 // Chaque dimension apparaît EXACTEMENT 4 fois (12 questions × 4 options)
 
 const QUESTIONS = [
