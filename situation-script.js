@@ -1,153 +1,186 @@
-/* 
-  ============================================
-  RECONVERSION 360 IA - BILAN DE SITUATION
-  ============================================
-  Script pour sauvegarder et charger les données du formulaire
-*/
-
-document.addEventListener('DOMContentLoaded', function() {
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bilan de situation - Reconversion 360 IA</title>
+  <link rel="stylesheet" href="situation-style.css?v=35" />
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Bouton retour accueil -->
+    <div class="top-nav">
+      <button onclick="window.location.href='index.html'" class="btn-retour-top">
+        <span class="arrow">←</span> Retour à l'accueil
+      </button>
+    </div>
+    
+    <h1 class="page-title">Réalisez le bilan de votre situation actuelle</h1>
+    
+    <p class="intro">
+      Prenez le temps de répondre à ces questions. Vos réponses permettront de construire un accompagnement personnalisé.
+    </p>
+    
+    <form id="situationForm" class="situation-form">
+      
+      <!-- AVANT DE COMMENCER -->
+      <div class="form-section">
+        <h2 class="section-title">Avant de commencer</h2>
+        
+        <div class="form-group">
+          <label for="prenom">Prénom <span class="required">*</span></label>
+          <input type="text" id="prenom" name="prenom" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="age">Âge <span class="required">*</span></label>
+          <input type="number" id="age" name="age" min="16" max="99" required>
+        </div>
+      </div>
+      
+      <!-- 1. SITUATION & PARCOURS -->
+      <div class="form-section">
+        <h2 class="section-title">1. Situation & parcours</h2>
+        
+        <div class="form-group">
+          <label for="q1">Q1. Quel est votre objectif professionnel aujourd'hui ? <span class="required">*</span></label>
+          <textarea id="q1" name="q1" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q2">Q2. Quel est votre statut actuel ? <span class="required">*</span></label>
+          <textarea id="q2" name="q2" rows="2" required placeholder="Ex: Salarié en CDI, En recherche d'emploi, Indépendant..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q3">Q3. Quel est votre niveau de formation le plus élevé ? <span class="required">*</span></label>
+          <textarea id="q3" name="q3" rows="2" required placeholder="Ex: Bac+3 Licence en Sciences, CAP Électricien..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q4">Q4. Avez-vous des certifications ou habilitations utiles à votre projet ? <span class="required">*</span></label>
+          <textarea id="q4" name="q4" rows="2" required placeholder="CACES, permis, certifications..."></textarea>
+        </div>
+      </div>
+      
+      <!-- 2. RESSOURCES & COMPÉTENCES -->
+      <div class="form-section">
+        <h2 class="section-title">2. Ressources & compétences</h2>
+        
+        <div class="form-group">
+          <label for="q5">Q5. Quelles compétences techniques ou savoir-faire avez-vous acquis ? <span class="required">*</span></label>
+          <textarea id="q5" name="q5" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q6">Q6. Lesquelles souhaitez-vous réutiliser dans votre futur métier ? <span class="required">*</span></label>
+          <textarea id="q6" name="q6" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q7">Q7. Quelles compétences relationnelles vous caractérisent ? <span class="required">*</span></label>
+          <textarea id="q7" name="q7" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q8">Q8. Quelles expériences vous ont le plus marqué et pourquoi ? <span class="required">*</span></label>
+          <textarea id="q8" name="q8" rows="3" required></textarea>
+        </div>
+      </div>
+      
+      <!-- 3. VALEURS & SENS DU TRAVAIL -->
+      <div class="form-section">
+        <h2 class="section-title">3. Valeurs & sens du travail</h2>
+        
+        <div class="form-group">
+          <label for="q9">Q9. Quelles sont vos valeurs essentielles au travail ? <span class="required">*</span></label>
+          <textarea id="q9" name="q9" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q10">Q10. Y a-t-il des secteurs ou activités que vous ne souhaitez pas envisager ? <span class="required">*</span></label>
+          <textarea id="q10" name="q10" rows="2" required></textarea>
+        </div>
+      </div>
+      
+      <!-- 4. CONTRAINTES & CONDITIONS -->
+      <div class="form-section">
+        <h2 class="section-title">4. Contraintes & conditions</h2>
+        
+        <div class="form-group">
+          <label for="q11">Q11. Quel secteur géographique et quel degré de mobilité acceptez-vous ? <span class="required">*</span></label>
+          <textarea id="q11" name="q11" rows="2" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q12">Q12. Dans quelles conditions de travail souhaitez-vous exercer ? <span class="required">*</span></label>
+          <textarea id="q12" name="q12" rows="2" required placeholder="Ex: télétravail, bureau, terrain..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q13">Q13. Quels horaires de travail acceptez-vous ? <span class="required">*</span></label>
+          <textarea id="q13" name="q13" rows="2" required placeholder="Ex: horaires fixes, flexibles, décalés..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q14">Q14. Avez-vous des limitations à prendre en compte (porter des charges lourdes, position debout...) ? <span class="required">*</span></label>
+          <textarea id="q14" name="q14" rows="2" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q15">Q15. Quel est votre niveau de rémunération minimale souhaitée ? <span class="required">*</span></label>
+          <input type="text" id="q15" name="q15" required placeholder="Ex: 2000€ net/mois">
+        </div>
+        
+        <div class="form-group">
+          <label for="q16">Q16. Quelles situations de travail souhaitez-vous éviter ? <span class="required">*</span></label>
+          <textarea id="q16" name="q16" rows="2" required placeholder="Ex: open space, déplacements fréquents..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q17">Q17. Dans quel type d'environnement de travail êtes-vous le plus à l'aise ? <span class="required">*</span></label>
+          <textarea id="q17" name="q17" rows="2" required placeholder="Ex: petite équipe, grande entreprise, autonomie..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="q18">Q18. Quelle échéance vous fixez-vous pour concrétiser votre projet ? <span class="required">*</span></label>
+          <textarea id="q18" name="q18" rows="2" required placeholder="Ex: Court terme (0-3 mois), Moyen terme (3-12 mois), Long terme (12-24 mois)"></textarea>
+        </div>
+      </div>
+      
+      <!-- 5. FORMATION -->
+      <div class="form-section">
+        <h2 class="section-title">5. Formation</h2>
+        
+        <div class="form-group">
+          <label for="q19">Q19. Quelle durée et quel type de formation êtes-vous prêt·e à envisager ? <span class="required">*</span></label>
+          <textarea id="q19" name="q19" rows="2" required placeholder="Ex: formation courte, alternance, reconversion longue..."></textarea>
+        </div>
+      </div>
+      
+      <!-- 6. OUVERTURE -->
+      <div class="form-section">
+        <h2 class="section-title">6. Ouverture</h2>
+        
+        <div class="form-group">
+          <label for="q20">Q20. Souhaitez-vous ajouter un élément important pour éclairer votre orientation ? <span class="required">*</span></label>
+          <textarea id="q20" name="q20" rows="3" required placeholder="Toute information complémentaire..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="main-btn">💾 Enregistrer mon bilan</button>
+      </div>
+      
+    </form>
+    
+    <div class="section-footer">
+      <button onclick="window.location.href='index.html'" class="btn-retour">🏠 Retour à l'accueil</button>
+    </div>
+    
+  </div>
   
-  const form = document.getElementById('situationForm');
-  
-  // ===== CHARGEMENT DES DONNÉES EXISTANTES =====
-  function loadSavedData(){
-    const saved = localStorage.getItem('situation_data');
-    if(!saved){
-      console.log('Aucune donnée sauvegardée trouvée');
-      return;
-    }
-    
-    try {
-      const data = JSON.parse(saved);
-      console.log('📥 Chargement des données:', data);
-      
-      // Remplir tous les champs du formulaire
-      Object.keys(data).forEach(key => {
-        const field = document.getElementById(key);
-        if(field && data[key]){
-          field.value = data[key];
-          console.log(`✓ Champ ${key} rempli`);
-        }
-      });
-      
-      console.log('✅ Données chargées avec succès');
-      
-    } catch(e) {
-      console.error('❌ Erreur lors du chargement des données:', e);
-    }
-  }
-  
-  // ===== SAUVEGARDE AUTOMATIQUE =====
-  function autoSave(){
-    try {
-      const formData = new FormData(form);
-      const data = {};
-      
-      formData.forEach((value, key) => {
-        if(value && value.trim() !== ''){
-          data[key] = value.trim();
-        }
-      });
-      
-      // Ne sauvegarder que si on a au moins quelques données
-      if(Object.keys(data).length > 2){
-        localStorage.setItem('situation_data', JSON.stringify(data));
-        console.log('💾 Sauvegarde automatique OK');
-      }
-      
-    } catch(e) {
-      console.error('❌ Erreur sauvegarde automatique:', e);
-    }
-  }
-  
-  // Sauvegarder automatiquement à chaque modification (avec délai)
-  let saveTimeout;
-  form.addEventListener('input', function(){
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => {
-      autoSave();
-    }, 500); // Attendre 500ms après la dernière frappe
-  });
-  
-  // ===== SOUMISSION DU FORMULAIRE =====
-  form.addEventListener('submit', function(e){
-    e.preventDefault(); // IMPORTANT : Empêcher le rechargement de la page
-    e.stopPropagation();
-    
-    console.log('📝 Tentative d\'enregistrement du bilan...');
-    
-    // Récupérer toutes les données
-    const formData = new FormData(form);
-    const data = {};
-    
-    formData.forEach((value, key) => {
-      data[key] = value.trim();
-    });
-    
-    console.log('📊 Données récupérées:', data);
-    
-    // Vérifier que tous les champs obligatoires sont remplis
-    const required = [
-      'prenom', 'age', 
-      'q1', 'q2', 'q3', 'q4',
-      'q5', 'q6', 'q7', 'q8', 
-      'q9', 'q10',
-      'q11', 'q12', 'q13', 'q14', 'q15', 'q16', 'q17',
-      'q18',
-      'q19'
-    ];
-    
-    const missing = required.filter(field => !data[field] || data[field] === '');
-    
-    if(missing.length > 0){
-      console.error('❌ Champs manquants:', missing);
-      alert(`⚠️ Veuillez remplir tous les champs obligatoires.\n\nChamps manquants: ${missing.join(', ')}`);
-      
-      // Scroller vers le premier champ manquant
-      const firstMissing = document.getElementById(missing[0]);
-      if(firstMissing){
-        firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstMissing.focus();
-      }
-      
-      return false;
-    }
-    
-    // Sauvegarder dans localStorage
-    try {
-      localStorage.setItem('situation_data', JSON.stringify(data));
-      console.log('✅ Données sauvegardées dans localStorage');
-      
-      // Vérifier immédiatement que la sauvegarde a fonctionné
-      const verification = localStorage.getItem('situation_data');
-      if(!verification){
-        throw new Error('La sauvegarde a échoué');
-      }
-      
-      console.log('✅ Vérification: données bien enregistrées');
-      
-      // Message de confirmation
-      alert('✅ Votre bilan de situation a été enregistré avec succès !\n\n' + Object.keys(data).length + ' champs sauvegardés.\n\nVous allez être redirigé vers l\'accueil.');
-      
-      // Rediriger vers l'accueil après 1 seconde
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1500);
-      
-    } catch(e) {
-      console.error('❌ Erreur lors de la sauvegarde:', e);
-      alert('❌ Erreur lors de la sauvegarde. Veuillez réessayer.\n\nDétails: ' + e.message);
-    }
-    
-    return false; // Empêcher tout comportement par défaut
-  });
-  
-  // ===== CHARGER LES DONNÉES AU DÉMARRAGE =====
-  console.log('🚀 Initialisation du formulaire de situation');
-  loadSavedData();
-  
-  // ===== BOUTON DE DEBUG (optionnel - à retirer en production) =====
-  console.log('💡 Pour débugger, tapez dans la console:');
-  console.log('   localStorage.getItem("situation_data")');
-  
-});
+  <script src="situation-script.js?v=35"></script>
+</body>
+</html>
