@@ -394,23 +394,31 @@ function calcUnivers(){
 
 /* 
   ============================================
-  ÉCHELLE DE COMPATIBILITÉ
+  ÉCHELLE DE COMPATIBILITÉ - CORRIGÉE
   ============================================
+  Score max par univers = 12 points (6+4+2)
+  
+  Seuils ajustés:
+  - 10-12 pts = très compatible (83-100%)
+  - 8-9 pts = compatible (67-75%)
+  - 6-7 pts = moyennement compatible (50-58%)
+  - 4-5 pts = peu compatible (33-42%)
+  - 0-3 pts = pas compatible (0-25%)
 */
 function getCompatibilityLevel(score){
-  if(score >= 14){
+  if(score >= 10){
     return {
       level: "très compatible",
       color: "#047857",
       class: "level-5"
     };
-  } else if(score >= 10){
+  } else if(score >= 8){
     return {
       level: "compatible",
       color: "#10b981",
       class: "level-4"
     };
-  } else if(score >= 7){
+  } else if(score >= 6){
     return {
       level: "moyennement compatible",
       color: "#d1d5db",
@@ -525,6 +533,9 @@ function renderUniversCard(u){
       </div>`
     : '';
 
+  // Calcul du pourcentage (sur 12 points max)
+  const percentage = Math.round((u.score / 12) * 100);
+  
   return `
     <div class="univers-card ${isSelected ? 'selected' : ''} ${compatibility.class}" id="card-${u.id}">
       <div class="univers-header">
@@ -533,6 +544,7 @@ function renderUniversCard(u){
           <div class="univers-name">${u.name}</div>
         </div>
         <div class="univers-right">
+          <div class="univers-percentage">${percentage}%</div>
           <div class="univers-actions">
             ${hasSubUnivers 
               ? `<button class="btn-toggle-sub" data-id="${u.id}" title="Voir sous-univers">🔎</button>` 
@@ -782,7 +794,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         alert("✅ Sélection de " + selectedUnivers.size + " univers enregistrée !\n\nVous pouvez retourner à l'accueil.");
         
-              }  catch(error) {
+      } catch(error) {
         console.error('❌ Erreur:', error);
         alert("❌ Erreur de sauvegarde.");
       }
