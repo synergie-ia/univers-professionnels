@@ -20,106 +20,139 @@ const DIMENSIONS = [
   { code: "DC", name: "Données & Chiffres" }
 ];
 
-// ===== QUESTIONS DU QUESTIONNAIRE - VERSION EXACTE =====
-// Chaque dimension apparaît EXACTEMENT 3 fois
+/ ===== QUESTIONS DU QUESTIONNAIRE - VERSION 48 ITEMS =====
+// Chaque dimension apparaît EXACTEMENT 4 fois (12 questions × 4 options)
 
 const QUESTIONS = [
   {
     id: "q1",
-    title: "Au travail, vous êtes plus à l'aise quand…",
+    title: "Votre journée idéale au travail - Vous exercez un métier qui vous correspond parfaitement. Quelle journée vous conviendrait le mieux ?",
     options: [
-      { text: "Vous pouvez privilégier les activités qui impliquent de bouger votre corps, être debout, marcher, porter des charges ou être physiquement actif.", dim: "MP" },
-      { text: "Vous pouvez utiliser vos mains pour assembler, démonter, ajuster ou réparer des objets, outils ou équipements.", dim: "MT" },
-      { text: "Vous pouvez collecter des informations auprès de plusieurs sources, comparer les versions, vérifier la cohérence des faits.", dim: "IN" },
-      { text: "Vous pouvez tester des hypothèses, expérimenter de nouvelles approches techniques, vous documenter sur les innovations.", dim: "ST" }
+      { text: "Une journée où vous êtes constamment en mouvement physique : vous vous déplacez sur différents sites, intervenez sur le terrain, votre corps est vraiment sollicité.", dim: "MP" },
+      { text: "Une journée où vous expérimentez avec des technologies : tester des systèmes, programmer, modéliser des solutions techniques, faire des simulations scientifiques.", dim: "ST" },
+      { text: "Une journée où vous accompagnez des personnes : écouter leurs difficultés, les conseiller, les former, les rassurer dans leur progression.", dim: "AA" },
+      { text: "Une journée où vous organisez et structurez : planifier les tâches, classer des dossiers, vérifier que les procédures sont respectées.", dim: "RM" }
     ]
   },
 
   {
     id: "q2",
-    title: "Quand vous produisez quelque chose, vous passez du temps à…",
+    title: "Face à un objet ou système défaillant - Quelque chose ne fonctionne plus correctement (machine, processus, organisation…). Quelle approche vous attire naturellement ?",
     options: [
-      { text: "Soigner l'aspect visuel, travailler les couleurs, les formes, la mise en page ou l'esthétique générale.", dim: "AE" },
-      { text: "Définir la structure d'ensemble, organiser les parties entre elles, établir un schéma ou un plan directeur.", dim: "IC" },
-      { text: "Adapter votre production aux besoins spécifiques des personnes qui vont l'utiliser, anticiper leurs difficultés.", dim: "AA" },
-      { text: "Échanger avec différents interlocuteurs, recueillir leurs avis, ajuster en fonction des retours.", dim: "RS" }
+      { text: "Démonter, examiner les pièces, réparer ou remplacer les composants défectueux avec vos mains et vos outils.", dim: "MT" },
+      { text: "Enquêter sur les causes : recueillir les symptômes, croiser les informations, analyser méthodiquement jusqu'à identifier l'origine du problème.", dim: "IN" },
+      { text: "Contacter les personnes concernées, échanger avec elles, négocier une solution, coordonner les différents acteurs impliqués.", dim: "RS" },
+      { text: "Analyser les données de performance : comparer les indicateurs avant/après, quantifier l'écart, calculer l'impact chiffré du dysfonctionnement.", dim: "DC" }
     ]
   },
 
   {
     id: "q3",
-    title: "Dans une réunion de travail, vous êtes souvent celui qui…",
+    title: "Votre contribution dans un projet créatif - Votre équipe lance un nouveau projet qui demande de l'innovation. Comment contribuez-vous le plus naturellement ?",
     options: [
-      { text: "Recentre la discussion sur les objectifs, synthétise les débats, propose une direction à suivre.", dim: "LS" },
-      { text: "Suggère de passer rapidement à la phase test, propose d'essayer une solution même imparfaite pour avancer.", dim: "AI" },
-      { text: "Note les décisions, récapitule les étapes, reformule le plan d'action avec les échéances.", dim: "RM" },
-      { text: "Ramène la discussion à des éléments chiffrés, pose des questions sur les budgets ou les délais précis.", dim: "DC" }
+      { text: "Créer l'identité artistique du projet : concevoir le design visuel, l'ambiance sonore, tourner une vidéo, écrire le récit qui va captiver.", dim: "AE" },
+      { text: "Imaginer le concept global : proposer une architecture originale, concevoir un modèle innovant, dessiner une vision prospective jamais testée.", dim: "IC" },
+      { text: "Piloter la stratégie : définir les priorités, trancher entre les options, coordonner les équipes, impulser la direction à suivre.", dim: "LS" },
+      { text: "Lancer des tests terrain rapidement : expérimenter une première version concrète, observer les réactions, ajuster en continu selon les résultats.", dim: "AI" }
     ]
   },
 
   {
     id: "q4",
-    title: "Face à un problème que personne ne comprend, votre réflexe est de…",
+    title: "Votre rapport à l'apprentissage - Vous devez maîtriser un nouveau domaine pour votre métier. Comment préférez-vous apprendre ?",
     options: [
-      { text: "Aller physiquement sur place, inspecter l'environnement en vous déplaçant, explorer l'espace de manière active.", dim: "MP" },
-      { text: "Examiner le matériel concerné, vérifier son fonctionnement, identifier où se situe la défaillance technique.", dim: "MT" },
-      { text: "Interroger les personnes impliquées, reconstituer la chronologie, chercher des indices dans les documents.", dim: "IN" },
-      { text: "Chercher dans la littérature technique ou scientifique si ce type de problème a déjà été documenté.", dim: "ST" }
+      { text: "Par la pratique directe : manipuler le matériel, répéter les gestes, comprendre par l'expérience tactile et le 'faire'.", dim: "MT" },
+      { text: "Par la théorie d'abord : étudier les principes scientifiques, comprendre les lois sous-jacentes, modéliser avant d'appliquer.", dim: "ST" },
+      { text: "Par l'investigation approfondie : lire des études, croiser plusieurs sources, analyser en détail jusqu'à maîtriser tous les aspects.", dim: "IN" },
+      { text: "Par l'échange avec d'autres : discuter avec des experts, participer à des groupes, apprendre en réseau et par le dialogue.", dim: "RS" }
     ]
   },
 
   {
     id: "q5",
-    title: "Vous vous sentez dans votre élément quand vous…",
+    title: "Une situation d'urgence survient - Délai très court, problème imprévu, forte pression. Comment réagissez-vous instinctivement ?",
     options: [
-      { text: "Composez un visuel, rédigez un texte créatif, imaginez un univers graphique ou une atmosphère particulière.", dim: "AE" },
-      { text: "Élaborez un modèle théorique, dessinez un schéma conceptuel, structurez une idée complexe.", dim: "IC" },
-      { text: "Expliquez quelque chose à quelqu'un qui ne comprend pas, l'aidez à surmonter une difficulté.", dim: "AA" },
-      { text: "Animez une discussion collective, facilitez les échanges entre personnes qui ne se connaissent pas.", dim: "RS" }
+      { text: "Intensifier votre action physique : bouger plus vite, multiplier les déplacements, intervenir directement, tenir un rythme physique élevé.", dim: "MP" },
+      { text: "Agir immédiatement : tester la solution la plus rapide, lancer une action concrète pour débloquer, ajuster ensuite selon ce qui marche.", dim: "AI" },
+      { text: "Établir des priorités claires : lister les tâches critiques dans l'ordre, créer une checklist, s'assurer qu'aucune étape essentielle n'est oubliée.", dim: "RM" },
+      { text: "Vous appuyer sur les chiffres : consulter les données disponibles, quantifier l'urgence, prioriser selon les impacts mesurables.", dim: "DC" }
     ]
   },
 
   {
     id: "q6",
-    title: "Dans un projet collectif, on vous retrouve naturellement en train de…",
+    title: "Ce qui vous donne le sentiment d'être utile - Dans votre métier, vous devez sentir que votre travail sert à quelque chose. Quelle forme d'utilité résonne le plus avec vous ?",
     options: [
-      { text: "Faire le point régulièrement sur l'avancement global, ajuster les priorités, réallouer les ressources.", dim: "LS" },
-      { text: "Lancer des initiatives parallèles, tester des pistes non prévues au départ, improviser des solutions.", dim: "AI" },
-      { text: "Tenir à jour les documents de suivi, vérifier que les procédures sont respectées, archiver les livrables.", dim: "RM" },
-      { text: "Mettre à jour les tableaux de suivi, calculer les écarts entre prévu et réalisé, suivre les indicateurs.", dim: "DC" }
+      { text: "Voir des personnes aller mieux grâce à vous : constater leur progression, leur soulagement, leur évolution positive après votre accompagnement.", dim: "AA" },
+      { text: "Avoir imaginé quelque chose de nouveau : savoir que votre concept, votre vision originale est devenue réalité et transforme les pratiques.", dim: "IC" },
+      { text: "Avoir réparé ou fabriqué concrètement : voir l'objet fonctionner à nouveau, l'installation terminée, le résultat tangible de vos mains.", dim: "MT" },
+      { text: "Avoir influencé des décisions importantes : savoir que vos choix stratégiques ont orienté l'organisation dans la bonne direction.", dim: "LS" }
     ]
   },
 
   {
     id: "q7",
-    title: "Pour acquérir une nouvelle compétence, vous préférez…",
+    title: "Votre mode d'interaction privilégié - Votre métier vous amène à interagir régulièrement. Quel type d'interaction vous correspond le mieux ?",
     options: [
-      { text: "Pratiquer en conditions réelles avec une forte dimension corporelle : gestes sportifs, déplacements, coordination physique.", dim: "MP" },
-      { text: "Apprendre par la pratique répétée : manipuler, fabriquer, répéter les gestes jusqu'à maîtriser le savoir-faire.", dim: "MT" },
-      { text: "Lire plusieurs sources d'information, comparer les approches, analyser les études de cas existantes.", dim: "IN" },
-      { text: "Suivre un cours structuré avec des fondamentaux théoriques, comprendre les principes scientifiques sous-jacents.", dim: "ST" }
+      { text: "Multiplier les contacts variés : échanger avec de nombreux interlocuteurs différents, animer des réseaux, créer du lien entre les gens.", dim: "RS" },
+      { text: "Raconter et captiver : utiliser des histoires, des métaphores visuelles, des mises en scène pour transmettre des messages de façon marquante.", dim: "AE" },
+      { text: "Poser des questions précises : interroger méthodiquement, creuser les contradictions, vérifier les sources pour comprendre objectivement.", dim: "IN" },
+      { text: "Expliquer patiemment : prendre le temps de reformuler, vérifier que les personnes ont bien compris, adapter votre discours à leur niveau de compréhension.", dim: "AA" }
     ]
   },
 
   {
     id: "q8",
-    title: "Vos collègues disent de vous que vous…",
+    title: "Un projet long terme qui vous motive - Vous participez à un projet de plusieurs mois. Qu'est-ce qui maintient votre engagement ?",
     options: [
-      { text: "Avez un sens du détail esthétique, remarquez les aspects visuels ou sonores que d'autres ne perçoivent pas.", dim: "AE" },
-      { text: "Voyez les liens entre des éléments apparemment séparés, comprenez les logiques d'ensemble.", dim: "IC" },
-      { text: "Remarquez rapidement quand quelqu'un va mal, êtes attentif aux signaux de difficulté chez les autres.", dim: "AA" },
-      { text: "Connaissez beaucoup de monde, faites facilement le lien entre des personnes qui pourraient collaborer.", dim: "RS" }
+      { text: "Approfondir votre expertise : accumuler des connaissances, devenir référent sur le sujet, maîtriser tous les aspects théoriques.", dim: "IN" },
+      { text: "Suivre l'avancement méthodiquement : contrôler le respect du planning, vérifier la qualité des livrables, maintenir l'ordre dans la documentation.", dim: "RM" },
+      { text: "Maintenir la dynamique d'action : lancer régulièrement de nouvelles initiatives concrètes, éviter que le projet ne s'enlise dans les discussions.", dim: "AI" },
+      { text: "Mesurer les progrès chiffrés : suivre les indicateurs, comparer aux objectifs, quantifier l'avancement de manière rigoureuse.", dim: "DC" }
     ]
   },
 
   {
     id: "q9",
-    title: "Sous pression, avec un délai très court, vous…",
+    title: "Votre environnement de travail idéal - Quel cadre professionnel vous attire le plus ?",
     options: [
-      { text: "Décidez rapidement ce qui est prioritaire, supprimez ce qui est secondaire, concentrez l'énergie sur l'essentiel.", dim: "LS" },
-      { text: "Passez directement à l'action sans attendre d'avoir toutes les informations, quitte à corriger ensuite.", dim: "AI" },
-      { text: "Suivez la méthode habituelle mais en accéléré, vérifiez que vous n'oubliez aucune étape importante.", dim: "RM" },
-      { text: "Calculez rapidement ce qui est réaliste en fonction du temps restant, chiffrez ce qui peut être livré.", dim: "DC" }
+      { text: "Environnements extérieurs et mobiles : terrain, chantiers, nature, déplacements fréquents entre différents sites d'intervention.", dim: "MP" },
+      { text: "Laboratoires ou espaces techniques : environnements équipés de technologies avancées, où vous pouvez expérimenter et développer des solutions scientifiques.", dim: "ST" },
+      { text: "Studios de création : ateliers artistiques, plateaux de tournage, espaces de design, lieux dédiés à la production culturelle.", dim: "AE" },
+      { text: "Salles de décision : bureaux de direction, comités stratégiques, espaces où se définissent les orientations majeures de l'organisation.", dim: "LS" }
+    ]
+  },
+
+  {
+    id: "q10",
+    title: "Face à un conflit dans l'équipe - Deux collègues sont en désaccord profond sur la manière de faire avancer un dossier. Quel rôle adoptez-vous naturellement ?",
+    options: [
+      { text: "Écouter chacun individuellement : comprendre leurs émotions, leurs besoins profonds, les aider à exprimer ce qui les bloque vraiment.", dim: "AA" },
+      { text: "Faciliter le dialogue : organiser un échange constructif, reformuler les positions, chercher un terrain d'entente entre les deux parties.", dim: "RS" },
+      { text: "Trancher la décision : évaluer les arguments, choisir l'orientation qui semble la plus pertinente, assumer la responsabilité de l'arbitrage.", dim: "LS" },
+      { text: "Revenir aux règles établies : rappeler les procédures définies, vérifier ce qui a été prévu initialement, s'appuyer sur le cadre formel.", dim: "RM" }
+    ]
+  },
+
+  {
+    id: "q11",
+    title: "Préparer un événement ou une présentation importante - Vous devez organiser ou préparer quelque chose d'important pour votre organisation. Qu'est-ce qui mobilise le plus votre attention ?",
+    options: [
+      { text: "Installer et préparer le matériel : monter les équipements, tester les branchements, ajuster physiquement l'espace et les dispositifs techniques.", dim: "MT" },
+      { text: "Créer une expérience mémorable : soigner la scénographie, l'ambiance visuelle ou musicale, concevoir un univers qui marquera les participants.", dim: "AE" },
+      { text: "Concevoir le fil conducteur : imaginer une structure narrative originale, construire une progression conceptuelle qui fait sens.", dim: "IC" },
+      { text: "Préparer les données de support : créer des tableaux synthétiques, calculer les chiffres clés, quantifier les informations pour convaincre.", dim: "DC" }
+    ]
+  },
+
+  {
+    id: "q12",
+    title: "Face à un changement majeur d'organisation - Votre structure se transforme profondément : fusion, restructuration, nouveaux outils, nouvelles méthodes. Quelle posture adoptez-vous ?",
+    options: [
+      { text: "Rester opérationnel malgré le bouleversement : continuer à intervenir sur le terrain, maintenir votre présence physique active, vous adapter aux nouveaux circuits.", dim: "MP" },
+      { text: "Maîtriser les nouveaux systèmes techniques : étudier les nouvelles technologies déployées, comprendre leur fonctionnement scientifique, expérimenter leurs capacités.", dim: "ST" },
+      { text: "Réimaginer l'organisation : proposer de nouveaux modèles de fonctionnement, concevoir des scénarios alternatifs, projeter une vision à long terme.", dim: "IC" },
+      { text: "Tester rapidement les nouvelles façons de faire : expérimenter concrètement, identifier ce qui fonctionne, pivoter vite si nécessaire.", dim: "AI" }
     ]
   }
 ];
