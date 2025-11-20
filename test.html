@@ -23,35 +23,10 @@
       <p><strong>12 affirmations à évaluer</strong> - Pour chaque affirmation, indiquez votre niveau d'intérêt de 0 à 4.</p>
     </div>
     
-    <p class="intro">
-      <strong>Évaluez votre intérêt pour chaque type de métier en choisissant une note de 0 à 4 :</strong>
-    </p>
-    
-    <!-- LÉGENDE AVEC LIMITATIONS EN TEXTE -->
+    <!-- LÉGENDE SANS ÉCHELLE DE NOTES -->
     <div class="legend-box">
-      <div class="legend-warning">⚠️ 2 notes à 0 maximum · 3 notes à 1 maximum · 3 notes à 2 maximum · 4 notes à 3 maximum · 3 notes à 4 maximum</div>
-      <div class="legend-scale">
-        <span class="legend-item">
-          <span class="dot dot-0"></span>
-          <span class="label">0 = Aucun intérêt</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-1"></span>
-          <span class="label">1 = Intérêt faible</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-2"></span>
-          <span class="label">2 = Intérêt moyen</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-3"></span>
-          <span class="label">3 = Intérêt fort</span>
-        </span>
-        <span class="legend-item">
-          <span class="dot dot-4"></span>
-          <span class="label">4 = Intérêt très fort</span>
-        </span>
-      </div>
+      <div class="legend-intro">Évaluez votre intérêt pour chaque type de métier en choisissant une note de 0 à 4</div>
+      <div class="legend-warning">⚠️ Nombre maximum de notes : 2 notes à 0 · 3 notes à 1 · 3 notes à 2 · 4 notes à 3 · 3 notes à 4</div>
     </div>
     
     <!-- Conteneur des questions -->
@@ -69,7 +44,7 @@
     
     <!-- Section résultat profil -->
     <div id="profileSection" class="hidden">
-      <h2 style="margin:32px 0 16px;font-size:24px;">📊 Votre profil d'intérêts professionnels</h2>
+      <h2 style="margin:32px 0 16px;font-size:24px;color:#000000;">📊 Votre profil d'intérêts professionnels</h2>
       <div id="profileResults"></div>
       <div style="text-align:center;margin-top:24px;">
         <button id="goUniversesBtn" class="main-btn">🌍 Voir vos univers compatibles</button>
@@ -78,11 +53,11 @@
     
     <!-- Section univers métiers -->
     <div id="univers-section" class="hidden">
-      <h2 style="margin:32px 0 16px;font-size:24px;">🌍 Vos univers-métiers compatibles</h2>
+      <h2 style="margin:32px 0 16px;font-size:24px;color:#000000;">🌍 Vos univers-métiers compatibles</h2>
       
       <div id="selectedUniversCounter" class="counter-univers">0 univers sélectionné</div>
       
-      <p class="notice">Sélectionnez au moins 3 univers qui vous intéressent et cliquez sur 🔎 pour explorer leurs sous-domaines :</p>
+      <p class="notice">Sélectionnez au moins 3 univers qui vous intéressent et cliquez sur 🔎 pour explorer leurs sous-domaines</p>
       
       <div id="univers-results"></div>
       
