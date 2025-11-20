@@ -20,140 +20,81 @@ const DIMENSIONS = [
   { code: "DC", name: "Données & Chiffres" }
 ];
 
-// ===== QUESTIONS DU QUESTIONNAIRE - VERSION 48 ITEMS =====
-// Chaque dimension apparaît EXACTEMENT 4 fois (12 questions × 4 options)
+// ===== QUESTIONS DU QUESTIONNAIRE - VERSION 12 QUESTIONS =====
+// Une question par dimension - Note de 0 à 4 avec limitations strictes
 
 const QUESTIONS = [
   {
     id: "q1",
-    title: "Votre journée idéale au travail - Vous exercez un métier qui vous correspond parfaitement. Quelle journée vous conviendrait le mieux ?",
-    options: [
-      { text: "Une journée où vous êtes constamment en mouvement physique : vous vous déplacez sur différents sites, intervenez sur le terrain, votre corps est vraiment sollicité.", dim: "MP" },
-      { text: "Une journée où vous expérimentez avec des technologies : tester des systèmes, programmer, modéliser des solutions techniques, faire des simulations scientifiques.", dim: "ST" },
-      { text: "Une journée où vous accompagnez des personnes : écouter leurs difficultés, les conseiller, les former, les rassurer dans leur progression.", dim: "AA" },
-      { text: "Une journée où vous organisez et structurez : planifier les tâches, classer des dossiers, vérifier que les procédures sont respectées.", dim: "RM" }
-    ]
+    title: "1. Mouvement & plein air",
+    text: "Je me vois plutôt dans un métier qui bouge, en extérieur, en mouvement ou physiquement actif.",
+    dim: "MP"
   },
-
   {
     id: "q2",
-    title: "Face à un objet ou système défaillant - Quelque chose ne fonctionne plus correctement (machine, processus, organisation…). Quelle approche vous attire naturellement ?",
-    options: [
-      { text: "Démonter, examiner les pièces, réparer ou remplacer les composants défectueux avec vos mains et vos outils.", dim: "MT" },
-      { text: "Enquêter sur les causes : recueillir les symptômes, croiser les informations, analyser méthodiquement jusqu'à identifier l'origine du problème.", dim: "IN" },
-      { text: "Contacter les personnes concernées, échanger avec elles, négocier une solution, coordonner les différents acteurs impliqués.", dim: "RS" },
-      { text: "Analyser les données de performance : comparer les indicateurs avant/après, quantifier l'écart, calculer l'impact chiffré du dysfonctionnement.", dim: "DC" }
-    ]
+    title: "2. Manuel & Technique",
+    text: "Je me vois plutôt dans un métier manuel, concret, où l'on fabrique, répare ou manipule des objets.",
+    dim: "MT"
   },
-
   {
     id: "q3",
-    title: "Votre contribution dans un projet créatif - Votre équipe lance un nouveau projet qui demande de l'innovation. Comment contribuez-vous le plus naturellement ?",
-    options: [
-      { text: "Créer l'identité artistique du projet : concevoir le design visuel, l'ambiance sonore, tourner une vidéo, écrire le récit qui va captiver.", dim: "AE" },
-      { text: "Imaginer le concept global : proposer une architecture originale, concevoir un modèle innovant, dessiner une vision prospective jamais testée.", dim: "IC" },
-      { text: "Piloter la stratégie : définir les priorités, trancher entre les options, coordonner les équipes, impulser la direction à suivre.", dim: "LS" },
-      { text: "Lancer des tests terrain rapidement : expérimenter une première version concrète, observer les réactions, ajuster en continu selon les résultats.", dim: "AI" }
-    ]
+    title: "3. Investigation & Information",
+    text: "Je me vois plutôt dans un métier où l'on enquête, où l'on cherche, où l'on comprend profondément les choses.",
+    dim: "IN"
   },
-
   {
     id: "q4",
-    title: "Votre rapport à l'apprentissage - Vous devez maîtriser un nouveau domaine pour votre métier. Comment préférez-vous apprendre ?",
-    options: [
-      { text: "Par la pratique directe : manipuler le matériel, répéter les gestes, comprendre par l'expérience tactile et le 'faire'.", dim: "MT" },
-      { text: "Par la théorie d'abord : étudier les principes scientifiques, comprendre les lois sous-jacentes, modéliser avant d'appliquer.", dim: "ST" },
-      { text: "Par l'investigation approfondie : lire des études, croiser plusieurs sources, analyser en détail jusqu'à maîtriser tous les aspects.", dim: "IN" },
-      { text: "Par l'échange avec d'autres : discuter avec des experts, participer à des groupes, apprendre en réseau et par le dialogue.", dim: "RS" }
-    ]
+    title: "4. Sciences & Technologies",
+    text: "Je me vois plutôt dans un métier lié aux technologies, aux systèmes techniques ou aux outils spécialisés.",
+    dim: "ST"
   },
-
   {
     id: "q5",
-    title: "Une situation d'urgence survient - Délai très court, problème imprévu, forte pression. Comment réagissez-vous instinctivement ?",
-    options: [
-      { text: "Intensifier votre action physique : bouger plus vite, multiplier les déplacements, intervenir directement, tenir un rythme physique élevé.", dim: "MP" },
-      { text: "Agir immédiatement : tester la solution la plus rapide, lancer une action concrète pour débloquer, ajuster ensuite selon ce qui marche.", dim: "AI" },
-      { text: "Établir des priorités claires : lister les tâches critiques dans l'ordre, créer une checklist, s'assurer qu'aucune étape essentielle n'est oubliée.", dim: "RM" },
-      { text: "Vous appuyer sur les chiffres : consulter les données disponibles, quantifier l'urgence, prioriser selon les impacts mesurables.", dim: "DC" }
-    ]
+    title: "5. Arts & Expressions",
+    text: "Je me vois plutôt dans un métier lié aux arts, à la création ou à l'expression artistique.",
+    dim: "AE"
   },
-
   {
     id: "q6",
-    title: "Ce qui vous donne le sentiment d'être utile - Dans votre métier, vous devez sentir que votre travail sert à quelque chose. Quelle forme d'utilité résonne le plus avec vous ?",
-    options: [
-      { text: "Voir des personnes aller mieux grâce à vous : constater leur progression, leur soulagement, leur évolution positive après votre accompagnement.", dim: "AA" },
-      { text: "Avoir imaginé quelque chose de nouveau : savoir que votre concept, votre vision originale est devenue réalité et transforme les pratiques.", dim: "IC" },
-      { text: "Avoir réparé ou fabriqué concrètement : voir l'objet fonctionner à nouveau, l'installation terminée, le résultat tangible de vos mains.", dim: "MT" },
-      { text: "Avoir influencé des décisions importantes : savoir que vos choix stratégiques ont orienté l'organisation dans la bonne direction.", dim: "LS" }
-    ]
+    title: "6. Idées & Conception",
+    text: "Je me vois plutôt dans un métier où l'on imagine, conçoit ou crée de nouvelles idées.",
+    dim: "IC"
   },
-
   {
     id: "q7",
-    title: "Votre mode d'interaction privilégié - Votre métier vous amène à interagir régulièrement. Quel type d'interaction vous correspond le mieux ?",
-    options: [
-      { text: "Multiplier les contacts variés : échanger avec de nombreux interlocuteurs différents, animer des réseaux, créer du lien entre les gens.", dim: "RS" },
-      { text: "Raconter et captiver : utiliser des histoires, des métaphores visuelles, des mises en scène pour transmettre des messages de façon marquante.", dim: "AE" },
-      { text: "Poser des questions précises : interroger méthodiquement, creuser les contradictions, vérifier les sources pour comprendre objectivement.", dim: "IN" },
-      { text: "Expliquer patiemment : prendre le temps de reformuler, vérifier que les personnes ont bien compris, adapter votre discours à leur niveau de compréhension.", dim: "AA" }
-    ]
+    title: "7. Aide & Accompagnement",
+    text: "Je me vois plutôt dans un métier où l'on aide, accompagne ou soutient les autres.",
+    dim: "AA"
   },
-
   {
     id: "q8",
-    title: "Un projet long terme qui vous motive - Vous participez à un projet de plusieurs mois. Qu'est-ce qui maintient votre engagement ?",
-    options: [
-      { text: "Approfondir votre expertise : accumuler des connaissances, devenir référent sur le sujet, maîtriser tous les aspects théoriques.", dim: "IN" },
-      { text: "Suivre l'avancement méthodiquement : contrôler le respect du planning, vérifier la qualité des livrables, maintenir l'ordre dans la documentation.", dim: "RM" },
-      { text: "Maintenir la dynamique d'action : lancer régulièrement de nouvelles initiatives concrètes, éviter que le projet ne s'enlise dans les discussions.", dim: "AI" },
-      { text: "Mesurer les progrès chiffrés : suivre les indicateurs, comparer aux objectifs, quantifier l'avancement de manière rigoureuse.", dim: "DC" }
-    ]
+    title: "8. Relations & Sociabilité",
+    text: "Je me vois plutôt dans un métier où l'on échange, écoute, comprend les autres et crée du lien social.",
+    dim: "RS"
   },
-
   {
     id: "q9",
-    title: "Votre environnement de travail idéal - Quel cadre professionnel vous attire le plus ?",
-    options: [
-      { text: "Environnements extérieurs et mobiles : terrain, chantiers, nature, déplacements fréquents entre différents sites d'intervention.", dim: "MP" },
-      { text: "Laboratoires ou espaces techniques : environnements équipés de technologies avancées, où vous pouvez expérimenter et développer des solutions scientifiques.", dim: "ST" },
-      { text: "Studios de création : ateliers artistiques, plateaux de tournage, espaces de design, lieux dédiés à la production culturelle.", dim: "AE" },
-      { text: "Salles de décision : bureaux de direction, comités stratégiques, espaces où se définissent les orientations majeures de l'organisation.", dim: "LS" }
-    ]
+    title: "9. Leadership & Stratégie",
+    text: "Je me vois plutôt dans un métier où l'on dirige, organise ou prend des décisions importantes.",
+    dim: "LS"
   },
-
   {
     id: "q10",
-    title: "Face à un conflit dans l'équipe - Deux collègues sont en désaccord profond sur la manière de faire avancer un dossier. Quel rôle adoptez-vous naturellement ?",
-    options: [
-      { text: "Écouter chacun individuellement : comprendre leurs émotions, leurs besoins profonds, les aider à exprimer ce qui les bloque vraiment.", dim: "AA" },
-      { text: "Faciliter le dialogue : organiser un échange constructif, reformuler les positions, chercher un terrain d'entente entre les deux parties.", dim: "RS" },
-      { text: "Trancher la décision : évaluer les arguments, choisir l'orientation qui semble la plus pertinente, assumer la responsabilité de l'arbitrage.", dim: "LS" },
-      { text: "Revenir aux règles établies : rappeler les procédures définies, vérifier ce qui a été prévu initialement, s'appuyer sur le cadre formel.", dim: "RM" }
-    ]
+    title: "10. Action & Initiative",
+    text: "Je me vois plutôt dans un métier où il faut agir vite, prendre des initiatives et passer à l'action.",
+    dim: "AI"
   },
-
   {
     id: "q11",
-    title: "Préparer un événement ou une présentation importante - Vous devez organiser ou préparer quelque chose d'important pour votre organisation. Qu'est-ce qui mobilise le plus votre attention ?",
-    options: [
-      { text: "Installer et préparer le matériel : monter les équipements, tester les branchements, ajuster physiquement l'espace et les dispositifs techniques.", dim: "MT" },
-      { text: "Créer une expérience mémorable : soigner la scénographie, l'ambiance visuelle ou musicale, concevoir un univers qui marquera les participants.", dim: "AE" },
-      { text: "Concevoir le fil conducteur : imaginer une structure narrative originale, construire une progression conceptuelle qui fait sens.", dim: "IC" },
-      { text: "Préparer les données de support : créer des tableaux synthétiques, calculer les chiffres clés, quantifier les informations pour convaincre.", dim: "DC" }
-    ]
+    title: "11. Règles & Méthodes",
+    text: "Je me vois plutôt dans un métier où l'on applique des règles, des méthodes et où la précision est essentielle.",
+    dim: "RM"
   },
-
   {
     id: "q12",
-    title: "Face à un changement majeur d'organisation - Votre structure se transforme profondément : fusion, restructuration, nouveaux outils, nouvelles méthodes. Quelle posture adoptez-vous ?",
-    options: [
-      { text: "Rester opérationnel malgré le bouleversement : continuer à intervenir sur le terrain, maintenir votre présence physique active, vous adapter aux nouveaux circuits.", dim: "MP" },
-      { text: "Maîtriser les nouveaux systèmes techniques : étudier les nouvelles technologies déployées, comprendre leur fonctionnement scientifique, expérimenter leurs capacités.", dim: "ST" },
-      { text: "Réimaginer l'organisation : proposer de nouveaux modèles de fonctionnement, concevoir des scénarios alternatifs, projeter une vision à long terme.", dim: "IC" },
-      { text: "Tester rapidement les nouvelles façons de faire : expérimenter concrètement, identifier ce qui fonctionne, pivoter vite si nécessaire.", dim: "AI" }
-    ]
+    title: "12. Données & Chiffres",
+    text: "Je me vois plutôt dans un métier où l'on analyse des données, compare, calcule ou modélise des informations.",
+    dim: "DC"
   }
 ];
 
