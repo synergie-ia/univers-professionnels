@@ -242,9 +242,9 @@ function copyResultsToClipboard() {
           universArray
             .sort((a, b) => b[1].score - a[1].score)
             .forEach(([id, data]) => {
+              const percentage = Math.round((data.score / 12) * 100);
               textToCopy += `• ${data.name}\n`;
-              textToCopy += `  Score: ${data.score} points\n`;
-              textToCopy += `  Compatibilité: ${data.level}\n\n`;
+              textToCopy += `  Compatibilité: ${percentage}% (${data.level})\n\n`;
             });
           
           console.log("✅ Univers ajoutés");
@@ -422,9 +422,9 @@ function downloadPDF() {
           universArray
             .sort((a, b) => b[1].score - a[1].score)
             .forEach(([id, data], index) => {
+              const percentage = Math.round((data.score / 12) * 100);
               pdfContent += `${index + 1}. ${data.name}\n`;
-              pdfContent += `   Score: ${data.score} points\n`;
-              pdfContent += `   Niveau de compatibilité: ${data.level}\n\n`;
+              pdfContent += `   Compatibilité: ${percentage}% (${data.level})\n\n`;
             });
           
           console.log("✅ Univers ajoutés au PDF");
@@ -557,10 +557,6 @@ function checkProjectAccess() {
   setTimeout(() => {
     window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
   }, 3000);
-}
-  
-  // Redirection vers le GPT Reconversion 360 IA
-  window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
 }
 
 /* ===== MÉTHODE DE COPIE ALTERNATIVE ===== */
