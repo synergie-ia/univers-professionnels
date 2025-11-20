@@ -120,10 +120,9 @@ html,body{
   margin-bottom:0;
 }
 
-/* ===== LÉGENDE COMPACTE AVEC LIMITATIONS ===== */
 .legend-box{
-  background:#eef2ff;
-  border:2px solid #c7d2fe;
+  background:var(--bg);
+  border:2px solid #9ca3af;
   border-radius:10px;
   padding:14px 16px;
   margin:16px 0 20px;
