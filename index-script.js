@@ -544,6 +544,21 @@ function checkProjectAccess() {
     return;
   }
   
+  // Message indiquant la nécessité de copier ou télécharger les résultats
+  alert(
+    "📋 IMPORTANT - Copie ou téléchargement obligatoire\n\n" +
+    "Pour construire votre projet avec l'IA, vous devez d'abord :\n\n" +
+    "1. Cliquer sur \"Copier mes résultats pour l'IA\" OU \"Télécharger PDF\"\n" +
+    "2. Transmettre ces données à l'IA dans la conversation\n\n" +
+    "La fenêtre de l'IA va s'ouvrir dans quelques secondes..."
+  );
+  
+  // Délai de 3 secondes pour laisser le temps de lire le message
+  setTimeout(() => {
+    window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
+  }, 3000);
+}
+  
   // Redirection vers le GPT Reconversion 360 IA
   window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
 }
