@@ -5,6 +5,7 @@
   Gestion des badges de complétion et actions
   VERSION COMPLÈTE - Copie profil + univers + bilan
   VERSION ATLAS - Section HTML cachée pour ChatGPT
+  VERSION FINALE - Messages améliorés + gestion blocage
   ============================================
 */
 
@@ -832,7 +833,7 @@ function downloadPDF() {
   }
 }
 
-/* ===== VÉRIFICATION ACCÈS PROJET (MODIFIÉ - SOLUTION 3) ===== */
+/* ===== VÉRIFICATION ACCÈS PROJET (VERSION FINALE AVEC GESTION BLOCAGE) ===== */
 
 function checkProjectAccess() {
   const { hasUnivers, hasSituation } = checkRequiredData();
@@ -855,21 +856,45 @@ function checkProjectAccess() {
     }
   }
   
-  // ✅ MESSAGE AVEC CONFIRMATION (SOLUTION 3)
+  // ✅ MESSAGE AVEC CONFIRMATION AMÉLIORÉ
   const userConfirm = confirm(
-    "✅ Données complètes ! Prêt à construire votre projet.\n\n" +
-    "📋 COMMENT TRANSMETTRE VOS DONNÉES À L'IA :\n\n" +
-    "🌐 AVEC ATLAS (navigateur intégré ChatGPT) :\n" +
-    "   • L'IA lira automatiquement vos données sur cette page\n" +
-    "   • Pas besoin de copier/coller\n\n" +
-    "📋 SANS ATLAS (navigation classique) :\n" +
-    "   • Cliquez d'abord sur \"Copier mes résultats (sans Atlas)\"\n" +
-    "   • Puis transmettez ces données à l'IA\n\n" +
-    "Cliquez OK pour ouvrir ChatGPT"
+    "✅ Données complètes !\n\n" +
+    "📋 AVANT DE CONTINUER - IMPORTANT :\n\n" +
+    "🌐 Vous utilisez ATLAS (navigateur ChatGPT) ?\n" +
+    "   → Cliquez OK (vos données seront lues automatiquement)\n\n" +
+    "📋 Vous N'utilisez PAS Atlas ?\n" +
+    "   → Cliquez ANNULER\n" +
+    "   → Copiez d'abord vos résultats avec le bouton ci-dessus\n" +
+    "   → Puis revenez cliquer sur \"Construire mon projet\""
   );
   
   if(userConfirm){
-    window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
+    const chatURL = 'https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia';
+    const newWindow = window.open(chatURL, '_blank');
+    
+    // ✅ VÉRIFIER SI BLOQUÉ (Windows / ChatGPT non chargé / Bloqueur pop-up)
+    setTimeout(() => {
+      if(!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined'){
+        // Copier automatiquement le lien
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(chatURL).catch(() => {
+            console.log("Impossible de copier automatiquement");
+          });
+        }
+        
+        // Message explicite avec étapes
+        alert(
+          "⚠️ OUVERTURE BLOQUÉE PAR VOTRE NAVIGATEUR\n\n" +
+          "Pas de problème ! Voici la solution :\n\n" +
+          "1️⃣ Le lien ChatGPT a été copié automatiquement\n\n" +
+          "2️⃣ Ouvrez un nouvel onglet dans votre navigateur\n\n" +
+          "3️⃣ Collez le lien (Ctrl+V sur PC ou Cmd+V sur Mac)\n\n" +
+          "4️⃣ Appuyez sur Entrée\n\n" +
+          "💡 Si ça n'a pas été copié, voici le lien :\n" +
+          chatURL
+        );
+      }
+    }, 100);
   }
 }
 
