@@ -26,11 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     btnCopy.addEventListener('click', copyResultsToClipboard);
   }
   
-  const btnPDF = document.getElementById('btnDownloadPDF');
-  if(btnPDF){
-    btnPDF.addEventListener('click', downloadPDF);
-  }
-  
   const btnProject = document.getElementById('btnConstructProject');
   if(btnProject){
     btnProject.addEventListener('click', checkProjectAccess);
@@ -649,7 +644,7 @@ function copyResultsToClipboard() {
   }
 }
 
-/* ===== TÉLÉCHARGEMENT PDF ===== */
+/* ===== TÉLÉCHARGEMENT PDF (CONSERVÉ MAIS NON UTILISÉ) ===== */
 
 function downloadPDF() {
   try {
@@ -837,11 +832,12 @@ function downloadPDF() {
   }
 }
 
-/* ===== VÉRIFICATION ACCÈS PROJET ===== */
+/* ===== VÉRIFICATION ACCÈS PROJET (MODIFIÉ - SOLUTION 3) ===== */
 
 function checkProjectAccess() {
   const { hasUnivers, hasSituation } = checkRequiredData();
   
+  // ✅ CONTRÔLES OBLIGATOIRES : Test + Univers + Bilan
   if(!hasUnivers || !hasSituation){
     if(!hasUnivers && !hasSituation){
       alert("⚠️ Accès non autorisé\n\nPour construire votre projet, vous devez d'abord :\n\n1. Sélectionner au moins 3 univers\n2. Remplir votre bilan personnel");
@@ -859,33 +855,22 @@ function checkProjectAccess() {
     }
   }
   
-  const dataExported = localStorage.getItem('data_exported');
-  
-  if(!dataExported || dataExported !== 'true'){
-    alert(
-      "⚠️ COPIE OU TÉLÉCHARGEMENT OBLIGATOIRE\n\n" +
-      "Avant d'accéder à l'IA, vous devez obligatoirement :\n\n" +
-      "➡️ Cliquer sur \"Copier mes résultats pour l'IA\"\n" +
-      "      OU\n" +
-      "➡️ Cliquer sur \"Télécharger PDF\"\n\n" +
-      "Ces données devront être transmises à l'IA pour débuter votre accompagnement.\n\n" +
-      "⚠️ Sans cette étape, vous ne pourrez pas construire votre projet."
-    );
-    return;
-  }
-  
-  alert(
-    "✅ Accès autorisé !\n\n" +
-    "📋 RAPPEL IMPORTANT :\n\n" +
-    "N'oubliez pas de transmettre vos données à l'IA en :\n" +
-    "• Collant le texte copié (Ctrl+V ou Cmd+V)\n" +
-    "• OU en envoyant le fichier téléchargé\n\n" +
-    "La fenêtre de l'IA va s'ouvrir dans 3 secondes..."
+  // ✅ MESSAGE AVEC CONFIRMATION (SOLUTION 3)
+  const userConfirm = confirm(
+    "✅ Données complètes ! Prêt à construire votre projet.\n\n" +
+    "📋 COMMENT TRANSMETTRE VOS DONNÉES À L'IA :\n\n" +
+    "🌐 AVEC ATLAS (navigateur intégré ChatGPT) :\n" +
+    "   • L'IA lira automatiquement vos données sur cette page\n" +
+    "   • Pas besoin de copier/coller\n\n" +
+    "📋 SANS ATLAS (navigation classique) :\n" +
+    "   • Cliquez d'abord sur \"Copier mes résultats (sans Atlas)\"\n" +
+    "   • Puis transmettez ces données à l'IA\n\n" +
+    "Cliquez OK pour ouvrir ChatGPT"
   );
   
-  setTimeout(() => {
+  if(userConfirm){
     window.open('https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-reconversion-360-ia', '_blank');
-  }, 3000);
+  }
 }
 
 /* ===== MÉTHODE DE COPIE ALTERNATIVE ===== */
@@ -947,10 +932,10 @@ function showCopySuccess() {
   }, 3000);
   
   alert(
-    "✅ DONNÉES COPIÉES AVEC SUCCÈS !\n\n" +
-    "📋 Vos résultats ont été copiés dans le presse-papiers.\n\n" +
-    "➡️ Vous pouvez maintenant cliquer sur \"Construire mon projet\"\n" +
-    "➡️ Puis coller ces données dans la conversation avec l'IA (Ctrl+V ou Cmd+V)"
+    "✅ DONNÉES COPIÉES !\n\n" +
+    "📋 Vos résultats sont dans le presse-papiers.\n\n" +
+    "➡️ Cliquez sur \"Construire mon projet\"\n" +
+    "➡️ Puis collez dans ChatGPT (Ctrl+V ou Cmd+V)"
   );
 }
 
@@ -980,9 +965,9 @@ function showDownloadSuccess() {
   }, 3000);
   
   alert(
-    "✅ FICHIER TÉLÉCHARGÉ AVEC SUCCÈS !\n\n" +
-    "📄 Votre fichier a été enregistré sur votre ordinateur.\n\n" +
-    "➡️ Vous pouvez maintenant cliquer sur \"Construire mon projet\"\n" +
-    "➡️ Puis transmettre ce fichier à l'IA dans la conversation"
+    "✅ FICHIER TÉLÉCHARGÉ !\n\n" +
+    "📄 Votre fichier a été enregistré.\n\n" +
+    "➡️ Cliquez sur \"Construire mon projet\"\n" +
+    "➡️ Puis transmettez ce fichier à l'IA"
   );
 }
