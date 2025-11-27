@@ -248,17 +248,23 @@ body {
   color: #3b82f6;
 }
 
- /* ===== ACTION NOTICE ===== */
+/* ===== ACTION NOTICE ===== */
 .action-notice {
   text-align: center;
-  font-size: 14px;
-  color: var(--text-medium);
+  font-size: 15px;
+  color: #1f2937;
   margin-bottom: 40px;
   font-style: normal;
-  padding: 12px 20px;
+  padding: 14px 20px;
   background: #fff7ed;
   border-left: 4px solid var(--warning);
   border-radius: 8px;
+  line-height: 1.6;
+}
+
+.action-notice strong {
+  color: #111827;
+  font-weight: 700;
 }
 
 .action-notice strong {
