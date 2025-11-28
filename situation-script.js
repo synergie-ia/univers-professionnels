@@ -4,6 +4,7 @@
   ============================================
   Gestion du formulaire de bilan personnel
   VERSION 36 - Ajout Q21 Tests psychotechniques
+  VERSION 39 - Ajout préfixe transition360_ pour localStorage
   ============================================
 */
 
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadSavedData() {
   try {
-    const savedData = localStorage.getItem('situation_data');
+    const savedData = localStorage.getItem('transition360_situation_data');
     
     if(savedData) {
       const data = JSON.parse(savedData);
@@ -70,7 +71,7 @@ function handleFormSubmit(event) {
   
   // Sauvegarde dans localStorage
   try {
-    localStorage.setItem('situation_data', JSON.stringify(formData));
+    localStorage.setItem('transition360_situation_data', JSON.stringify(formData));
     console.log("✅ Bilan enregistré avec succès");
     console.log("📊 Données sauvegardées:", formData);
     
@@ -204,7 +205,7 @@ function autoSave() {
     });
     
     if(hasData) {
-      localStorage.setItem('situation_data_autosave', JSON.stringify(formData));
+      localStorage.setItem('transition360_situation_data_autosave', JSON.stringify(formData));
       console.log("💾 Auto-sauvegarde effectuée (silencieuse)");
       // Pas de notification visuelle
     }
