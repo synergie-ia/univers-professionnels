@@ -1,6 +1,6 @@
 /* 
   ============================================
-  Transition 360 IA - PAGE D'ACCUEIL
+  Passerelle-Transition - PAGE D'ACCUEIL
   ============================================
   Gestion des badges de complétion et actions
   VERSION COMPLÈTE - Copie profil + univers + bilan
@@ -492,7 +492,7 @@ function copyResultsToClipboard() {
     const situationData = localStorage.getItem('situation_data');
     
     let textToCopy = "═══════════════════════════════════════\n";
-    textToCopy += "   TRANSITION 360 IA - MES RÉSULTATS\n";
+    textToCopy += "   Passerelle-Transition - MES RÉSULTATS\n";
     textToCopy += "═══════════════════════════════════════\n\n";
     
     // PROFIL PERSONNEL
@@ -616,7 +616,7 @@ function copyResultsToClipboard() {
     }
     
     textToCopy += "═══════════════════════════════════════\n";
-    textToCopy += "Généré par Transition 360 IA\n";
+    textToCopy += "Généré par Passerelle-Transition\n";
     textToCopy += new Date().toLocaleDateString('fr-FR', { 
       year: 'numeric', 
       month: 'long', 
@@ -674,7 +674,7 @@ function downloadPDF() {
     let pdfContent = "";
     
     pdfContent += "═══════════════════════════════════════════════════════\n";
-    pdfContent += "        Transition 360 IA - MES RÉSULTATS\n";
+    pdfContent += "        Passerelle-Transition - MES RÉSULTATS\n";
     pdfContent += "═══════════════════════════════════════════════════════\n\n";
     pdfContent += "Date de génération: " + new Date().toLocaleDateString('fr-FR', { 
       weekday: 'long',
@@ -815,7 +815,7 @@ function downloadPDF() {
     a.href = url;
     
     const dateStr = new Date().toISOString().split('T')[0];
-    a.download = `Transition_360_IA_${dateStr}.txt`;
+    a.download = `Passerelle-Transition_${dateStr}.txt`;
     
     document.body.appendChild(a);
     a.click();
@@ -857,7 +857,7 @@ function checkProjectAccess() {
   }
   
   // ✅ OUVERTURE DIRECTE CHATGPT
-  const chatURL = 'https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-transition360ia';
+  const chatURL = 'https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-Passerelle-Transition';
   window.open(chatURL, '_blank');
   console.log("✅ Ouverture ChatGPT");
 }
