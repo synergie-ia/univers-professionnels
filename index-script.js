@@ -1,6 +1,6 @@
 /* 
   ============================================
-  Passerelle-Transition - PAGE D'ACCUEIL
+  Pass-Transition - PAGE D'ACCUEIL
   ============================================
   Gestion des actions
   VERSION COMPLÈTE - Copie profil + univers + bilan
@@ -162,7 +162,7 @@ function copyResultsToClipboard() {
     const situationData = localStorage.getItem('transition360_situation_data');
     
     let textToCopy = "═══════════════════════════════════════\n";
-    textToCopy += "   Passerelle-Transition - MES RÉSULTATS\n";
+    textToCopy += "   Pass-Transition - MES RÉSULTATS\n";
     textToCopy += "═══════════════════════════════════════\n\n";
     
     // PROFIL PERSONNEL
@@ -286,7 +286,7 @@ function copyResultsToClipboard() {
     }
     
     textToCopy += "═══════════════════════════════════════\n";
-    textToCopy += "Généré par Passerelle-Transition\n";
+    textToCopy += "Généré par Pass-Transition\n";
     textToCopy += new Date().toLocaleDateString('fr-FR', { 
       year: 'numeric', 
       month: 'long', 
@@ -344,7 +344,7 @@ function downloadPDF() {
     let pdfContent = "";
     
     pdfContent += "═══════════════════════════════════════════════════════\n";
-    pdfContent += "        Passerelle-Transition - MES RÉSULTATS\n";
+    pdfContent += "        Passe-Transition - MES RÉSULTATS\n";
     pdfContent += "═══════════════════════════════════════════════════════\n\n";
     pdfContent += "Date de génération: " + new Date().toLocaleDateString('fr-FR', { 
       weekday: 'long',
@@ -541,7 +541,7 @@ function checkProjectAccess() {
   }
   
   // ✅ OUVERTURE CHATGPT
-  const chatURL = 'https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-Passerelle-Transition';
+  const chatURL = 'https://chatgpt.com/g/g-6914f232fb048191b5df9a123ac6af82-Pass-Transition';
   window.open(chatURL, '_blank');
   console.log("✅ Ouverture ChatGPT");
 }
