@@ -5,6 +5,7 @@
   Gestion du formulaire de bilan personnel
   VERSION 36 - Ajout Q21 Tests psychotechniques
   VERSION 39 - Ajout préfixe transition360_ pour localStorage
+  VERSION 40 - Sauvegarde automatique instantanée à chaque saisie
   ============================================
 */
 
@@ -22,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', handleFormSubmit);
   }
   
-  // Auto-sauvegarde toutes les 30 secondes (silencieuse)
-  setInterval(autoSave, 30000);
+  // ✨ NOUVEAU: Auto-sauvegarde instantanée à chaque saisie
+  setupAutoSave();
   
   console.log("✅ Initialisation terminée");
 });
@@ -32,7 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadSavedData() {
   try {
-    const savedData = localStorage.getItem('transition360_situation_data');
+    // Priorité 1: Données définitivement enregistrées
+    let savedData = localStorage.getItem('transition360_situation_data');
+    
+    // Priorité 2: Auto-sauvegarde si pas de données définitives
+    if(!savedData) {
+      savedData = localStorage.getItem('transition360_situation_data_autosave');
+    }
     
     if(savedData) {
       const data = JSON.parse(savedData);
@@ -193,9 +200,33 @@ function collectFormData() {
   return formData;
 }
 
-/* ===== AUTO-SAUVEGARDE (SILENCIEUSE) ===== */
+/* ===== ✨ NOUVELLE FONCTION: AUTO-SAUVEGARDE INSTANTANÉE ===== */
 
-function autoSave() {
+let autoSaveTimeout = null;
+
+function setupAutoSave() {
+  const form = document.getElementById('situationForm');
+  if(!form) return;
+  
+  // Écouter tous les champs input et textarea
+  const fields = form.querySelectorAll('input, textarea');
+  
+  fields.forEach(field => {
+    // Événement "input" se déclenche à chaque caractère tapé
+    field.addEventListener('input', function() {
+      // Debounce: attendre 500ms après la dernière frappe
+      clearTimeout(autoSaveTimeout);
+      
+      autoSaveTimeout = setTimeout(() => {
+        performAutoSave();
+      }, 500);
+    });
+  });
+  
+  console.log("✅ Auto-sauvegarde instantanée activée");
+}
+
+function performAutoSave() {
   try {
     const formData = collectFormData();
     
@@ -206,12 +237,49 @@ function autoSave() {
     
     if(hasData) {
       localStorage.setItem('transition360_situation_data_autosave', JSON.stringify(formData));
-      console.log("💾 Auto-sauvegarde effectuée (silencieuse)");
-      // Pas de notification visuelle
+      console.log("💾 Auto-sauvegarde effectuée");
+      
+      // ✨ Afficher un petit indicateur visuel discret
+      showAutoSaveIndicator();
     }
   } catch(error) {
     console.error("❌ Erreur auto-sauvegarde:", error);
   }
+}
+
+function showAutoSaveIndicator() {
+  // Chercher ou créer l'indicateur
+  let indicator = document.getElementById('autosave-indicator');
+  
+  if(!indicator) {
+    indicator = document.createElement('div');
+    indicator.id = 'autosave-indicator';
+    indicator.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(16, 185, 129, 0.9);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    `;
+    indicator.textContent = '💾 Sauvegardé automatiquement';
+    document.body.appendChild(indicator);
+  }
+  
+  // Afficher l'indicateur
+  indicator.style.opacity = '1';
+  
+  // Masquer après 2 secondes
+  setTimeout(() => {
+    indicator.style.opacity = '0';
+  }, 2000);
 }
 
 /* ===== MESSAGES & NOTIFICATIONS ===== */
