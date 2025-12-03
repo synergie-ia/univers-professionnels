@@ -1,6 +1,6 @@
 /* 
   ============================================
-  Passerelle-Transition - PAGE D'ACCUEIL
+  Pass-Transition - PAGE D'ACCUEIL
   ============================================
   Gestion des actions
   VERSION COMPLÈTE - Copie profil + univers + bilan
