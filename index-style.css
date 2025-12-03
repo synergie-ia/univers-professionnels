@@ -148,12 +148,21 @@ body {
 .action-card:nth-child(3) {
   background: linear-gradient(135deg, #0052A3 0%, #003580 100%) !important;
 }
+
 /* ICÔNES - MÊME TAILLE QUE GESTACRISES */
 .card-icon {
   font-size: 3.5em;
   margin-bottom: 15px;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
   pointer-events: none;
+}
+
+/* STYLE POUR L'IMAGE LOGO */
+.card-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
 }
 
 /* TITRES - MÊME TAILLE QUE GESTACRISES */
@@ -305,6 +314,11 @@ body {
 
   .card-icon {
     font-size: 3em;
+  }
+
+  .card-logo {
+    width: 70px;
+    height: 70px;
   }
 
   .card-title {
