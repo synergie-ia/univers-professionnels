@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnUniversMetiers = document.getElementById('btnUniversMetiers');
   if(btnUniversMetiers){
     btnUniversMetiers.addEventListener('click', function() {
-      window.location.href = 'univers-metiers.html';
+      window.location.href = 'mode-emploi.html';
     });
   }
 });
